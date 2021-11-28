@@ -1,3 +1,3 @@
 require('config')
-require('plugins/init')
+require('plugins/index')
 
