@@ -3,6 +3,7 @@
 -- ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 
 require('plugins/lualine')
+require('plugins/treesitter')
 
 return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
@@ -24,3 +25,4 @@ return require('packer').startup(function(use)
 
   use 'asiryk/everforest'
 end)
+

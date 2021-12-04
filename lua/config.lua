@@ -7,6 +7,7 @@ vim.opt.number = true                             -- Show line numbers
 vim.opt.relativenumber = true                     -- Show line number starting at cursor position
 vim.cmd[[au BufEnter * set fo-=c fo-=r fo-=o]]    -- Don't auto comment new lines
 vim.cmd[[colorscheme everforest]]                 -- Set the colorscheme
+vim.cmd[[inoremap jk <esc>]]                      -- Remap <esc> to "jk" combination
 
 -------------------------------------------------
 -- Tabs, indentation
