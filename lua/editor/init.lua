@@ -1,3 +1,3 @@
-require('editor/comments')
-require('editor/completion')
-require('editor/syntax')
+require "editor/comments"
+require "editor/completion"
+require "editor/syntax"
