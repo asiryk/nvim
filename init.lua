@@ -23,7 +23,7 @@ local use_packages = function(use)
 end
 
 require("packer").startup(use_packages)
-require "general"
+require "primary"
 require "keymaps"
 require "editor"
 require "interface"
