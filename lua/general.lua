@@ -15,4 +15,3 @@ vim.opt.expandtab = true                          -- Use tabs instead of spaces
 vim.opt.tabstop = 2                               -- Amount of spaces the tab is displayed
 vim.opt.shiftwidth = 2                            -- Amount of spaces to use for each step of (auto)indent
 vim.opt.smartindent = true                        -- Copy indent from the previous line
-

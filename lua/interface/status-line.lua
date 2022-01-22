@@ -7,4 +7,3 @@ require('lualine').setup {
     lualine_y = { 'os.date("%H:%M")' },
   },
 }
-

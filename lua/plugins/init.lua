@@ -1,6 +1,0 @@
-require('plugins/treesitter')
-require('plugins/lualine')
-require('plugins/telescope')
-require('plugins/lsp/cmp')
-require('plugins/lsp/config')
-require('plugins/comment')

@@ -1,6 +1,6 @@
 local luasnip = require('luasnip')
 local cmp = require('cmp')
- 
+
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
@@ -49,4 +49,3 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
-
