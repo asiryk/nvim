@@ -10,6 +10,9 @@ local use_packages = function(use)
   use "L3MON4D3/LuaSnip"                                        -- snippets engine
   use "hrsh7th/nvim-cmp"                                        -- completion engine
   use "saadparwaiz1/cmp_luasnip"                                -- integration of snippets with completion
+  use "hrsh7th/cmp-nvim-lua"                                    -- cmp source for Lua
+  use "hrsh7th/cmp-buffer"                                      -- cmp source for buffer words
+  use "hrsh7th/cmp-path"                                        -- cmp source for for filesystem paths
 
   -- interface
   use "asiryk/everforest"
