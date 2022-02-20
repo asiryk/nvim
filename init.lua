@@ -16,6 +16,7 @@ local use_packages = function(use)
 
   -- interface
   use "asiryk/everforest"
+  use "chrisduerr/vim-undead"
   use "nvim-lualine/lualine.nvim"
   use "nvim-telescope/telescope.nvim"
   use "kyazdani42/nvim-tree.lua"
@@ -25,9 +26,9 @@ local use_packages = function(use)
   use "hrsh7th/cmp-nvim-lsp"                                    -- integration of lsp with completion
 end
 
-require("packer").startup(use_packages)
-require "primary"
+require "defaults"
 require "keymaps"
+require("packer").startup(use_packages)
 require "editor"
 require "interface"
 require "languages"
