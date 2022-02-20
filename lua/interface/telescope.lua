@@ -1,5 +1,7 @@
 local telescope = require("telescope")
 
+local noremap = { noremap = true }
+
 telescope.setup {
   pickers = {
     find_files = {
@@ -8,6 +10,8 @@ telescope.setup {
   },
 }
 
-vim.api.nvim_set_keymap("n", "<C-P>", "<cmd>lua require('telescope.builtin').find_files()<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-F>", "<cmd>lua require('telescope.builtin').live_grep()<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-B>", "<cmd>lua require('telescope.builtin').buffers()<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<Leader>p", "<cmd>lua require('telescope.builtin').find_files()<CR>", noremap)
+vim.api.nvim_set_keymap("n", "<Leader>F", "<cmd>lua require('telescope.builtin').live_grep()<CR>", noremap)
+vim.api.nvim_set_keymap("n", "<Leader>B", "<cmd>lua require('telescope.builtin').buffers()<CR>", noremap)
+vim.api.nvim_set_keymap("n", "<Leader>H", "<cmd>lua require('telescope.builtin').help_tags()<CR>", noremap)
+vim.api.nvim_set_keymap("n", "<Leader>R", "<cmd>lua require('telescope.builtin').reloader()<CR>", noremap)
