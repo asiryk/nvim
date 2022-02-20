@@ -12,3 +12,7 @@ map("n", "<C-L>", "<cmd>tabnext<CR>", noremap)    -- Switch to right tab
 map("n", "<C-H>", "<cmd>tabprev<CR>", noremap)    -- Switch to left tab
 map("n", "tc", "<cmd>tabclose<CR>", noremap)      -- Close current tab
 map("n", "tac", "<cmd>tabo<CR>", noremap)         -- Close all tabs
+
+map("n", "<BS>", "<NOP>")                         -- Unmap Backspace
+map("n", "<Space>", "<NOP>")                      -- Unmap Space
+vim.g.mapleader = " "                             -- Set Leader key
