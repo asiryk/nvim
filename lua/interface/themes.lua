@@ -8,16 +8,26 @@ local everforest = function(background, contrast)
   background = "set background=" .. background .. "\n"
   contrast = string.format("let g:everforest_background='%s'\n", contrast)
 
-  return background .. contrast .. [[
+  local config = background .. contrast .. [[
     let g:everforest_enable_italic = 1
     let g:everforest_disable_italic_comment = 1
 
-    if has('termguicolors')
-      set termguicolors
-    endif
-
     colorscheme everforest
   ]]
+
+  vim.cmd(config)
 end
 
-vim.cmd(everforest())
+--@param style? "dark" | "darker" | "cool" | "deep" | "warm" | "warmer" | "light"
+local onedark = function(style)
+  if not style then style = "warm" end
+  local od = require("onedark")
+
+  od.setup {
+    style = style,
+  }
+
+  od.load()
+end
+
+everforest()

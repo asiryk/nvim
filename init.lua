@@ -11,19 +11,20 @@ local use_packages = function(use)
   use "hrsh7th/nvim-cmp"                                        -- completion engine
   use "saadparwaiz1/cmp_luasnip"                                -- integration of snippets with completion
   use "hrsh7th/cmp-nvim-lua"                                    -- cmp source for Lua
-  use "hrsh7th/cmp-buffer"                                      -- cmp source for buffer words
-  use "hrsh7th/cmp-path"                                        -- cmp source for for filesystem paths
+  use "norcalli/nvim-colorizer.lua"                             -- highlight colors
 
   -- interface
-  use "asiryk/everforest"
-  use "chrisduerr/vim-undead"
   use "nvim-lualine/lualine.nvim"
-  use "nvim-telescope/telescope.nvim"
-  use "kyazdani42/nvim-tree.lua"
+  use "sainnhe/everforest"
+  use "navarasu/onedark.nvim"
 
   -- languages
   use "neovim/nvim-lspconfig"                                   -- config for language servers
   use "hrsh7th/cmp-nvim-lsp"                                    -- integration of lsp with completion
+
+  -- tools
+  use "nvim-telescope/telescope.nvim"
+  use "akinsho/toggleterm.nvim"
 end
 
 require "defaults"
@@ -32,3 +33,4 @@ require("packer").startup(use_packages)
 require "editor"
 require "interface"
 require "languages"
+require "tools"

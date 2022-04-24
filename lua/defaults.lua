@@ -1,3 +1,7 @@
+--
+-- Following remaps don't add new features/keybindings, but improve existing ones
+--
+
 local opts = { noremap = true, silent = true }
 local expr = { noremap = true, silent = true, expr = true }
 
@@ -7,16 +11,13 @@ vim.opt.cursorline = true                         -- Highlight current line
 vim.opt.number = true                             -- Show line numbers
 vim.opt.relativenumber = true                     -- Show line number starting at cursor position
 vim.opt.swapfile = false                          -- Disable swapfiles
-vim.cmd[[au BufEnter * set fo-=c fo-=r fo-=o]]    -- Don't auto comment new lines
-
 vim.opt.expandtab = true                          -- Use tabs instead of spaces
 vim.opt.tabstop = 2                               -- Amount of spaces the tab is displayed
 vim.opt.shiftwidth = 2                            -- Amount of spaces to use for each step of (auto)indent
 vim.opt.smartindent = true                        -- Copy indent from the previous line
+vim.opt.termguicolors = true                      -- Set 24 bit colors
 
---
--- Following remaps don't add new features, but improve existing behavior
---
+vim.cmd[[au BufEnter * set fo-=c fo-=r fo-=o]]    -- Don't auto comment new lines todo use formatoptions instead
 
 -- Set undo breakpoints: Every time following key ({"<CR>", "."})
 -- gets pressed, it stops current change, so the next "undo"
