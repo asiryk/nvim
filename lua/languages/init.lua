@@ -1,37 +1,33 @@
 local nvim_lsp = require("lspconfig")
 
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local on_attach = function(_, bufnr)
-
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+-- will be called when language server attaches to the current buffer
+local on_attach = function(_, buffer)
+  local options = { buffer = buffer }
+  local lsp_buf = vim.lsp.buf
+  local lsp_diagnostic = vim.lsp.diagnostic
 
   -- Enable completion triggered by <c-x><c-o>
-  buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
-
-  -- Mappings.
-  local opts = { noremap=true, silent=true }
+  vim.api.nvim_buf_set_option(buffer, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
   -- See `:help vim.lsp.*` for documentation on any of the below functions
-  buf_set_keymap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-  buf_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-  buf_set_keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-  buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-  buf_set_keymap("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
-  buf_set_keymap("n", "<space>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
-  buf_set_keymap("n", "<space>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
-  buf_set_keymap("n", "<space>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
-  buf_set_keymap("n", "<space>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
-  buf_set_keymap("n", "<space>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-  buf_set_keymap("n", "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
-  buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-  buf_set_keymap("n", "<space>e", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", opts)
-  buf_set_keymap("n", "[d", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
-  buf_set_keymap("n", "]d", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
-  buf_set_keymap("n", "<space>q", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", opts)
-  buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  vim.keymap.set("n", "gD", lsp_buf.declaration, options)
+  vim.keymap.set("n", "gd", lsp_buf.definition, options)
+  vim.keymap.set("n", "K", lsp_buf.hover, options)
+  vim.keymap.set("n", "gi", lsp_buf.implementation, options)
+  vim.keymap.set("n", "<C-k>", lsp_buf.signature_help, options)
+  vim.keymap.set("n", "<Leader>wa", lsp_buf.add_workspace_folder, options)
+  vim.keymap.set("n", "<Leader>wr", lsp_buf.remove_workspace_folder, options)
+  vim.keymap.set("n", "<Leader>wl", function() vim.pretty_print(vim.lsp.buf.list_workspace_folders()) end, options)
+  vim.keymap.set("n", "<Leader>D", lsp_buf.type_definition, options)
+  vim.keymap.set("n", "<Leader>rn", lsp_buf.rename, options)
+  vim.keymap.set("n", "<Leader>ca", lsp_buf.code_action, options)
+  vim.keymap.set("n", "gr", lsp_buf.references, options)
+  vim.keymap.set("n", "<Leader>f", lsp_buf.formatting, options)
 
+  vim.keymap.set("n", "<Leader>e", lsp_diagnostic.show_line_diagnostics, options)
+  vim.keymap.set("n", "[d", lsp_diagnostic.goto_prev, options)
+  vim.keymap.set("n", "]d", lsp_diagnostic.goto_next, options)
+  vim.keymap.set("n", "<Leader>q", lsp_diagnostic.set_loclist, options)
 end
 
 local runtime_path = vim.split(package.path, ";")
@@ -40,7 +36,7 @@ table.insert(runtime_path, "lua/?/init.lua")
 
 local Lua = {
   runtime = { version = "LuaJIT", path = runtime_path },
-  diagnostics = { globals = {"vim"} },
+  diagnostics = { globals = { "vim" } },
   workspace = { library = vim.api.nvim_get_runtime_file("", true) },
   telemetry = { enable = false },
 }

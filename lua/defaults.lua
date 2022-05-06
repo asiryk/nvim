@@ -22,18 +22,18 @@ vim.cmd[[au BufEnter * set fo-=c fo-=r fo-=o]]    -- Don't auto comment new line
 -- Set undo breakpoints: Every time following key ({"<CR>", "."})
 -- gets pressed, it stops current change, so the next "undo"
 -- will apply up to this key
-for _, key in pairs({"<CR>", "."}) do
-  vim.api.nvim_set_keymap("i", key, key .. "<c-g>u", opts)
+for _, key in pairs({ "<CR>", "." }) do
+  vim.keymap.set("i", key, key .. "<c-g>u")
 end
 
 -- Center screen on the "next" and "previos" search jumps
-vim.api.nvim_set_keymap("n", "n", "nzzzv", opts) -- todo don't pollute :reg by pressing x, pasting, etc
-vim.api.nvim_set_keymap("n", "N", "Nzzzv", opts)
+vim.keymap.set("n", "n", "nzzzv") -- todo don't pollute :reg by pressing x, pasting, etc
+vim.keymap.set("n", "N", "Nzzzv")
 
 -- Move one or more selected lines up and down (in Visual mode)
-vim.api.nvim_set_keymap("v", "J", ":m '>+1<CR>gv=gv", opts) -- todo: don't modify undo list
-vim.api.nvim_set_keymap("v", "K", ":m '<-2<CR>gv=gv", opts)
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv") -- todo: don't modify undo list; todo: probably replace with lua function
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 -- Add position to jumplist if moving more than 5 lines up or down
-vim.api.nvim_set_keymap("n", "j", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'j']], expr)
-vim.api.nvim_set_keymap("n", "k", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'k']], expr)
+vim.keymap.set("n", "j", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'j']], { expr = true })
+vim.keymap.set("n", "k", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'k']], { expr = true })
