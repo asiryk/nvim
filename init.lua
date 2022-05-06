@@ -29,7 +29,14 @@ end
 
 require "defaults"
 require "keymaps"
-require("packer").startup(use_packages)
+
+local present, packer = pcall(require, "packer")
+if not present then
+  return print("You should install packer.nvim \nhttps://github.com/wbthomason/packer.nvim")
+end
+
+packer.startup(use_packages)
+
 require "editor"
 require "interface"
 require "languages"
