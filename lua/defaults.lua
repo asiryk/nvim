@@ -1,9 +1,7 @@
 --
 -- Following remaps don't add new features/keybindings, but improve existing ones
 --
-
-local opts = { noremap = true, silent = true }
-local expr = { noremap = true, silent = true, expr = true }
+local autocmd = require("helpers").autocmd
 
 vim.opt.mouse = "a"                               -- Enable mouse support
 vim.opt.clipboard = "unnamedplus"                 -- Use system clipboard
@@ -16,8 +14,6 @@ vim.opt.tabstop = 2                               -- Amount of spaces the tab is
 vim.opt.shiftwidth = 2                            -- Amount of spaces to use for each step of (auto)indent
 vim.opt.smartindent = true                        -- Copy indent from the previous line
 vim.opt.termguicolors = true                      -- Set 24 bit colors
-
-vim.cmd[[au BufEnter * set fo-=c fo-=r fo-=o]]    -- Don't auto comment new lines todo use formatoptions instead
 
 -- Set undo breakpoints: Every time following key ({"<CR>", "."})
 -- gets pressed, it stops current change, so the next "undo"
@@ -37,3 +33,12 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 -- Add position to jumplist if moving more than 5 lines up or down
 vim.keymap.set("n", "j", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'j']], { expr = true })
 vim.keymap.set("n", "k", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'k']], { expr = true })
+
+autocmd("VimLeave", { "guicursor", "a:ver100" }) -- set beam cursor when leaving neovim
+autocmd("BufEnter", function()
+  -- Don't auto comment new lines
+  vim.opt.formatoptions = vim.opt.formatoptions
+      - "c"
+      - "r"
+      - "o"
+end)
