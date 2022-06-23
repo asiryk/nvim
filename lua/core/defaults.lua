@@ -1,7 +1,8 @@
 --
 -- Following remaps don't add new features/keybindings, but improve existing ones
 --
-local autocmd = require("helpers").autocmd
+
+local autocmd = vim.api.nvim_create_autocmd
 
 vim.opt.mouse = "a"                               -- Enable mouse support
 vim.opt.clipboard = "unnamedplus"                 -- Use system clipboard
@@ -18,8 +19,9 @@ vim.opt.termguicolors = true                      -- Set 24 bit colors
 -- Set undo breakpoints: Every time following key ({"<CR>", "."})
 -- gets pressed, it stops current change, so the next "undo"
 -- will apply up to this key
-for _, key in pairs({ "<CR>", "." }) do
-  vim.keymap.set("i", key, key .. "<c-g>u")
+local undo_breakpoinsts = { "<CR>", "." }
+for _, key in pairs(undo_breakpoinsts) do
+   vim.keymap.set("i", key, key .. "<c-g>u")
 end
 
 -- Center screen on the "next" and "previos" search jumps
@@ -34,11 +36,8 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "j", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'j']], { expr = true })
 vim.keymap.set("n", "k", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'k']], { expr = true })
 
-autocmd("VimLeave", { "guicursor", "a:ver100" }) -- set beam cursor when leaving neovim
-autocmd("BufEnter", function()
-  -- Don't auto comment new lines
-  vim.opt.formatoptions = vim.opt.formatoptions
-      - "c"
-      - "r"
-      - "o"
-end)
+-- Don't auto commenting new lines
+autocmd("BufEnter", {
+   pattern = "*",
+   command = "set fo-=c fo-=r fo-=o",
+})

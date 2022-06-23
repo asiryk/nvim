@@ -1,2 +1,4 @@
-.*
-plugin/
+plugin
+.DS_STORE
+.idea
+.vscode
