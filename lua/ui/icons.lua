@@ -66,6 +66,15 @@ local M = {}
 -- seti-default 
 -- seti-json 
 -- weather     
+
+M.ui = { -- icons from https://graphemica.com
+   ["U258E"] = "▎",
+   ["U25B6"] = "▶",
+   ["U25B8"] = "▸",
+   ["U2B95"] = "⮕",
+   ["U2716"] = "✖",
+}
+
 M.lspkind = {
    Namespace = "",
    Text = "",

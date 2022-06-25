@@ -18,7 +18,7 @@ local everforest = function(background, contrast)
    vim.cmd(config)
 end
 
---@param style? "dark" | "darker" | "cool" | "deep" | "warm" | "warmer" | "light"
+---@param style? "dark" | "darker" | "cool" | "deep" | "warm" | "warmer" | "light"
 local onedark = function(style)
    if not style then style = "warm" end
    local od = require("onedark")

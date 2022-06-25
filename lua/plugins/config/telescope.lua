@@ -1,8 +1,16 @@
 local present, telescope = pcall(require, "telescope")
 
-if not present then
-   return
-end
+if not present then return end
+
+local sorters = require("telescope.sorters")
+local previewers = require("telescope.previewers")
+local actions = require("telescope.actions")
+local builtin = require("telescope.builtin")
+local set = function(lhs, rhs) vim.keymap.set("n", lhs, rhs) end
+
+set("<Leader>fo", builtin.find_files)
+set("<Leader>ff", builtin.live_grep)
+set("<Leader>fa", builtin.builtin)
 
 local options = {
    defaults = {
@@ -15,7 +23,7 @@ local options = {
          "--column",
          "--smart-case",
       },
-      prompt_prefix = "   ",
+      prompt_prefix = "  ",
       selection_caret = "  ",
       entry_prefix = "  ",
       initial_mode = "insert",
@@ -35,9 +43,9 @@ local options = {
          height = 0.80,
          preview_cutoff = 120,
       },
-      file_sorter = require("telescope.sorters").get_fuzzy_file,
+      file_sorter = sorters.get_fuzzy_file,
       file_ignore_patterns = { "node_modules", "*.jpeg", "*.png", "*.jpg" },
-      generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,
+      generic_sorter = sorters.get_generic_fuzzy_sorter,
       path_display = { "truncate" },
       winblend = 0,
       border = {},
@@ -45,24 +53,13 @@ local options = {
       color_devicons = true,
       use_less = true,
       set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
-      file_previewer = require("telescope.previewers").vim_buffer_cat.new,
-      grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
-      qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
+      file_previewer = previewers.vim_buffer_cat.new,
+      grep_previewer = previewers.vim_buffer_vimgrep.new,
+      qflist_previewer = previewers.vim_buffer_qflist.new,
       -- Developer configurations: Not meant for general override
-      buffer_previewer_maker = require("telescope.previewers").buffer_previewer_maker,
-      mappings = {
-         n = { ["q"] = require("telescope.actions").close },
-      },
+      buffer_previewer_maker = previewers.buffer_previewer_maker,
+      mappings = { n = { ["q"] = actions.close } },
    },
-
-   --extensions_list = { "themes", "terms" }, todo add terminal and theme switcher
 }
 
 telescope.setup(options)
-
--- load extensions
---pcall(function()
---   for _, ext in ipairs(options.extensions_list) do
---      telescope.load_extension(ext)
---   end
---end)

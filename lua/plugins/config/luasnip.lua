@@ -1,8 +1,6 @@
 local present, luasnip = pcall(require, "luasnip")
 
-if not present then
-   return
-end
+if not present then return end
 
 local options = {
    history = true,
@@ -10,4 +8,6 @@ local options = {
 }
 
 luasnip.config.set_config(options)
-require("luasnip.loaders.from_vscode").lazy_load() -- load friendly-snippets
+
+-- Load friendly-snippets
+require("luasnip.loaders.from_vscode").lazy_load()

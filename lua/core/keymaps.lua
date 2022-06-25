@@ -1,34 +1,19 @@
-local lib = require("core.lib")
+local set = vim.keymap.set
 
--- todo use ? vim.keymap.del() ?
-vim.keymap.set("n", "<bs>", "<nop>")              -- Unmap Backspace
-vim.keymap.set("n", "<space>", "<nop>")           -- Unmap Space
-vim.g.mapleader = " "                             -- Set Leader key
+set("n", "<bs>", "<nop>")                 -- Unmap Backspace
+set("n", "<space>", "<nop>")              -- Unmap Space
+vim.g.mapleader = " "                     -- Set Leader key
 
-local M = {}
+set("n", "tn", "<cmd>tabnew<CR>")         -- Create new tab
+set("n", "<C-L>", "<cmd>tabnext<CR>")     -- Switch to right tab
+set("n", "<C-H>", "<cmd>tabprev<CR>")     -- Switch to left tab
+set("n", "tc", "<cmd>tabclose<CR>")       -- Close current tab
+set("n", "tac", "<cmd>tabo<CR>")          -- Close all tabs
 
-M.neovim = {
-   n = {
-      ["tn"] = { "<cmd>tabnew<cr>", "Create new tab" },
-      ["<C-L>"] = { "<cmd>tabnext<cr>", "Switch to right tab" },
-      ["<C-H>"] = { "<cmd>tabprev<cr>", "Switch to left tab" },
-      ["tc"] = { "<cmd>tabclose<cr>", "Close current tab" },
-      ["tac"] = { "<cmd>tabo<cr>", "Close all tabs" },
-   }
-}
-
-local function set_telescope_keymaps(telescope)
-   M.telescope = {
-      n = {
-         ["<Leader>p"] = { telescope.find_files, " Find files" },
-         ["<Leader>F"] = { telescope.live_grep, " Global search" },
-         ["<Leader>a"] = { telescope.builtin, " Telescope all" },
-      },
-   }
-end
-
-lib.Result(pcall(require, "telescope.builtin"))
-   :Ok(set_telescope_keymaps)
-   :Err(function() print("Err! Couldn't load Telescope to set keymaps") end)
-
-return M
+-- LSP, :help vim.lsp.*
+local buf = vim.lsp.buf
+set("n", "gd", buf.definition)
+set("n", "<S-K>", buf.hover)
+set("n", "<Leader>lf", buf.formatting)
+set("n", "<Leader>lr", buf.rename)
+set("n", "<Leader>la", buf.code_action)
