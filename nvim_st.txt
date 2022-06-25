@@ -1,0 +1,71 @@
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.020  000.020: --- NVIM STARTING ---
+000.658  000.638: locale set
+009.726  009.068: inits 1
+009.748  000.022: window checked
+009.955  000.206: parsing arguments
+013.111  003.157: expanding arguments
+013.179  000.068: inits 2
+013.687  000.508: init highlight
+013.689  000.002: waiting for UI
+016.100  002.411: done waiting for UI
+016.111  000.011: init screen for UI
+016.136  000.025: init default mappings
+016.188  000.052: init default autocommands
+017.297  000.083  000.083: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/ftplugin.vim
+017.511  000.041  000.041: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/indent.vim
+031.226  013.485  013.485: sourcing /Users/asiryk/.config/nvim/init.lua
+031.255  001.457: sourcing vimrc file(s)
+031.607  000.110  000.110: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/filetype.lua
+038.567  000.021  000.021: sourcing /Users/asiryk/.local/share/nvim/site/pack/packer/start/LuaSnip/ftdetect/snippets.vim
+038.813  007.086  007.065: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/filetype.vim
+039.202  000.091  000.091: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/syntax/synload.vim
+039.332  000.387  000.296: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/syntax/syntax.vim
+041.455  000.028  000.028: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/plugin/gzip.vim
+041.641  000.028  000.028: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/plugin/health.vim
+041.885  000.073  000.073: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/plugin/man.vim
+042.077  000.030  000.030: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/plugin/matchit.vim
+042.440  000.189  000.189: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/plugin/matchparen.vim
+042.633  000.030  000.030: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/plugin/netrwPlugin.vim
+043.204  000.018  000.018: sourcing /Users/asiryk/.local/share/nvim/rplugin.vim
+043.222  000.424  000.406: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/plugin/rplugin.vim
+043.515  000.108  000.108: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/plugin/shada.vim
+043.723  000.026  000.026: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/plugin/spellfile.vim
+043.927  000.037  000.037: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/plugin/tarPlugin.vim
+044.132  000.027  000.027: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/plugin/tohtml.vim
+044.329  000.036  000.036: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/plugin/tutor.vim
+044.573  000.032  000.032: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/plugin/zipPlugin.vim
+090.879  000.152  000.152: sourcing /Users/asiryk/.local/share/nvim/site/pack/packer/opt/plenary.nvim/plugin/plenary.vim
+121.166  076.181  076.029: sourcing /Users/asiryk/.config/nvim/plugin/packer_compiled.lua
+121.770  005.683: loading rtp plugins
+123.088  000.308  000.308: sourcing /Users/asiryk/.local/share/nvim/site/pack/packer/start/LuaSnip/plugin/luasnip.vim
+125.487  001.733  001.733: sourcing /Users/asiryk/.local/share/nvim/site/pack/packer/start/nvim-cmp/plugin/cmp.lua
+126.070  000.086  000.086: sourcing /Users/asiryk/.local/share/nvim/site/pack/packer/start/nvim-lspconfig/plugin/lspconfig.vim
+127.495  000.489  000.489: sourcing /Users/asiryk/.local/share/nvim/site/pack/packer/start/telescope.nvim/plugin/telescope.lua
+127.658  003.272: loading packages
+129.453  000.184  000.184: sourcing /Users/asiryk/.local/share/nvim/site/pack/packer/start/Comment.nvim/after/plugin/Comment.lua
+130.195  000.424  000.424: sourcing /Users/asiryk/.local/share/nvim/site/pack/packer/opt/cmp-path/after/plugin/cmp_path.lua
+131.555  001.073  001.073: sourcing /Users/asiryk/.local/share/nvim/site/pack/packer/opt/cmp-buffer/after/plugin/cmp_buffer.lua
+132.184  000.319  000.319: sourcing /Users/asiryk/.local/share/nvim/site/pack/packer/opt/cmp-nvim-lua/after/plugin/cmp_nvim_lua.lua
+133.088  000.578  000.578: sourcing /Users/asiryk/.local/share/nvim/site/pack/packer/opt/cmp-nvim-lsp/after/plugin/cmp_nvim_lsp.lua
+133.826  000.416  000.416: sourcing /Users/asiryk/.local/share/nvim/site/pack/packer/opt/cmp_luasnip/after/plugin/cmp_luasnip.lua
+133.839  003.185: loading after plugins
+133.849  000.011: inits 3
+134.892  001.043: reading ShaDa
+147.063  000.066  000.066: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/ftplugin/json.vim
+149.807  000.182  000.182: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/indent/json.vim
+151.128  000.470  000.470: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/syntax/json.vim
+153.786  018.175: opening buffers
+153.815  000.029: BufEnter autocommands
+153.817  000.003: editing files in windows
+154.773  000.956: VimEnter autocommands
+154.779  000.005: UIEnter autocommands
+155.485  000.289  000.289: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/autoload/provider/clipboard.vim
+155.517  000.450: before starting main loop
+162.945  007.428: first screen update
+162.950  000.005: --- NVIM STARTED ---

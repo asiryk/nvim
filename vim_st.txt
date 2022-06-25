@@ -1,0 +1,42 @@
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.019  000.019: --- NVIM STARTING ---
+000.779  000.760: locale set
+011.525  010.745: inits 1
+011.561  000.036: window checked
+011.857  000.296: parsing arguments
+015.863  004.006: expanding arguments
+015.963  000.100: inits 2
+016.540  000.577: init highlight
+016.543  000.003: waiting for UI
+019.926  003.383: done waiting for UI
+019.951  000.026: init screen for UI
+019.987  000.035: init default mappings
+020.052  000.065: init default autocommands
+022.029  000.115  000.115: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/ftplugin.vim
+022.383  000.061  000.061: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/indent.vim
+041.551  018.544  018.544: sourcing /Users/asiryk/.config/nvim/init.lua
+041.579  002.808: sourcing vimrc file(s)
+041.991  000.114  000.114: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/filetype.lua
+049.444  000.031  000.031: sourcing /Users/asiryk/.local/share/nvim/site/pack/packer/start/LuaSnip/ftdetect/snippets.vim
+049.746  007.548  007.517: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/filetype.vim
+050.322  000.097  000.097: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/syntax/synload.vim
+050.461  000.498  000.401: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/syntax/syntax.vim
+050.484  000.746: inits 3
+051.735  001.250: reading ShaDa
+058.751  000.036  000.036: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/ftplugin/json.vim
+060.243  000.241  000.241: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/indent/json.vim
+060.851  000.244  000.244: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/syntax/json.vim
+061.718  009.462: opening buffers
+061.737  000.019: BufEnter autocommands
+061.739  000.002: editing files in windows
+061.782  000.043: VimEnter autocommands
+061.784  000.002: UIEnter autocommands
+062.125  000.196  000.196: sourcing /usr/local/Cellar/neovim/0.7.0/share/nvim/runtime/autoload/provider/clipboard.vim
+062.141  000.161: before starting main loop
+068.958  006.816: first screen update
+068.960  000.003: --- NVIM STARTED ---

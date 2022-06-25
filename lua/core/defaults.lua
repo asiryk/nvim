@@ -1,6 +1,4 @@
---
 -- Following remaps don't add new features/keybindings, but improve existing ones
---
 
 local autocmd = vim.api.nvim_create_autocmd
 
@@ -19,8 +17,8 @@ vim.opt.termguicolors = true                      -- Set 24 bit colors
 -- Set undo breakpoints: Every time following key ({"<CR>", "."})
 -- gets pressed, it stops current change, so the next "undo"
 -- will apply up to this key
-local undo_breakpoinsts = { "<CR>", "." }
-for _, key in pairs(undo_breakpoinsts) do
+local undo_breakpoints = { "<CR>", "." }
+for _, key in pairs(undo_breakpoints) do
    vim.keymap.set("i", key, key .. "<c-g>u")
 end
 
@@ -36,8 +34,47 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "j", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'j']], { expr = true })
 vim.keymap.set("n", "k", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'k']], { expr = true })
 
--- Don't auto commenting new lines
+-- Don't auto comment new lines
 autocmd("BufEnter", {
    pattern = "*",
    command = "set fo-=c fo-=r fo-=o",
 })
+
+-- Disable some default plugins
+local default_plugins = {
+   "2html_plugin",
+   "getscript",
+   "getscriptPlugin",
+   "gzip",
+   "logipat",
+   "netrw",
+   "netrwPlugin",
+   "netrwSettings",
+   "netrwFileHandlers",
+   "matchit",
+   "tar",
+   "tarPlugin",
+   "rrhelper",
+   "spellfile_plugin",
+   "vimball",
+   "vimballPlugin",
+   "zip",
+   "zipPlugin",
+   "python3_provider",
+   "python_provider",
+   "node_provider",
+   "ruby_provider",
+   "perl_provider",
+   "tutor",
+   "rplugin",
+   "syntax",
+   "synmenu",
+   "optwin",
+   "compiler",
+   "bugreport",
+   "ftplugin",
+}
+
+for _, plugin in pairs(default_plugins) do
+   vim.g["loaded_" .. plugin] = 1
+end
