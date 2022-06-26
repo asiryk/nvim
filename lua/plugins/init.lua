@@ -15,19 +15,22 @@ return {
    --   config = function() require("plugins.config.null-ls") end,
    --},
 
-   -- Completion and snippets
-   ["rafamadriz/friendly-snippets"] = {}, -- todo maybe add some event not to load every time
-   ["hrsh7th/nvim-cmp"] = { config = function() require("plugins.config.cmp") end },
-   ["L3MON4D3/LuaSnip"] = { config = function() require("plugins.config.luasnip") end },
-   ["saadparwaiz1/cmp_luasnip"] = { after = "LuaSnip" },
+   -- Completion and snippets. Are loaded in Insert mode only
+   ["rafamadriz/friendly-snippets"] = { event = "InsertEnter" },
+   ["L3MON4D3/LuaSnip"] = { config = function() require("plugins.config.luasnip") end, after = "friendly-snippets" },
+   ["hrsh7th/nvim-cmp"] = { config = function() require("plugins.config.cmp") end, after = "LuaSnip" },
+   ["saadparwaiz1/cmp_luasnip"] = { after = "nvim-cmp" },
    ["hrsh7th/cmp-nvim-lsp"] = { after = "cmp_luasnip" },
    ["hrsh7th/cmp-nvim-lua"] = { after = "cmp-nvim-lsp" },
    ["hrsh7th/cmp-buffer"] = { after = "cmp-nvim-lua" },
    ["hrsh7th/cmp-path"] = { after = "cmp-buffer" },
 
-   ["numToStr/Comment.nvim"] = { config = function() require("Comment").setup() end },
+   ["numToStr/Comment.nvim"] = { config = function() require("Comment").setup() end, keys = { "gc", "gb" } },
 
-   ["nvim-telescope/telescope.nvim"] = { config = function() require("plugins.config.telescope") end },
+   ["nvim-telescope/telescope.nvim"] = {
+      config = function() require("plugins.config.telescope") end,
+      keys = { "<Leader>f" } -- All Telescope keybindings start with <Leader>f
+   },
 
    ["lewis6991/gitsigns.nvim"] = { config = function() require("plugins.config.gitsigns") end },
 
