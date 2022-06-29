@@ -13,6 +13,8 @@ vim.opt.tabstop = 2                               -- Amount of spaces the tab is
 vim.opt.shiftwidth = 2                            -- Amount of spaces to use for each step of (auto)indent
 vim.opt.smartindent = true                        -- Copy indent from the previous line
 vim.opt.termguicolors = true                      -- Set 24 bit colors
+vim.opt.laststatus = 3                            -- Set global status line
+vim.cmd([[highlight WinSeparator guibg=None]])    -- Remove borders for window separators
 
 -- Set undo breakpoints: Every time following key ({"<CR>", "."})
 -- gets pressed, it stops current change, so the next "undo"
@@ -72,7 +74,7 @@ local default_plugins = {
    "optwin",
    "compiler",
    "bugreport",
-   "ftplugin",
+   -- "ftplugin",
 }
 
 for _, plugin in pairs(default_plugins) do
