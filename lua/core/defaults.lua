@@ -7,6 +7,7 @@ vim.opt.clipboard = "unnamedplus"                 -- Use system clipboard
 vim.opt.cursorline = true                         -- Highlight current line
 vim.opt.number = true                             -- Show line numbers
 vim.opt.relativenumber = true                     -- Show line number starting at cursor position
+vim.opt.signcolumn = "yes"                        -- Show sign column always, even without lsp or gitsigns
 vim.opt.swapfile = false                          -- Disable swapfiles
 vim.opt.expandtab = true                          -- Use tabs instead of spaces
 vim.opt.tabstop = 2                               -- Amount of spaces the tab is displayed
@@ -14,7 +15,14 @@ vim.opt.shiftwidth = 2                            -- Amount of spaces to use for
 vim.opt.smartindent = true                        -- Copy indent from the previous line
 vim.opt.termguicolors = true                      -- Set 24 bit colors
 vim.opt.laststatus = 3                            -- Set global status line
-vim.cmd([[highlight WinSeparator guibg=None]])    -- Remove borders for window separators
+
+local function set_hi_groups()
+  vim.cmd([[highlight WinSeparator guibg=None]])  -- Remove borders for window separators
+  vim.cmd([[highlight SignColumn guibg=None]])    -- Remove background from signs column
+end
+
+set_hi_groups()
+require("core.utils").autocmd_default_colorscheme({ callback = set_hi_groups })
 
 -- Set undo breakpoints: Every time following key ({"<CR>", "."})
 -- gets pressed, it stops current change, so the next "undo"
