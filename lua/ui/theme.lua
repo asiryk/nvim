@@ -1,3 +1,8 @@
+local ok_everforest = pcall(require, "everforest")
+local ok_onedark = pcall(require, "onedark")
+
+if not ok_everforest and not ok_onedark then return end
+
 ---@param background? "dark" | "light
 ---@param contrast? "hard" | "medium" | "soft"
 ---@return string
