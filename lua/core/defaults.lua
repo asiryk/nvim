@@ -4,7 +4,7 @@ local autocmd = vim.api.nvim_create_autocmd
 
 vim.opt.mouse = "a" -- Enable mouse support
 vim.opt.clipboard = "unnamedplus" -- Use system clipboard
-vim.opt.cursorline = true -- Highlight current line
+vim.opt.cursorline = false -- Don't highlight current line
 vim.opt.number = true -- Show line numbers
 vim.opt.relativenumber = true -- Show line number starting at cursor position
 vim.opt.signcolumn = "yes" -- Show sign column always, even without lsp or gitsigns
