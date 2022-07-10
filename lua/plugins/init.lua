@@ -35,6 +35,11 @@ return {
     keys = { "<Leader>f" }, -- All Telescope keybindings start with <Leader>f
   },
 
+  ["kyazdani42/nvim-tree.lua"] = {
+    config = function() require("plugins.config.nvim-tree") end,
+    keys = { "<C-N>" },
+  },
+
   ["lewis6991/gitsigns.nvim"] = { config = function() require("plugins.config.gitsigns") end },
 
   -- Themes
