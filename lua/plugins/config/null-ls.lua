@@ -6,9 +6,9 @@ local formatting = null_ls.builtins.formatting
 local diagnostics = null_ls.builtins.diagnostics
 
 local sources = {
-   formatting.prettier,
-   formatting.stylua,
-   diagnostics.luacheck,
+  formatting.prettier,
+  formatting.stylua,
+  diagnostics.luacheck.with({ extra_args = { "--globals vim" } }),
 }
 
 null_ls.setup({ sources = sources })

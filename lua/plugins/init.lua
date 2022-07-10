@@ -13,12 +13,12 @@ return {
 
    ["neovim/nvim-lspconfig"] = { config = function() require("plugins.config.lspconfig") end },
 
-   --["jose-elias-alvarez/null-ls.nvim"] = {
-   --   after = "nvim-lspconfig",
-   --   config = function() require("plugins.config.null-ls") end,
-   --},
+   ["jose-elias-alvarez/null-ls.nvim"] = {
+     after = "nvim-lspconfig",
+     config = function() require("plugins.config.null-ls") end,
+   },
 
-   -- Completion and snippets. Are loaded in Insert mode only
+   -- Completion and snippets. Are loaded in Insert mode only.
    ["rafamadriz/friendly-snippets"] = { event = "InsertEnter" },
    ["L3MON4D3/LuaSnip"] = { config = function() require("plugins.config.luasnip") end, after = "friendly-snippets" },
    ["hrsh7th/nvim-cmp"] = { config = function() require("plugins.config.cmp") end, after = "LuaSnip" },
