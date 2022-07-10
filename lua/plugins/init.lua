@@ -37,7 +37,8 @@ return {
 
   ["lewis6991/gitsigns.nvim"] = { config = function() require("plugins.config.gitsigns") end },
 
-  ---- Themes
-  --["sainnhe/everforest"] = {},
-  --["navarasu/onedark.nvim"] = {},
+  -- Themes
+  ["sainnhe/everforest"] = {},
+  ["navarasu/onedark.nvim"] = {},
+  ["EdenEast/nightfox.nvim"] = {},
 }

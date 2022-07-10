@@ -1,7 +1,7 @@
 ---@param background? "dark" | "light
 ---@param contrast? "hard" | "medium" | "soft"
 ---@return string
-local everforest = function(background, contrast)
+local function everforest(background, contrast)
   if not background then background = "dark" end
   if not contrast then contrast = "soft" end
 
@@ -21,15 +21,12 @@ local everforest = function(background, contrast)
 end
 
 ---@param style? "dark" | "darker" | "cool" | "deep" | "warm" | "warmer" | "light"
-local onedark = function(style)
-  if not style then style = "warm" end
+local function onedark(style)
+  if not style then style = "darker" end
+
   local od = require("onedark")
-
-  od.setup({
-    style = style,
-  })
-
+  od.setup({ style = style })
   od.load()
 end
 
-everforest()
+onedark()

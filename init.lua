@@ -7,6 +7,8 @@ else
   require("plugins.packer").startup(require("plugins"))
 end
 
+require("ui.theme")
+
 local function dbg()
   local set = function(lhs, rhs) vim.keymap.set("n", lhs, rhs) end
 
