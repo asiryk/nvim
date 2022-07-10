@@ -6,33 +6,24 @@ local options = {
    highlight = {
       enable = true,
       use_languagetree = true,
-      disable = function (lang, bufnr)
+      disable = function (_, bufnr)
+        -- Disable highlight for large files.
         return vim.api.nvim_buf_line_count(bufnr) > 50000
       end
    },
-   indent = {
-      enable = false,
-   },
+   indent = { enable = false },
    ensure_installed = {
-      "bash",
-      "css",
-      "html",
       "java",
       "javascript",
       "jsdoc",
-      "json",
-      "latex",
       "lua",
       "markdown",
-      "python",
       "regex",
       "rust",
       "svelte",
-      "toml",
       "tsx",
       "typescript",
       "vim",
-      "yaml",
    },
 }
 

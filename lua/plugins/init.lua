@@ -3,10 +3,13 @@ return {
    ["nvim-lua/plenary.nvim"] = { module = "plenary" },
    ["kyazdani42/nvim-web-devicons"] = { module = "nvim-web-devicons" },
 
-   --["nvim-treesitter/nvim-treesitter"] = {
-   --   run = ":TSUpdate",
-   --   config = function() require("plugins.config.treesitter") end,
-   --},
+   ["nvim-treesitter/nvim-treesitter"] = {
+     -- Force load Treesitter because of the first time initialization error.
+     -- TODO: it should be lazy loaded.
+     setup = function() vim.cmd("PackerLoad nvim-treesitter") end,
+     config = function() require("plugins.config.treesitter") end,
+     run = ":TSUpdate",
+   },
 
    ["neovim/nvim-lspconfig"] = { config = function() require("plugins.config.lspconfig") end },
 
