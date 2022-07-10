@@ -2,32 +2,34 @@
 ---@param contrast? "hard" | "medium" | "soft"
 ---@return string
 local everforest = function(background, contrast)
-   if not background then background = "dark" end
-   if not contrast then contrast = "soft" end
+  if not background then background = "dark" end
+  if not contrast then contrast = "soft" end
 
-   background = "set background=" .. background .. "\n"
-   contrast = string.format("let g:everforest_background='%s'\n", contrast)
+  background = "set background=" .. background .. "\n"
+  contrast = string.format("let g:everforest_background='%s'\n", contrast)
 
-   local config = background .. contrast .. [[
+  local config = background
+    .. contrast
+    .. [[
     let g:everforest_enable_italic = 1
     let g:everforest_disable_italic_comment = 1
 
     colorscheme everforest
   ]]
 
-   vim.cmd(config)
+  vim.cmd(config)
 end
 
 ---@param style? "dark" | "darker" | "cool" | "deep" | "warm" | "warmer" | "light"
 local onedark = function(style)
-   if not style then style = "warm" end
-   local od = require("onedark")
+  if not style then style = "warm" end
+  local od = require("onedark")
 
-   od.setup {
-      style = style,
-   }
+  od.setup({
+    style = style,
+  })
 
-   od.load()
+  od.load()
 end
 
 everforest()
