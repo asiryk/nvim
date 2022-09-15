@@ -11,6 +11,13 @@ return {
     run = ":TSUpdate",
   },
 
+  ["nvim-treesitter/playground"] = { after = "nvim-treesitter" },
+
+  ["mattn/emmet-vim"] = {
+    ft = { "html", "svelte" },
+    run = ":EmmetInstall",
+  },
+
   ["neovim/nvim-lspconfig"] = { config = function() require("plugins.config.lspconfig") end },
 
   ["jose-elias-alvarez/null-ls.nvim"] = {
@@ -41,6 +48,13 @@ return {
   },
 
   ["lewis6991/gitsigns.nvim"] = { config = function() require("plugins.config.gitsigns") end },
+
+  ["akinsho/toggleterm.nvim"] = {
+    config = function() require("plugins.config.toggleterm") end,
+    keys = { "<C-T>" },
+  },
+
+  ["simrat39/rust-tools.nvim"] = { config = function() require("plugins.config.rust-tools") end },
 
   -- Themes
   ["sainnhe/everforest"] = {},

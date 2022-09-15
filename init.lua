@@ -17,3 +17,5 @@ local function dbg()
 end
 
 dbg()
+
+vim.cmd([[set guifont=Hack\ Nerd\ Font\ Mono:h14]])

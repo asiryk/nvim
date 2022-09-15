@@ -24,6 +24,8 @@ local function set_hi_groups()
   vim.cmd([[highlight GitSignsAdd guibg=None guifg=Green]])
   vim.cmd([[highlight GitSignsChange guibg=None guifg=DarkCyan]])
   vim.cmd([[highlight GitSignsDelete guibg=None guifg=Grey]])
+  vim.cmd([[highlight WinSeparator guibg=None]]) -- Remove borders for window separators
+  vim.cmd([[highlight SignColumn guibg=None]]) -- Remove background from signs column
 end
 
 gitsigns.setup(options)

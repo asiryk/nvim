@@ -3,7 +3,7 @@
 local autocmd = vim.api.nvim_create_autocmd
 
 vim.opt.mouse = "a" -- Enable mouse support
-vim.opt.clipboard = "unnamedplus" -- Use system clipboard
+-- vim.opt.clipboard = "unnamedplus" -- Use system clipboard -- TODO change this to use registers/tmux in the future
 vim.opt.cursorline = false -- Don't highlight current line
 vim.opt.number = true -- Show line numbers
 vim.opt.relativenumber = true -- Show line number starting at cursor position
@@ -15,14 +15,8 @@ vim.opt.shiftwidth = 2 -- Amount of spaces to use for each step of (auto)indent
 vim.opt.smartindent = true -- Copy indent from the previous line
 vim.opt.termguicolors = true -- Set 24 bit colors
 vim.opt.laststatus = 3 -- Set global status line
-
-local function set_hi_groups()
-  vim.cmd([[highlight WinSeparator guibg=None]]) -- Remove borders for window separators
-  vim.cmd([[highlight SignColumn guibg=None]]) -- Remove background from signs column
-end
-
-set_hi_groups()
-require("core.utils").autocmd_default_colorscheme({ callback = set_hi_groups })
+vim.opt.hlsearch = false -- Don't highlight searches
+vim.opt.ignorecase = true -- Ignore case when searching
 
 -- Set undo breakpoints: Every time following key ({"<CR>", "."})
 -- gets pressed, it stops current change, so the next "undo"
@@ -32,7 +26,16 @@ for _, key in pairs(undo_breakpoints) do
   vim.keymap.set("i", key, key .. "<c-g>u")
 end
 
--- Center screen on the "next" and "previos" search jumps
+-- Center cursor
+vim.keymap.set("n", "<C-i>", "<C-i>zz")
+vim.keymap.set("n", "<C-o>", "<C-o>zz")
+
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+
+vim.keymap.set("n", "<C-f>", "<C-f>zz")
+vim.keymap.set("n", "<C-b>", "<C-b>zz")
+
 vim.keymap.set("n", "n", "nzzzv") -- TODO: don't pollute :reg by pressing x, pasting, etc
 vim.keymap.set("n", "N", "Nzzzv")
 

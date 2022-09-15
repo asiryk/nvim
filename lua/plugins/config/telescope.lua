@@ -11,6 +11,7 @@ vim.keymap.set("n", "<Leader>ff", builtin.live_grep)
 vim.keymap.set("n", "<Leader>fa", builtin.builtin)
 vim.keymap.set("n", "<Leader>fb", builtin.buffers)
 vim.keymap.set("n", "<Leader>fc", find_nvim_config)
+vim.keymap.set("n", "<Leader>fr", builtin.lsp_references)
 
 local ignore_files = {
   -- work
@@ -32,6 +33,7 @@ local ignore_files = {
   "^.*%.fnt$",
   "^.*%.woff?2$",
   "^.*%.atlas$",
+  "^.*%.spine$",
 }
 
 local options = {

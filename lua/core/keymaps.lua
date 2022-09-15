@@ -18,3 +18,9 @@ set("n", "<Leader>lf", buf.formatting)
 set("n", "<Leader>lr", buf.rename)
 set("n", "<Leader>la", buf.code_action)
 set("n", "<Leader>lcr", vim.lsp.codelens.refresh)
+
+-- Quickfix list
+set("n", "<C-j>", "<cmd>cnext<CR>zz")
+set("n", "<C-k>", "<cmd>cprev<CR>zz")
+set("n", "<leader>k", "<cmd>lnext<CR>zz")
+set("n", "<leader>j", "<cmd>lprev<CR>zz")

@@ -35,7 +35,7 @@ nvim_tree.setup({
     show_on_dirs = true,
   },
   filters = {
-    dotfiles = true,
+    dotfiles = false,
     custom = {},
     exclude = {},
   },
@@ -46,3 +46,4 @@ nvim_tree.setup({
 })
 
 vim.keymap.set({ "n", "i" }, "<C-N>", "<cmd>NvimTreeToggle<CR>")
+vim.keymap.set("n", "<leader>nf", "<cmd>NvimTreeFindFile<CR>")
