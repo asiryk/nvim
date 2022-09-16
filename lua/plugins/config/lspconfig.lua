@@ -17,6 +17,18 @@ local config = {
       },
     },
   },
+  tsserver = {
+    root_dir = function(filename, buf)
+      local root_func
+      if string.find(filename, "ne-slots") then
+        -- root - where .git is located. otherwise works bad with monorepo
+        root_func = lspconfig.util.root_pattern(".git")
+      else
+        root_func = lspconfig.util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git")
+      end
+      return root_func(filename, buf)
+    end,
+  },
 }
 
 for _, server_name in ipairs(servers) do
