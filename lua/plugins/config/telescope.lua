@@ -12,6 +12,7 @@ vim.keymap.set("n", "<Leader>fa", builtin.builtin)
 vim.keymap.set("n", "<Leader>fb", builtin.buffers)
 vim.keymap.set("n", "<Leader>fc", find_nvim_config)
 vim.keymap.set("n", "<Leader>fr", builtin.lsp_references)
+vim.keymap.set("n", "<Leader>fh", builtin.help_tags)
 
 local ignore_files = {
   -- work
