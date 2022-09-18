@@ -1,5 +1,14 @@
 local lspconfig = require("lspconfig")
 
+-- TODO: center async goto definition with use of :h lsp-handler
+-- https://www.reddit.com/r/neovim/comments/r756ur/how_can_you_center_the_cursor_when_going_to/
+vim.keymap.set("n", "gd", vim.lsp.buf.definition)
+vim.keymap.set("n", "<S-K>", vim.lsp.buf.hover)
+vim.keymap.set("n", "<Leader>lf", vim.lsp.buf.formatting)
+vim.keymap.set("n", "<Leader>lr", vim.lsp.buf.rename)
+vim.keymap.set("n", "<Leader>la", vim.lsp.buf.code_action)
+vim.keymap.set("n", "<Leader>lcr", vim.lsp.codelens.refresh)
+
 local servers = { "pyright", "rust_analyzer", "tsserver", "sumneko_lua", "svelte", "html" }
 
 local config = {
