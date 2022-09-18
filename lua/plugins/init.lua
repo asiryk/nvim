@@ -42,6 +42,10 @@ return {
     keys = { "<Leader>f" }, -- All Telescope keybindings start with <Leader>f
   },
 
+  ["ThePrimeagen/harpoon"] = {
+    config = function() require("plugins.config.harpoon") end,
+  },
+
   ["kyazdani42/nvim-tree.lua"] = {
     config = function() require("plugins.config.nvim-tree") end,
     keys = { "<C-N>" },
