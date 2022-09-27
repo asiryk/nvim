@@ -31,3 +31,5 @@ end
 gitsigns.setup(options)
 set_hi_groups()
 require("core.utils").autocmd_default_colorscheme({ callback = set_hi_groups })
+
+vim.keymap.set("n", "<leader>gr", ":Gitsigns reset_hunk<cr>")
