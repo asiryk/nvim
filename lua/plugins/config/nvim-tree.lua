@@ -12,7 +12,7 @@ nvim_tree.setup({
   -- end,
   view = {
     width = 35,
-    height = 35,
+    -- height = 35, -- todo seems it's deprecated
     adaptive_size = true,
     hide_root_folder = true,
     side = "left",

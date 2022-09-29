@@ -10,7 +10,14 @@ return {
     config = function() require("plugins.config.treesitter") end,
     run = ":TSUpdate",
   },
-
+  ["nvim-treesitter/nvim-treesitter-context"] = {
+    config = function() require("plugins.config.treesitter-context") end,
+    after = "nvim-treesitter",
+  },
+  ["m-demare/hlargs.nvim"] = {
+    config = function() require("plugins.config.hlargs") end,
+    after = "nvim-treesitter",
+  },
   ["nvim-treesitter/playground"] = { after = "nvim-treesitter" },
 
   ["mattn/emmet-vim"] = {
