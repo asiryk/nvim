@@ -26,6 +26,10 @@ return {
   },
 
   ["neovim/nvim-lspconfig"] = { config = function() require("plugins.config.lspconfig") end },
+  ["williamboman/mason.nvim"] = {
+    after = "nvim-lspconfig",
+    config = function() require("plugins.config.mason") end,
+  },
 
   ["jose-elias-alvarez/null-ls.nvim"] = {
     after = "nvim-lspconfig",

@@ -55,6 +55,17 @@ autocmd("BufEnter", {
   command = "set fo-=c fo-=r fo-=o",
 })
 
+-- Highilight yanked text for a short time
+autocmd("TextYankPost", {
+  pattern = "*",
+  callback = function()
+    vim.highlight.on_yank({
+      higroup = "IncSearch",
+      timeout = 40,
+    })
+  end,
+})
+
 -- Disable some default plugins
 local default_plugins = {
   "2html_plugin",
