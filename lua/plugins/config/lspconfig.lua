@@ -11,12 +11,20 @@ vim.keymap.set("n", "<Leader>lcr", vim.lsp.codelens.refresh)
 
 local servers = { "pyright", "rust_analyzer", "tsserver", "sumneko_lua", "svelte", "html" }
 
+local function disable_formatting(client)
+  -- client.server_capabilities.documentFormattingProvider = false
+  -- client.server_capabilities.documentRangeFormattingProvider = false
+  -- below ones are deprecated in 0.8 ?
+  client.resolved_capabilities.document_formatting = false
+  client.resolved_capabilities.document_range_formatting = false
+end
+
 local config = {
   default = {
     flags = { debounce_text_changes = 150 },
-    format = false,
   },
   sumneko_lua = {
+    on_attach = disable_formatting,
     settings = {
       Lua = {
         runtime = { version = "LuaJIT" },
@@ -25,6 +33,9 @@ local config = {
         telemetry = { enable = false },
       },
     },
+  },
+  tsserver = {
+    on_attach = disable_formatting,
   },
 }
 

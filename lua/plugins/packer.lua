@@ -37,7 +37,7 @@ function Packer.startup(plugins)
       done_sym = "",
       removed_sym = "",
       moved_sym = "",
-      open_fn = function() return require("packer.util").float({ border = "single" }) end,
+      open_fn = function() return require("packer.util").float({ border = "none" }) end,
     },
   })
 
