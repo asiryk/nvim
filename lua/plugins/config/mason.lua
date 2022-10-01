@@ -4,7 +4,6 @@ local mason_api = require("mason.api.command")
 
 local ensure_installed = {
   -- lsp
-  "jdtls",
   "lua-language-server",
   "pyright",
   "svelte-language-server",
@@ -25,7 +24,7 @@ if #not_installed ~= 0 then
   local fn = function()
     -- close packer window
     local opened_win = vim.api.nvim_get_current_win()
-    vim.api.nvim_win_close(opened_win, true)
+    pcall(vim.api.nvim_win_close, opened_win, true)
     mason_api.MasonInstall(not_installed)
   end
   vim.schedule(fn)
