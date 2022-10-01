@@ -1,6 +1,12 @@
 local present, treesitter = pcall(require, "nvim-treesitter.configs")
 local utils = require("core.utils")
 
+-- Try to load treesitter on first launch when autoinstalled plugins
+-- todo probably remove since :TSUpdate at the end of the config
+if not present then vim.cmd("PackerLoad nvim-treesitter") end
+
+present, treesitter = pcall(require, "nvim-treesitter.configs")
+
 if not present then return end
 
 local options = {
@@ -34,3 +40,5 @@ local options = {
 }
 
 treesitter.setup(options)
+
+vim.cmd("normal! :TSUpdate<cr>")

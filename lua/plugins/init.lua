@@ -4,11 +4,7 @@ return {
   ["kyazdani42/nvim-web-devicons"] = { module = "nvim-web-devicons" },
 
   ["nvim-treesitter/nvim-treesitter"] = {
-    -- Force load Treesitter because of the first time initialization error.
-    -- TODO: it should be lazy loaded.
-    setup = function() vim.cmd("PackerLoad nvim-treesitter") end,
     config = function() require("plugins.config.treesitter") end,
-    run = ":TSUpdate",
   },
   ["nvim-treesitter/nvim-treesitter-context"] = {
     config = function() require("plugins.config.treesitter-context") end,
