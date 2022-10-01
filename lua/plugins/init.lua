@@ -74,5 +74,4 @@ return {
   -- Themes
   ["sainnhe/everforest"] = {},
   ["navarasu/onedark.nvim"] = {},
-  ["EdenEast/nightfox.nvim"] = {},
 }
