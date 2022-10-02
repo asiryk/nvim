@@ -36,6 +36,8 @@ local options = {
     "tsx",
     "typescript",
     "vim",
+    "c",
+    "go",
   },
 }
 
