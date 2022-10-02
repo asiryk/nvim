@@ -19,8 +19,7 @@ local function disable_formatting(client)
   client.server_capabilities.documentRangeFormattingProvider = false
 end
 
-local function on_attach(client, buffer)
-  disable_formatting(client)
+local function on_attach(_, buffer)
   local function set(lhs, rhs) vim.keymap.set("n", lhs, rhs, { buffer = buffer }) end
 
   -- TODO: center async goto definition with use of :h lsp-handler
@@ -36,6 +35,10 @@ end
 local config = {
   default = {
     flags = { debounce_text_changes = 150 },
+    on_attach = function(client, buffer)
+      disable_formatting(client)
+      on_attach(client, buffer)
+    end,
   },
   sumneko_lua = {
     on_attach = on_attach,
@@ -49,7 +52,10 @@ local config = {
     },
   },
   tsserver = {
-    on_attach = disable_formatting,
+    on_attach = function(client, buffer)
+      disable_formatting(client)
+      on_attach(client, buffer)
+    end,
   },
 }
 
