@@ -3,6 +3,7 @@
 local autocmd = vim.api.nvim_create_autocmd
 
 vim.opt.mouse = "a" -- Enable mouse support
+vim.opt.mousemodel = "extend" -- Disable mouse context menu
 -- vim.opt.clipboard = "unnamedplus" -- Use system clipboard -- TODO change this to use registers/tmux in the future
 vim.opt.cursorline = false -- Don't highlight current line
 vim.opt.number = true -- Show line numbers

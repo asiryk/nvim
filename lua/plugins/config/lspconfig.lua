@@ -1,14 +1,5 @@
 local lspconfig = require("lspconfig")
 
--- TODO: center async goto definition with use of :h lsp-handler
--- https://www.reddit.com/r/neovim/comments/r756ur/how_can_you_center_the_cursor_when_going_to/
-vim.keymap.set("n", "gd", vim.lsp.buf.definition)
-vim.keymap.set("n", "<S-K>", vim.lsp.buf.hover)
-vim.keymap.set("n", "<Leader>lf", vim.lsp.buf.formatting)
-vim.keymap.set("n", "<Leader>lr", vim.lsp.buf.rename)
-vim.keymap.set("n", "<Leader>la", vim.lsp.buf.code_action)
-vim.keymap.set("n", "<Leader>lcr", vim.lsp.codelens.refresh)
-
 local servers = {
   "pyright",
   "rust_analyzer",
@@ -24,11 +15,22 @@ local servers = {
 }
 
 local function disable_formatting(client)
-  -- client.server_capabilities.documentFormattingProvider = false
-  -- client.server_capabilities.documentRangeFormattingProvider = false
-  -- below ones are deprecated in 0.8 ?
-  client.resolved_capabilities.document_formatting = false
-  client.resolved_capabilities.document_range_formatting = false
+  client.server_capabilities.documentFormattingProvider = false
+  client.server_capabilities.documentRangeFormattingProvider = false
+end
+
+local function on_attach(client, buffer)
+  disable_formatting(client)
+  local function set(lhs, rhs) vim.keymap.set("n", lhs, rhs, { buffer = buffer }) end
+
+  -- TODO: center async goto definition with use of :h lsp-handler
+  -- https://www.reddit.com/r/neovim/comments/r756ur/how_can_you_center_the_cursor_when_going_to/
+  set("gd", vim.lsp.buf.definition)
+  set("<S-K>", vim.lsp.buf.hover)
+  set("<Leader>lf", function() vim.lsp.buf.format({ async = true }) end)
+  set("<Leader>lr", vim.lsp.buf.rename)
+  set("<Leader>la", vim.lsp.buf.code_action)
+  set("<Leader>lcr", vim.lsp.codelens.refresh)
 end
 
 local config = {
@@ -36,7 +38,7 @@ local config = {
     flags = { debounce_text_changes = 150 },
   },
   sumneko_lua = {
-    on_attach = disable_formatting,
+    on_attach = on_attach,
     settings = {
       Lua = {
         runtime = { version = "LuaJIT" },
