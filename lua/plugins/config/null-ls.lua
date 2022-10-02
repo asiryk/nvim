@@ -10,6 +10,7 @@ local sources = {
   code_actions.eslint_d,
   formatting.prettierd,
   formatting.stylua,
+  formatting.clang_format,
   diagnostics.luacheck.with({ extra_args = { "--globals vim" } }),
 }
 

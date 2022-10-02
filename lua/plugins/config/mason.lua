@@ -26,6 +26,7 @@ local ensure_installed = {
   "eslint_d",
   "prettierd",
   "stylua",
+  "clang-format",
 }
 
 local function not_installed(packages)
