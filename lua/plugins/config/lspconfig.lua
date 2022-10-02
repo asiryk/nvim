@@ -9,7 +9,19 @@ vim.keymap.set("n", "<Leader>lr", vim.lsp.buf.rename)
 vim.keymap.set("n", "<Leader>la", vim.lsp.buf.code_action)
 vim.keymap.set("n", "<Leader>lcr", vim.lsp.codelens.refresh)
 
-local servers = { "pyright", "rust_analyzer", "tsserver", "sumneko_lua", "svelte", "html" }
+local servers = {
+  "pyright",
+  "rust_analyzer",
+  "tsserver",
+  "sumneko_lua",
+  "svelte",
+  "html",
+  "jsonls",
+  "eslint",
+  "cssls",
+  "clangd",
+  "bashls",
+}
 
 local function disable_formatting(client)
   -- client.server_capabilities.documentFormattingProvider = false
