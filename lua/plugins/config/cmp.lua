@@ -3,7 +3,6 @@ local ok_luasnip, luasnip = pcall(require, "luasnip")
 
 if not ok_cmp or not ok_luasnip then return end
 
-local cmp_window = require("cmp.utils.window")
 local icons = require("ui.icons").lspkind
 
 vim.opt.completeopt = "menuone,noselect"
@@ -19,13 +18,6 @@ local function border(hl_name)
     { "╰", hl_name },
     { "│", hl_name },
   }
-end
-
-local _cmp_info = cmp_window.info
-cmp_window.info = function(self)
-  local info = _cmp_info(self)
-  info.scrollable = false
-  return info
 end
 
 local options = {

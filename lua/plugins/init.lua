@@ -35,10 +35,9 @@ return {
   },
 
   -- Completion and snippets. Are loaded in Insert mode only.
-  ["rafamadriz/friendly-snippets"] = { event = "InsertEnter" },
   ["L3MON4D3/LuaSnip"] = {
     config = function() require("plugins.config.luasnip") end,
-    after = "friendly-snippets",
+    event = "InsertEnter",
   },
   ["hrsh7th/nvim-cmp"] = {
     config = function() require("plugins.config.cmp") end,
@@ -79,6 +78,7 @@ return {
   },
 
   ["simrat39/rust-tools.nvim"] = {
+    ft = { "rust", "rs" },
     config = function() require("plugins.config.rust-tools") end,
   },
 

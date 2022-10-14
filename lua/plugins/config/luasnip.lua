@@ -8,6 +8,3 @@ local options = {
 }
 
 luasnip.config.set_config(options)
-
--- Load friendly-snippets
--- require("luasnip.loaders.from_vscode").lazy_load()
