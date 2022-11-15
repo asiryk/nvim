@@ -5,6 +5,11 @@ return {
 
   ["nvim-treesitter/nvim-treesitter"] = {
     config = function() require("plugins.config.treesitter") end,
+    run = function()
+      require("nvim-treesitter").setup()
+      require("plugins.config.treesitter")
+      vim.cmd("TSUpdate")
+    end,
   },
   ["nvim-treesitter/nvim-treesitter-context"] = {
     config = function() require("plugins.config.treesitter-context") end,
@@ -21,7 +26,7 @@ return {
   },
 
   ["mattn/emmet-vim"] = {
-    ft = { "html", "svelte" },
+    ft = { "html", "svelte", "astro", "handlebars" },
     run = ":EmmetInstall",
   },
 
