@@ -54,5 +54,5 @@ require("core.utils").autocmd_default_colorscheme({ callback = set_hi_groups })
 
 vim.keymap.set("n", "<leader>gh", ":Gitsigns reset_hunk<cr>")
 vim.keymap.set("n", "<leader>gb", ":Gitsigns reset_buffer<cr>")
-vim.keymap.set("n", "<leader>gk", ":Gitsigns prev_hunk<cr>")
-vim.keymap.set("n", "<leader>gj", ":Gitsigns next_hunk<cr>")
+vim.keymap.set("n", "<leader>gk", ":Gitsigns prev_hunk<cr>zz")
+vim.keymap.set("n", "<leader>gj", ":Gitsigns next_hunk<cr>zz")

@@ -1,4 +1,4 @@
-plugin
 .DS_STORE
 .idea
 .vscode
+packer_compiled.lua

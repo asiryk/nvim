@@ -9,13 +9,9 @@ end
 
 require("ui.colorscheme")
 
-local function dbg()
-  local set = function(lhs, rhs) vim.keymap.set("n", lhs, rhs) end
-
-  set("<leader>pc", ":PackerCompile<cr>")
-  set("<leader>ps", ":PackerSync<cr>")
-end
-
-dbg()
-
 vim.cmd([[set guifont=Hack\ Nerd\ Font\ Mono:h14]])
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "css", "html", "javascript", "typescript" },
+  command = "set shiftwidth=2",
+})
