@@ -1,17 +1,17 @@
 local lspconfig = require("lspconfig")
 
 local servers = {
+  "astro",
   "pyright",
   "rust_analyzer",
   "tsserver",
   "sumneko_lua",
   "svelte",
-  "html",
-  "jsonls",
+  -- "html",
+  -- "jsonls",
   "eslint",
-  "cssls",
+  -- "cssls",
   "clangd",
-  "bashls",
 }
 
 local function disable_formatting(client)
@@ -46,7 +46,10 @@ local config = {
       Lua = {
         runtime = { version = "LuaJIT" },
         diagnostics = { globals = { "vim" } },
-        workspace = { library = vim.api.nvim_get_runtime_file("", true) },
+        workspace = {
+          library = vim.api.nvim_get_runtime_file("", true),
+          checkThirdParty = false,
+        },
         telemetry = { enable = false },
       },
     },
@@ -75,8 +78,8 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "None" })
 end
 
-local autocmd = vim.api.nvim_create_autocmd
-autocmd("BufWinEnter", { -- Don't run LSP for large files.
-  pattern = "*",
-  callback = function() vim.cmd([[if line2byte(line("$") + 1) > 1000000 | LspStop | endif]]) end,
-})
+-- local autocmd = vim.api.nvim_create_autocmd
+-- autocmd("BufWinEnter", { -- Don't run LSP for large files.
+--   pattern = "*",
+--   callback = function() vim.cmd([[if line2byte(line("$") + 1) > 1000000 | LspStop | endif]]) end,
+-- })

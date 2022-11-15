@@ -1,13 +1,11 @@
-local present, null_ls = pcall(require, "null-ls")
-
-if not present then return end
+local null_ls = require("null-ls")
 
 local formatting = null_ls.builtins.formatting
 local diagnostics = null_ls.builtins.diagnostics
-local code_actions = null_ls.builtins.code_actions
+
+table.insert(formatting.prettierd.filetypes, "astro")
 
 local sources = {
-  code_actions.eslint_d,
   formatting.prettierd,
   formatting.stylua,
   formatting.clang_format,
