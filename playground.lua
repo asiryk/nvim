@@ -17,3 +17,7 @@
 --     vim.o.expandtab = false
 --   end
 -- end)
+
+local null_ls = require("null-ls")
+table.insert(null_ls.builtins.formatting.prettierd.filetypes, "astro")
+vim.pretty_print(null_ls.builtins.formatting.prettierd.filetypes)

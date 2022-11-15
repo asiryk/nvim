@@ -59,13 +59,13 @@ return {
   ["hrsh7th/cmp-path"] = { after = "cmp-buffer" },
 
   ["numToStr/Comment.nvim"] = {
-    config = function() require("Comment").setup() end,
+    config = function() require("plugins.config.comment-nvim") end,
     keys = { "gc", "gb" },
   },
 
   ["nvim-telescope/telescope.nvim"] = {
     config = function() require("plugins.config.telescope") end,
-    keys = { "<Leader>f" }, -- All Telescope keybindings start with <Leader>f
+    keys = { "<Leader>f" },
   },
 
   ["ThePrimeagen/harpoon"] = {
@@ -74,21 +74,17 @@ return {
 
   ["kyazdani42/nvim-tree.lua"] = {
     config = function() require("plugins.config.nvim-tree") end,
-    keys = { "<C-N>" },
+    keys = { "<C-N>", "<Leader>n" },
   },
 
   ["lewis6991/gitsigns.nvim"] = {
     config = function() require("plugins.config.gitsigns") end,
+    commit = "d3a8ba0b0d34bbac482b963e52b346065169fa20",
   },
 
   ["akinsho/toggleterm.nvim"] = {
     config = function() require("plugins.config.toggleterm") end,
     keys = { "<C-T>" },
-  },
-
-  ["simrat39/rust-tools.nvim"] = {
-    ft = { "rust", "rs" },
-    config = function() require("plugins.config.rust-tools") end,
   },
 
   -- Themes
