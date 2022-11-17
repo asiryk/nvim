@@ -6,7 +6,6 @@
 -- end
 -- print(get_buf_size_in_bytes(vim.api.nvim_get_current_buf()))
 
-
 -- vim.ui.select({ "tabs", "spaces" }, {
 --   prompt = "Select tabs or spaces:",
 --   format_item = function(item) return "I'd like to choose " .. item end,
@@ -18,6 +17,6 @@
 --   end
 -- end)
 
-local null_ls = require("null-ls")
-table.insert(null_ls.builtins.formatting.prettierd.filetypes, "astro")
-vim.pretty_print(null_ls.builtins.formatting.prettierd.filetypes)
+-- local null_ls = require("null-ls")
+-- table.insert(null_ls.builtins.formatting.prettierd.filetypes, "astro")
+-- vim.pretty_print(null_ls.builtins.formatting.prettierd.filetypes)

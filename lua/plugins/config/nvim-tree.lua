@@ -47,3 +47,6 @@ nvim_tree.setup({
 
 vim.keymap.set({ "n", "i" }, "<C-N>", "<cmd>NvimTreeToggle<CR>")
 vim.keymap.set("n", "<leader>nf", "<cmd>NvimTreeFindFile<CR>")
+
+-- Load colorscheme once again to fix wrong borders
+vim.cmd(string.format("colorscheme %s", vim.g.colors_name))

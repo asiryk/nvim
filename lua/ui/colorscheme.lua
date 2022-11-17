@@ -7,8 +7,7 @@ if not ok_everforest and not ok_onedark then return end
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 
-local function default()
-  -- Transparent background
+local function transparent()
   vim.cmd([[
     highlight Normal guibg=NONE ctermbg=NONE
     highlight EndOfBuffer guibg=NONE ctermbg=NONE
@@ -19,15 +18,12 @@ local function default()
     highlight NvimTreeEndOfBuffer guibg=None
     highlight NvimTreeNormal guibg=None
   ]])
+end
 
+local function default()
   -- highlight current line number
   vim.opt.cursorline = true
-  vim.cmd([[
-    hi clear CursorLine
-  ]])
-
-  -- remove packer pink thing
-  vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#1e222a" })
+  vim.cmd("hi clear CursorLine")
 end
 
 ---@param background? "dark" | "light
@@ -37,15 +33,13 @@ local function everforest(background, contrast)
   if not contrast then contrast = "soft" end
 
   vim.cmd("set background=" .. background)
-  vim.cmd("let g:everforest_background=" .. contrast)
+  vim.cmd(string.format("let g:everforest_background='%s'", contrast))
   vim.cmd([[
     let g:everforest_enable_italic = 1
     let g:everforest_disable_italic_comment = 1
 
     colorscheme everforest
   ]])
-
-  default()
 end
 
 ---@param style? "dark" | "darker" | "cool" | "deep" | "warm" | "warmer" | "light"
@@ -53,10 +47,8 @@ local function onedark(style)
   if not style then style = "darker" end
 
   local theme = require("onedark")
-  theme.setup({ style = style })
+  theme.setup({ style = style, transparent = true })
   theme.load()
-
-  default()
 end
 
 local group = augroup("colorscheme", {})
@@ -75,10 +67,12 @@ autocmd("TextYankPost", {
     local mode = vim.api.nvim_get_mode()["mode"]
 
     -- Only highlight in normal mode. not in visual
-    if mode == "no" then vim.highlight.on_yank({
-      higroup = "Visual",
-      timeout = 75,
-    }) end
+    if mode == "no" then
+      vim.highlight.on_yank({
+        higroup = "Visual",
+        timeout = 75,
+      })
+    end
   end,
 })
 
