@@ -20,3 +20,9 @@
 -- local null_ls = require("null-ls")
 -- table.insert(null_ls.builtins.formatting.prettierd.filetypes, "astro")
 -- vim.pretty_print(null_ls.builtins.formatting.prettierd.filetypes)
+
+-- NeoTreeVertSplit = { fg = c.bg1, bg = cfg.transparent and c.none or c.bg1 },
+
+-- NvimTreeVertSplit
+
+-- VertSplit = {fg = c.bg3},

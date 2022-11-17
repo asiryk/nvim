@@ -24,6 +24,9 @@ local function default()
   -- highlight current line number
   vim.opt.cursorline = true
   vim.cmd("hi clear CursorLine")
+
+  local c = require("onedark.colors")
+  vim.api.nvim_set_hl(0, "NvimTreeVertSplit", { fg = c.bg3 })
 end
 
 ---@param background? "dark" | "light
