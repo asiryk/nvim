@@ -15,10 +15,5 @@ toggleterm.setup({
   end,
 })
 
-local Terminal = require("toggleterm.terminal").Terminal
-local btop = Terminal:new({ cmd = "btop", hidden = true })
-
-vim.keymap.set("n", "<Leader>tb", function() btop:toggle() end)
-
 -- Load colorscheme once again to fix wrong borders
 vim.cmd(string.format("colorscheme %s", vim.g.colors_name))
