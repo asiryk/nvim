@@ -27,6 +27,10 @@ local function default()
 
   local c = require("onedark.colors")
   vim.api.nvim_set_hl(0, "NvimTreeVertSplit", { fg = c.bg3 })
+  vim.cmd([[
+    hi clear Hlargs
+    hi link Hlargs @parameter
+  ]]) -- use default ts parameter color for hlargs
 end
 
 ---@param background? "dark" | "light
