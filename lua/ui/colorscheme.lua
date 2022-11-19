@@ -26,11 +26,18 @@ local function default()
   vim.cmd("hi clear CursorLine")
 
   local c = require("onedark.colors")
+  -- Make VertSplit look not faded
   vim.api.nvim_set_hl(0, "NvimTreeVertSplit", { fg = c.bg3 })
+
+  -- Make Harpoon transparent
+  vim.api.nvim_set_hl(0, "HarpoonBorder", { bg = nil, fg = c.fg })
+  vim.api.nvim_set_hl(0, "HarpoonWindow", { bg = nil, fg = c.fg })
+
+  -- use default ts parameter color for hlargs
   vim.cmd([[
     hi clear Hlargs
     hi link Hlargs @parameter
-  ]]) -- use default ts parameter color for hlargs
+  ]])
 end
 
 ---@param background? "dark" | "light
