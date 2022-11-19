@@ -26,3 +26,36 @@
 -- NvimTreeVertSplit
 
 -- VertSplit = {fg = c.bg3},
+
+
+
+
+---
+--- LSP rust-analyzer runnables
+---
+-- local buf = 13
+-- local function get_params(buf_number)
+--   return {
+--     textDocument = vim.lsp.util.make_text_document_params(buf_number),
+--     position = nil, -- get em all
+--   }
+-- end
+-- local function get_options(result)
+--   local option_strings = {}
+--
+--   for _, runnable in ipairs(result) do
+--     local str = runnable.label
+--     table.insert(option_strings, str)
+--   end
+--
+--   return option_strings
+-- end
+-- local function handler(_, result)
+--   -- :h lsp-handler
+--   local options = get_options(result)
+--   vim.pretty_print(options)
+-- end
+-- vim.lsp.buf_request(buf, "experimental/runnables", get_params(buf), handler)
+---
+--- LSP rust-analyzer runnables
+---

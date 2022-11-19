@@ -87,6 +87,11 @@ return {
     keys = { "<C-T>" },
   },
 
+  ["simrat39/rust-tools.nvim"] = {
+    config = function() require("plugins.config.rust-tools") end,
+    ft = { "rust" },
+  },
+
   -- Themes
   ["sainnhe/everforest"] = {},
   ["navarasu/onedark.nvim"] = {},
