@@ -36,7 +36,7 @@ local config = {
   default = {
     flags = { debounce_text_changes = 150 },
     on_attach = function(client, buffer)
-      disable_formatting(client)
+      -- Set keybindings for buffer
       on_attach(client, buffer)
     end,
   },
