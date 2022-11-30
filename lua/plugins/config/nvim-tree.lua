@@ -17,6 +17,7 @@ nt.setup({
 
     set("<Tab>", nt_api.node.open.preview)
     set("<CR>", nt_api.node.open.edit)
+    set("<2-LeftMouse>", nt_api.node.open.edit)
     set("gk", nt_api.node.navigate.parent)
     set("gj", nt_api.node.navigate.sibling.last)
     set("gc", bind(nt_api.tree.collapse_all, true))
