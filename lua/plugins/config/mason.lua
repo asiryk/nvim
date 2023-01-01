@@ -25,6 +25,7 @@ local ensure_installed = {
   -- other
   "prettierd",
   "stylua",
+  "luacheck",
   "clang-format",
 }
 
