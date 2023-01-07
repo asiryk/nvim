@@ -31,6 +31,12 @@ local options = {
     "c",
     "go",
     "glsl",
+    "yaml",
+    "toml",
+    "json",
+    "python",
+    "latex",
+    "dockerfile",
   },
 }
 
