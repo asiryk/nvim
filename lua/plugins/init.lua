@@ -3,6 +3,10 @@ return {
   ["nvim-lua/plenary.nvim"] = { module = "plenary" },
   ["kyazdani42/nvim-web-devicons"] = { module = "nvim-web-devicons" },
 
+  ["asiryk/auto-hlsearch.nvim"] = {
+    config = function() require("auto-hlsearch").setup() end,
+  },
+
   ["nvim-treesitter/nvim-treesitter"] = {
     config = function() require("plugins.config.treesitter") end,
     run = function()
