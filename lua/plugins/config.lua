@@ -2,9 +2,7 @@ return {
   ["nvim-lua/plenary.nvim"] = {},
   ["kyazdani42/nvim-web-devicons"] = {},
 
-  ["asiryk/auto-hlsearch.nvim"] = {
-    config = function() require("auto-hlsearch").setup() end,
-  },
+  ["asiryk/auto-hlsearch.nvim"] = { config = {} },
 
   ["nvim-treesitter/nvim-treesitter"] = {
     config = function() require("plugins.config.treesitter") end,
@@ -14,9 +12,7 @@ return {
       vim.cmd("TSUpdate")
     end,
   },
-  ["m-demare/hlargs.nvim"] = {
-    config = function() require("plugins.config.hlargs") end,
-  },
+  ["m-demare/hlargs.nvim"] = { config = {} },
   ["nvim-treesitter/playground"] = {},
 
   ["jinh0/eyeliner.nvim"] = {
@@ -55,7 +51,7 @@ return {
 
   ["numToStr/Comment.nvim"] = {
     config = function() require("plugins.config.comment-nvim") end,
-    keys = { "gc", "gb" },
+    keys = { { "gc", mode = { "n", "v" } }, { "gb", mode = { "n", "v" } } },
   },
 
   ["nvim-telescope/telescope.nvim"] = {

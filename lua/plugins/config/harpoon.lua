@@ -7,18 +7,11 @@ local utils = require("core.utils")
 local harpoon_mark = require("harpoon.mark")
 local harpoon_ui = require("harpoon.ui")
 
-local alt = { -- When I press alt<key> on macos
-  ["n"] = "˜",
-  ["m"] = "µ",
-  ["j"] = "∆",
-  ["k"] = "˚",
-  ["l"] = "¬",
-  [";"] = "…",
-}
+local function set_keymap(lhs, rhs) vim.keymap.set("n", lhs, rhs, { silent = true }) end
 
-vim.keymap.set("n", alt["n"], harpoon_mark.add_file)
-vim.keymap.set("n", alt["m"], harpoon_ui.toggle_quick_menu)
-vim.keymap.set("n", alt["j"], utils.center_move(bind(harpoon_ui.nav_file, 1)))
-vim.keymap.set("n", alt["k"], utils.center_move(bind(harpoon_ui.nav_file, 2)))
-vim.keymap.set("n", alt["l"], utils.center_move(bind(harpoon_ui.nav_file, 3)))
-vim.keymap.set("n", alt[";"], utils.center_move(bind(harpoon_ui.nav_file, 4)))
+set_keymap("<Leader>ha", harpoon_mark.add_file)
+set_keymap("<Leader>ho", harpoon_ui.toggle_quick_menu)
+set_keymap("<C-J>", utils.center_move(bind(harpoon_ui.nav_file, 1)))
+set_keymap("<C-K>", utils.center_move(bind(harpoon_ui.nav_file, 2)))
+set_keymap("<C-L>", utils.center_move(bind(harpoon_ui.nav_file, 3)))
+set_keymap("<C-:>", utils.center_move(bind(harpoon_ui.nav_file, 4)))
