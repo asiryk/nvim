@@ -1,4 +1,4 @@
-#!/usr/local/bin/lua
+#!/usr/bin/lua
 
 os.execute([[
   rm -rfd ~/.config/nvim/plugin/;

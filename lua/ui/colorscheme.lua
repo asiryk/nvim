@@ -61,7 +61,7 @@ local function onedark(style)
   if not style then style = "darker" end
 
   local theme = require("onedark")
-  theme.setup({ style = style, transparent = true })
+  theme.setup({ style = style, transparent = false })
   theme.load()
 end
 
