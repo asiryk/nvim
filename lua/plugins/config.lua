@@ -4,7 +4,6 @@ return {
 
   ["asiryk/auto-hlsearch.nvim"] = {
     config = function() require("auto-hlsearch").setup() end,
-    tag = "1.0.0",
   },
 
   ["nvim-treesitter/nvim-treesitter"] = {
@@ -14,9 +13,6 @@ return {
       require("plugins.config.treesitter")
       vim.cmd("TSUpdate")
     end,
-  },
-  ["nvim-treesitter/nvim-treesitter-context"] = {
-    config = function() require("plugins.config.treesitter-context") end,
   },
   ["m-demare/hlargs.nvim"] = {
     config = function() require("plugins.config.hlargs") end,
