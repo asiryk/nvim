@@ -18,7 +18,8 @@ local ensure_installed = {
   "html-lsp",
   "json-lsp",
   "eslint-lsp",
-
+  "docker-compose-language-service",
+  "dockerfile-language-server",
   -- dap
   -- "chrome-debug-adapter",
 

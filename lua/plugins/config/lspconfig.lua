@@ -7,6 +7,8 @@ local servers = {
   "tsserver",
   "lua_ls",
   "svelte",
+  "dockerls",
+  "docker_compose_language_service",
   -- "html",
   -- "jsonls",
   "eslint",
