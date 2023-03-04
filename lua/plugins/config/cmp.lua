@@ -1,7 +1,5 @@
-local ok_cmp, cmp = pcall(require, "cmp")
-local ok_luasnip, luasnip = pcall(require, "luasnip")
-
-if not ok_cmp or not ok_luasnip then return end
+local cmp = require("cmp")
+local luasnip = require("luasnip")
 
 local icons = require("ui.icons").lspkind
 

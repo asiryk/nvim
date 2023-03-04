@@ -40,6 +40,7 @@ local ignore_files = {
 
 local options = {
   defaults = {
+    winblend = DEFAULT_WINBLEND,
     prompt_prefix = "",
     selection_caret = "  ",
     file_ignore_patterns = ignore_files,

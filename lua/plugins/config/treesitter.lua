@@ -22,6 +22,7 @@ local options = {
     "jsdoc",
     "lua",
     "markdown",
+    "markdown_inline",
     "regex",
     "rust",
     "svelte",
@@ -37,6 +38,7 @@ local options = {
     "python",
     "latex",
     "dockerfile",
+    "bash",
   },
 }
 

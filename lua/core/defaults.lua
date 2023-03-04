@@ -2,9 +2,10 @@
 
 local autocmd = vim.api.nvim_create_autocmd
 
+DEFAULT_WINBLEND = 15
+
 vim.opt.mouse = "a" -- Enable mouse support
 vim.opt.mousemodel = "extend" -- Disable mouse context menu
--- vim.opt.clipboard = "unnamedplus" -- Use system clipboard -- TODO change this to use registers/tmux in the future
 vim.opt.cursorline = false -- Don't highlight current line
 vim.opt.number = true -- Show line numbers
 vim.opt.relativenumber = true -- Show line number starting at cursor position
@@ -18,6 +19,7 @@ vim.opt.termguicolors = true -- Set 24 bit colors
 vim.opt.laststatus = 3 -- Set global status line
 vim.opt.hlsearch = false -- Don't highlight searches
 vim.opt.ignorecase = true -- Ignore case when searching
+vim.opt.pumblend = DEFAULT_WINBLEND -- Blend colors with compositor
 
 -- Set undo breakpoints: Every time following key ({"<CR>", "."})
 -- gets pressed, it stops current change, so the next "undo"

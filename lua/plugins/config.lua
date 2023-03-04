@@ -1,7 +1,7 @@
 return {
   ["nvim-lua/plenary.nvim"] = {},
   ["kyazdani42/nvim-web-devicons"] = {},
-  ["asiryk/auto-hlsearch.nvim"] = { config = {} },
+  ["asiryk/auto-hlsearch.nvim"] = {},
   ["nvim-treesitter/nvim-treesitter"] = {
     config = function() require("plugins.config.treesitter") end,
     build = function()
