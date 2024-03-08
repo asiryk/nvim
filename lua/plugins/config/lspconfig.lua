@@ -1,14 +1,9 @@
 local lspconfig = require("lspconfig")
 
 local servers = {
-  "astro",
-  "pyright",
   "rust_analyzer",
   "tsserver",
   "lua_ls",
-  "svelte",
-  "dockerls",
-  "docker_compose_language_service",
   -- "html",
   -- "jsonls",
   "eslint",

@@ -8,20 +8,13 @@ mason.setup({
 
 local ensure_installed = {
   -- lsp
-  "astro-language-server",
   "lua-language-server",
-  "pyright",
-  "svelte-language-server",
   "typescript-language-server",
   "clangd",
   "css-lsp",
   "html-lsp",
   "json-lsp",
   "eslint-lsp",
-  "docker-compose-language-service",
-  "dockerfile-language-server",
-  -- dap
-  -- "chrome-debug-adapter",
 
   -- other
   "prettierd",

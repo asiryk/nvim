@@ -1,6 +1,5 @@
 local cmp = require("cmp")
 local luasnip = require("luasnip")
-
 local icons = require("ui.icons").lspkind
 
 vim.opt.completeopt = "menuone,noselect"

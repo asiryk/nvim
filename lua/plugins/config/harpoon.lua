@@ -19,3 +19,9 @@ set_keymap("<C-J>", utils.center_move(bind(harpoon_ui.nav_file, 1)))
 set_keymap("<C-K>", utils.center_move(bind(harpoon_ui.nav_file, 2)))
 set_keymap("<C-L>", utils.center_move(bind(harpoon_ui.nav_file, 3)))
 set_keymap("<C-:>", utils.center_move(bind(harpoon_ui.nav_file, 4)))
+
+table.insert(G.plugin_hl, function(color)
+  -- Make Harpoon transparent
+  vim.api.nvim_set_hl(0, "HarpoonBorder", { bg = nil, fg = color.fg })
+  vim.api.nvim_set_hl(0, "HarpoonWindow", { bg = nil, fg = color.fg })
+end)

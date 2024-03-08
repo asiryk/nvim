@@ -3,10 +3,26 @@ local nt_api = require("nvim-tree.api")
 local bind = require("plenary.fun").bind
 
 nt.setup({
-  sort_by = "case_sensitive",
-  disable_netrw = true,
+  sort = {
+    sorter = "case_sensitive",
+  },
   hijack_cursor = true,
-  remove_keymaps = true,
+  renderer = {
+    group_empty = true,
+    highlight_git = "icon",
+    highlight_diagnostics = "all",
+    icons = {
+      show = {
+        file = true,
+        folder = false,
+        folder_arrow = true,
+        git = false,
+        modified = true,
+        diagnostics = true,
+        bookmarks = true,
+      },
+    },
+  },
   on_attach = function(buffer)
     local function set(lhs, rhs)
       vim.keymap.set("n", lhs, rhs, { buffer = buffer, nowait = true })
@@ -29,37 +45,9 @@ nt.setup({
     set("cd", nt_api.tree.change_root_to_node)
     set("<S-R>", nt_api.tree.reload)
   end,
-  view = {
-    width = 35,
-    adaptive_size = true,
-    hide_root_folder = true,
-    side = "left",
-    signcolumn = "yes",
-  },
-  renderer = {
-    group_empty = true,
-    highlight_git = true,
-    icons = {
-      show = {
-        file = true,
-        folder = false,
-        folder_arrow = true,
-        git = false,
-      },
-    },
-  },
   diagnostics = {
     enable = true,
     show_on_dirs = true,
-  },
-  filters = {
-    dotfiles = false,
-    custom = {},
-    exclude = {},
-  },
-  git = {
-    enable = true,
-    ignore = false,
   },
 })
 

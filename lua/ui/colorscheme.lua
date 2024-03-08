@@ -24,14 +24,11 @@ local function default()
   -- highlight current line number
   vim.opt.cursorline = true
   vim.cmd("hi clear CursorLine")
-
   local c = require("onedark.colors")
-  -- Make VertSplit look not faded
-  vim.api.nvim_set_hl(0, "NvimTreeVertSplit", { fg = c.bg3 })
 
-  -- Make Harpoon transparent
-  vim.api.nvim_set_hl(0, "HarpoonBorder", { bg = nil, fg = c.fg })
-  vim.api.nvim_set_hl(0, "HarpoonWindow", { bg = nil, fg = c.fg })
+  for _, func in ipairs(G.plugin_hl) do
+    func(c)
+  end
 
   -- use default ts parameter color for hlargs
   vim.cmd([[

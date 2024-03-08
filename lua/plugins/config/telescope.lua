@@ -1,7 +1,4 @@
-local present, telescope = pcall(require, "telescope")
-
-if not present then return end
-
+local telescope = require("telescope")
 local builtin = require("telescope.builtin")
 
 local function find_nvim_config() builtin.find_files({ cwd = "~/.config/nvim/" }) end
@@ -16,12 +13,6 @@ vim.keymap.set("n", "<Leader>fr", builtin.lsp_references)
 vim.keymap.set("n", "<Leader>fh", builtin.help_tags)
 
 local ignore_files = {
-  -- work
-  -- "assets/.+%.json",
-  -- "config/.+%.json",
-  -- "multimedia/.+%.json",
-  -- "logs/.+%.json",
-
   -- folders
   "node_modules/",
 
