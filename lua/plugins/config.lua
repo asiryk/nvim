@@ -58,6 +58,9 @@ return {
     config = function() require("plugins.config.telescope") end,
     keys = { "<Leader>f" },
   },
+  ["nvim-telescope/telescope-fzf-native.nvim"] = {
+    build = "make"
+  },
 
   ["ThePrimeagen/harpoon"] = {
     config = function() require("plugins.config.harpoon") end,

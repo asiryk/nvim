@@ -3,7 +3,7 @@ local builtin = require("telescope.builtin")
 
 local function find_nvim_config() builtin.find_files({ cwd = "~/.config/nvim/" }) end
 
-vim.keymap.set("n", "<Leader>o", "<nop>", { desc = "Ignore telescope missclick"})
+vim.keymap.set("n", "<Leader>o", "<nop>", { desc = "Ignore telescope missclick" })
 vim.keymap.set("n", "<Leader>fo", builtin.find_files)
 vim.keymap.set("n", "<Leader>ff", builtin.live_grep)
 vim.keymap.set("n", "<Leader>fa", builtin.builtin)
@@ -39,3 +39,4 @@ local options = {
 }
 
 telescope.setup(options)
+telescope.load_extension("fzf")
