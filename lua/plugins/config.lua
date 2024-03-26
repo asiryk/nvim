@@ -79,6 +79,14 @@ return {
     tag = "v0.7"
   },
 
+  ["mbbill/undotree"] = {
+    config = function()
+      vim.keymap.set("n", "<leader>ut", vim.cmd.UndotreeToggle)
+    end,
+    commit = "aa93a7e"
+  },
+
+
   -- ["akinsho/toggleterm.nvim"] = {
   --   config = function() require("plugins.config.toggleterm") end,
   --   keys = { "<C-T>" },
