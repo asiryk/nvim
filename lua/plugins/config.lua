@@ -12,17 +12,14 @@ return {
       vim.cmd("TSUpdate")
     end,
   },
-  -- ["m-demare/hlargs.nvim"] = { config = {} },
-  -- ["nvim-treesitter/playground"] = {},
+  ["jinh0/eyeliner.nvim"] = {
+    opts = { highlight_on_key = true, dim = true }
+  },
 
-  -- ["jinh0/eyeliner.nvim"] = {
-  --   config = function() require("eyeliner").setup({ highlight_on_key = true }) end,
-  -- },
-
-  -- ["mattn/emmet-vim"] = {
-  --   ft = { "html", "svelte", "astro", "handlebars" },
-  --   build = ":EmmetInstall",
-  -- },
+  ["mattn/emmet-vim"] = {
+    ft = { "html", "svelte", "astro", "handlebars" },
+    build = ":EmmetInstall",
+  },
 
   ["neovim/nvim-lspconfig"] = {
     config = function() require("plugins.config.lspconfig") end,
@@ -36,18 +33,21 @@ return {
   },
 
   -- Completion and snippets. Are loaded in Insert mode only.
-  ["L3MON4D3/LuaSnip"] = {
-    config = function() require("plugins.config.luasnip") end,
-    event = "InsertEnter",
-  },
   ["hrsh7th/nvim-cmp"] = {
     config = function() require("plugins.config.cmp") end,
+    dependencies = {
+      {
+        "L3MON4D3/LuaSnip",
+        config = function() require("plugins.config.luasnip") end,
+        event = "InsertEnter",
+      },
+      "saadparwaiz1/cmp_luasnip",
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-nvim-lua",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+    }
   },
-  ["saadparwaiz1/cmp_luasnip"] = {},
-  ["hrsh7th/cmp-nvim-lsp"] = {},
-  ["hrsh7th/cmp-nvim-lua"] = {},
-  ["hrsh7th/cmp-buffer"] = {},
-  ["hrsh7th/cmp-path"] = {},
 
   ["numToStr/Comment.nvim"] = {
     config = function() require("plugins.config.comment-nvim") end,
@@ -57,9 +57,12 @@ return {
   ["nvim-telescope/telescope.nvim"] = {
     config = function() require("plugins.config.telescope") end,
     keys = { "<Leader>f" },
-  },
-  ["nvim-telescope/telescope-fzf-native.nvim"] = {
-    build = "make"
+    dependencies = {
+      {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "make",
+      },
+    },
   },
 
   ["ThePrimeagen/harpoon"] = {
@@ -73,7 +76,7 @@ return {
 
   ["lewis6991/gitsigns.nvim"] = {
     config = function() require("plugins.config.gitsigns") end,
-    commit = "d3a8ba0b0d34bbac482b963e52b346065169fa20",
+    tag = "v0.7"
   },
 
   -- ["akinsho/toggleterm.nvim"] = {

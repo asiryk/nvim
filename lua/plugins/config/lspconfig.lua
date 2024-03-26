@@ -22,6 +22,7 @@ local function on_attach(_, buffer)
   -- TODO: center async goto definition with use of :h lsp-handler
   -- https://www.reddit.com/r/neovim/comments/r756ur/how_can_you_center_the_cursor_when_going_to/
   set("gd", vim.lsp.buf.definition)
+  set("gr", vim.lsp.buf.references)
   set("<S-K>", vim.lsp.buf.hover)
   set("<Leader>lf", function() vim.lsp.buf.format({ async = true }) end)
   set("<Leader>lr", vim.lsp.buf.rename)
@@ -33,7 +34,6 @@ local config = {
   default = {
     flags = { debounce_text_changes = 150 },
     on_attach = function(client, buffer)
-      -- Set keybindings for buffer
       on_attach(client, buffer)
     end,
   },
@@ -42,10 +42,15 @@ local config = {
     settings = {
       Lua = {
         runtime = { version = "LuaJIT" },
-        diagnostics = { globals = { "vim" } },
         workspace = {
-          library = vim.api.nvim_get_runtime_file("", true),
           checkThirdParty = false,
+          library = {
+            "${3rd}/luv/library",
+            unpack(vim.api.nvim_get_runtime_file("", true)),
+          },
+        },
+        completion = {
+          callSnippet = "Replace",
         },
         telemetry = { enable = false },
       },

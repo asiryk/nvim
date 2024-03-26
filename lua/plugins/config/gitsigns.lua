@@ -1,8 +1,6 @@
-local present, gitsigns = pcall(require, "gitsigns")
-
-if not present then return end
-
+local gs = require("gitsigns")
 local icons = require("ui.icons").ui
+local utils = require("core.utils")
 
 local options = {
   signs = {
@@ -40,19 +38,17 @@ local options = {
   yadm = { enable = false },
 }
 
-local function set_hi_groups()
-  vim.cmd([[highlight GitSignsAdd guibg=None guifg=Green]])
-  vim.cmd([[highlight GitSignsChange guibg=None guifg=DarkCyan]])
-  vim.cmd([[highlight GitSignsDelete guibg=None guifg=Grey]])
+table.insert(G.plugin_hl, function(c)
+  vim.cmd([[highlight GitSignsAdd guibg=None guifg=]] .. c.green)
+  vim.cmd([[highlight GitSignsChange guibg=None guifg=]] .. c.cyan)
+  vim.cmd([[highlight GitSignsDelete guibg=None guifg=]] .. c.light_grey)
   vim.cmd([[highlight WinSeparator guibg=None]]) -- Remove borders for window separators
   vim.cmd([[highlight SignColumn guibg=None]]) -- Remove background from signs column
-end
+end)
 
-gitsigns.setup(options)
-set_hi_groups()
-require("core.utils").autocmd_default_colorscheme({ callback = set_hi_groups })
+gs.setup(options)
 
-vim.keymap.set("n", "<leader>gr", ":Gitsigns reset_hunk<cr>")
-vim.keymap.set("n", "<leader>gR", ":Gitsigns reset_buffer<cr>")
-vim.keymap.set("n", "<leader>gk", ":Gitsigns prev_hunk<cr>zz")
-vim.keymap.set("n", "<leader>gj", ":Gitsigns next_hunk<cr>zz")
+vim.keymap.set("n", "<leader>gr", gs.reset_hunk)
+vim.keymap.set("n", "<leader>gR", gs.reset_buffer)
+vim.keymap.set("n", "<leader>gk", utils.center_move(gs.prev_hunk))
+vim.keymap.set("n", "<leader>gj", utils.center_move(gs.next_hunk))

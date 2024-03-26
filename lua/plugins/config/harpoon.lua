@@ -13,7 +13,6 @@ set_keymap("<Leader>ha", harpoon_mark.add_file)
 set_keymap("<Leader>ho", function ()
   harpoon_ui.toggle_quick_menu()
   vim.wo.winblend = 20
-
 end)
 set_keymap("<C-J>", utils.center_move(bind(harpoon_ui.nav_file, 1)))
 set_keymap("<C-K>", utils.center_move(bind(harpoon_ui.nav_file, 2)))

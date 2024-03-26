@@ -1,5 +1,12 @@
+-- Notes
+-- <C-^> - Toggle between 2 recent files
+
+
 G = {}
 G.plugin_hl = {} -- array of functions to be applied by colorscheme
+G.const = {
+  default_winblend = 15,
+}
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {
@@ -8,11 +15,6 @@ vim.api.nvim_create_autocmd("FileType", {
     -- "typescript"
   },
   command = "set shiftwidth=4",
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "html", "astro", "glsl", "typescript", "xml", "lua" },
-  command = "set shiftwidth=2",
 })
 
 require("core.defaults")

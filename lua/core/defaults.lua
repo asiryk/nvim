@@ -2,8 +2,6 @@
 
 local autocmd = vim.api.nvim_create_autocmd
 
-DEFAULT_WINBLEND = 15
-
 vim.opt.mouse = "a" -- Enable mouse support
 vim.opt.mousemodel = "extend" -- Disable mouse context menu
 vim.opt.cursorline = false -- Don't highlight current line
@@ -13,14 +11,23 @@ vim.opt.signcolumn = "yes" -- Show sign column always, even without lsp or gitsi
 vim.opt.swapfile = false -- Disable swapfiles
 vim.opt.expandtab = true -- Use tabs instead of spaces
 vim.opt.tabstop = 2 -- Amount of spaces the tab is displayed
-vim.opt.shiftwidth = 4 -- Amount of spaces to use for each step of (auto)indent
+vim.opt.shiftwidth = 2 -- Amount of spaces to use for each step of (auto)indent
 vim.opt.smartindent = true -- Copy indent from the previous line
 vim.opt.termguicolors = true -- Set 24 bit colors
 vim.opt.laststatus = 3 -- Set global status line
-vim.opt.hlsearch = false -- Don't highlight searches
+vim.opt.hlsearch = true -- Don't highlight searches
 vim.opt.ignorecase = true -- Ignore case when searching
-vim.opt.pumblend = DEFAULT_WINBLEND -- Blend colors with compositor
-vim.opt.scrolloff = 5 -- Leave some space while scrolling
+vim.opt.smartcase = true -- If capitals are present, do case-sensitive search
+vim.opt.pumblend = G.const.default_winblend -- Blend colors with compositor
+vim.opt.scrolloff = 10 -- Leave some space while scrolling
+vim.opt.list = true -- Allow listchars to display
+vim.opt.listchars = { trail = "·", tab = "» ", nbsp = "␣" }
+vim.opt.showmode = false
+vim.opt.breakindent = true
+vim.opt.undofile = true
+vim.opt.splitright = true
+vim.opt.splitbelow = true
+vim.opt.inccommand = "split" -- Preview supstitutions live
 
 -- Set undo breakpoints: Every time following key ({"<CR>", "."})
 -- gets pressed, it stops current change, so the next "undo"

@@ -75,6 +75,8 @@ M.ui = { -- icons from https://graphemica.com
   ["U2716"] = "✖",
   block = "▌",
   triangle = "▸",
+  top_line = "‾",
+  low_line = "_",
 }
 
 M.lspkind = {
