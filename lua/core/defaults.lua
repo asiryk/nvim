@@ -1,7 +1,5 @@
 -- Following remaps don't add new features/keybindings, but improve existing ones
 
-local autocmd = vim.api.nvim_create_autocmd
-
 vim.opt.mouse = "a" -- Enable mouse support
 vim.opt.mousemodel = "extend" -- Disable mouse context menu
 vim.opt.cursorline = false -- Don't highlight current line
@@ -27,7 +25,7 @@ vim.opt.breakindent = true
 vim.opt.undofile = true
 vim.opt.splitright = true
 vim.opt.splitbelow = true
-vim.opt.inccommand = "split" -- Preview supstitutions live
+-- vim.opt.inccommand = "split" -- Preview supstitutions live
 
 -- Set undo breakpoints: Every time following key ({"<CR>", "."})
 -- gets pressed, it stops current change, so the next "undo"
@@ -60,14 +58,18 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "j", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'j']], { expr = true })
 vim.keymap.set("n", "k", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'k']], { expr = true })
 
-autocmd("BufEnter", {
+local defaults_augroup = vim.api.nvim_create_augroup("defaults", {})
+
+vim.api.nvim_create_autocmd("BufEnter", {
   desc = "Don't auto comment new lines",
+  group = defaults_augroup,
   pattern = "*",
   command = "set fo-=c fo-=r fo-=o",
 })
 
-autocmd({ "TextChanged", "InsertLeave" }, {
+vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
   desc = "Autosave on leaving insert mode or text change",
+  group = defaults_augroup,
   pattern = "*",
   callback = function()
     local modifiable = vim.bo.modifiable
@@ -78,8 +80,9 @@ autocmd({ "TextChanged", "InsertLeave" }, {
   end,
 })
 
-autocmd("BufWritePre", {
+vim.api.nvim_create_autocmd("BufWritePre", {
   desc = "Remove trailing whitespace on pressing :w",
+  group = defaults_augroup,
   pattern = "*",
   callback = G.utils.remove_trailin_whitespace,
 })
