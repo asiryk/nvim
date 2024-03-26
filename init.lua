@@ -7,6 +7,7 @@ G.plugin_hl = {} -- array of functions to be applied by colorscheme
 G.const = {
   default_winblend = 15,
 }
+G.utils = require("core.utils")
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {

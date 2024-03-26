@@ -60,10 +60,28 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "j", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'j']], { expr = true })
 vim.keymap.set("n", "k", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'k']], { expr = true })
 
--- Don't auto comment new lines
 autocmd("BufEnter", {
+  desc = "Don't auto comment new lines",
   pattern = "*",
   command = "set fo-=c fo-=r fo-=o",
+})
+
+autocmd({ "TextChanged", "InsertLeave" }, {
+  desc = "Autosave on leaving insert mode or text change",
+  pattern = "*",
+  callback = function()
+    local modifiable = vim.bo.modifiable
+    local no_buftype = vim.bo.buftype == ""
+    if modifiable and no_buftype then
+      vim.cmd("silent update")
+    end
+  end,
+})
+
+autocmd("BufWritePre", {
+  desc = "Remove trailing whitespace on pressing :w",
+  pattern = "*",
+  callback = G.utils.remove_trailin_whitespace,
 })
 
 -- Disable some default plugins

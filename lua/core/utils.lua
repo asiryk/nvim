@@ -15,4 +15,12 @@ function utils.center_move(fn)
   end
 end
 
+function utils.remove_trailin_whitespace()
+  if vim.bo.modifiable then
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    vim.cmd("%s/\\s\\+$//e")
+    vim.api.nvim_win_set_cursor(0, cursor_pos)
+  end
+end
+
 return utils
