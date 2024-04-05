@@ -16,6 +16,8 @@ local ignore_files = {
   "node_modules/",
 
   -- files
+  "^.*%.ogg$",
+  "^.*%.m4a$",
   "snippets/.+%.json$",
   "^.*%.log$",
   "^.*%.png$",

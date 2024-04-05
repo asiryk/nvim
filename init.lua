@@ -11,8 +11,8 @@ G.utils = require("core.utils")
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {
-    "css",
-    "javascript",
+    -- "css",
+    -- "javascript",
     -- "typescript"
   },
   command = "set shiftwidth=4",

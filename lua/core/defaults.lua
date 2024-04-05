@@ -74,7 +74,12 @@ vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
   callback = function()
     local modifiable = vim.bo.modifiable
     local no_buftype = vim.bo.buftype == ""
-    if modifiable and no_buftype then
+
+    local buf = vim.api.nvim_get_current_buf()
+    local file = vim.api.nvim_buf_get_name(buf)
+    local attached = file ~= ""
+
+    if modifiable and no_buftype and attached then
       vim.cmd("silent update")
     end
   end,
