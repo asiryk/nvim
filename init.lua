@@ -8,6 +8,7 @@ G.const = {
   default_winblend = 15,
 }
 G.utils = require("core.utils")
+G.bufnr = vim.api.nvim_get_current_buf
 
 require("core.defaults")
 require("core.keymaps")

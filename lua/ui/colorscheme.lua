@@ -29,12 +29,6 @@ local function default()
   for _, func in ipairs(G.plugin_hl) do
     func(c)
   end
-
-  -- use default ts parameter color for hlargs
-  vim.cmd([[
-    hi clear Hlargs
-    hi link Hlargs @parameter
-  ]])
 end
 
 ---@param background? "dark" | "light
