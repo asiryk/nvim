@@ -9,15 +9,6 @@ G.const = {
 }
 G.utils = require("core.utils")
 
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {
-    -- "css",
-    -- "javascript",
-    -- "typescript"
-  },
-  command = "set shiftwidth=4",
-})
-
 require("core.defaults")
 require("core.keymaps")
 require("plugins").load()

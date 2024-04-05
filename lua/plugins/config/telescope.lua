@@ -18,7 +18,6 @@ local ignore_files = {
   -- files
   "^.*%.ogg$",
   "^.*%.m4a$",
-  "snippets/.+%.json$",
   "^.*%.log$",
   "^.*%.png$",
   "^.*%.jpg$",
