@@ -80,6 +80,16 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "None" })
 end
 
+vim.lsp.handlers["textDocument/hover"] = function(err, result, ctx, cfg)
+  -- make lsp documentation window with rounded borders
+  cfg = cfg or {}
+  cfg.border = "rounded"
+  local _, winid = vim.lsp.handlers.hover(err, result, ctx, cfg)
+  if winid ~= nil then
+    vim.api.nvim_win_set_option(winid, "winhl", "NormalFloat:None,FloatBorder:CmpBorder")
+  end
+end
+
 -- local autocmd = vim.api.nvim_create_autocmd
 -- autocmd("BufWinEnter", { -- Don't run LSP for large files.
 --   pattern = "*",

@@ -9,6 +9,9 @@ G.const = {
 }
 G.utils = require("core.utils")
 G.bufnr = vim.api.nvim_get_current_buf
+G.log = function (msg)
+  vim.notify(vim.inspect(msg), vim.log.levels.DEBUG)
+end
 
 require("core.defaults")
 require("core.keymaps")
