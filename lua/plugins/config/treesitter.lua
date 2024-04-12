@@ -1,7 +1,8 @@
+---@diagnostic disable: missing-fields
 local utils = require("core.utils")
 local ts_config = require("nvim-treesitter.configs")
 
-local options = {
+ts_config.setup({
   highlight = {
     enable = true,
     disable = function(_, buf)
@@ -36,9 +37,21 @@ local options = {
     "dockerfile",
     "bash",
   },
-}
-
-ts_config.setup(options)
+  textobjects = {
+    select = {
+      enable = true,
+      lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+      keymaps = {
+        ["af"] = { query = "@function.outer", desc = "Select around function" },
+        ["if"] = { query = "@function.inner", desc = "Select inside function" },
+        ["ab"] = { query = "@block.outer", desc = "Select around block" },
+        ["ib"] = { query = "@block.inner", desc = "Select inside block" },
+        ["ac"] = { query = "@comment.outer", desc = "Select around comment" },
+        ["ic"] = { query = "@comment.inner", desc = "Select inside comment" },
+      }
+    }
+  },
+})
 
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("NvimTreesitter-handlebars", {}),

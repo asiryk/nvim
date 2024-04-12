@@ -12,6 +12,8 @@ return {
       vim.cmd("TSUpdate")
     end,
   },
+  ["nvim-treesitter/nvim-treesitter-context"] = {},
+  ["nvim-treesitter/nvim-treesitter-textobjects"] = {},
   ["jinh0/eyeliner.nvim"] = {
     opts = { highlight_on_key = true, dim = true }
   },
