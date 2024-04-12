@@ -2,8 +2,6 @@ return {
   ["nvim-lua/plenary.nvim"] = {},
   ["nvim-tree/nvim-web-devicons"] = {},
 
-  -- ["asiryk/auto-hlsearch.nvim"] = { config = {} },
-
   ["nvim-treesitter/nvim-treesitter"] = {
     config = function() require("plugins.config.treesitter") end,
     build = function()
@@ -88,25 +86,9 @@ return {
     commit = "aa93a7e"
   },
 
-
-  -- ["akinsho/toggleterm.nvim"] = {
-  --   config = function() require("plugins.config.toggleterm") end,
-  --   keys = { "<C-T>" },
-  -- },
-
   -- ["simrat39/rust-tools.nvim"] = {
   --   config = function() require("plugins.config.rust-tools") end,
   --   ft = { "rust" },
-  -- },
-  -- ["folke/zen-mode.nvim"] = {
-  --   config = function()
-  --     require("zen-mode").setup()
-  --     vim.api.nvim_create_user_command(
-  --       "Zen",
-  --       function() require("zen-mode").toggle() end,
-  --       {}
-  --     )
-  --   end,
   -- },
 
   -- Themes
