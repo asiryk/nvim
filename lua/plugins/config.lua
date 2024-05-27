@@ -49,11 +49,6 @@ return {
     }
   },
 
-  ["numToStr/Comment.nvim"] = {
-    config = function() require("plugins.config.comment-nvim") end,
-    keys = { { "gc", mode = { "n", "v" } }, { "gb", mode = { "n", "v" } } },
-  },
-
   ["nvim-telescope/telescope.nvim"] = {
     config = function() require("plugins.config.telescope") end,
     keys = { "<Leader>f" },
