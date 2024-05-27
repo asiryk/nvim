@@ -71,7 +71,7 @@ return {
 
   ["lewis6991/gitsigns.nvim"] = {
     config = function() require("plugins.config.gitsigns") end,
-    tag = "v0.7"
+    tag = "v0.8.1"
   },
 
   ["mbbill/undotree"] = {
