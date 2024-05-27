@@ -2,6 +2,14 @@ return {
   ["nvim-lua/plenary.nvim"] = {},
   ["nvim-tree/nvim-web-devicons"] = {},
 
+  ["stevearc/oil.nvim"] = {
+    config = function ()
+      require("oil").setup()
+      vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+    end,
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
+
   ["nvim-treesitter/nvim-treesitter"] = {
     config = function() require("plugins.config.treesitter") end,
     build = function()
