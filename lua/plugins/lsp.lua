@@ -88,17 +88,17 @@ do -- set up lspconfig
   end
 
   local function on_attach(_, buffer)
-    local function set(lhs, rhs) vim.keymap.set("n", lhs, rhs, { buffer = buffer }) end
+    local function set(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { buffer = buffer, desc = desc }) end
 
     -- TODO: center async goto definition with use of :h lsp-handler
     -- https://www.reddit.com/r/neovim/comments/r756ur/how_can_you_center_the_cursor_when_going_to/
-    set("gd", vim.lsp.buf.definition)
-    set("gr", vim.lsp.buf.references)
-    set("<S-K>", vim.lsp.buf.hover)
-    set("<Leader>lf", function() vim.lsp.buf.format({ async = true }) end)
-    set("<Leader>lr", vim.lsp.buf.rename)
-    set("<Leader>la", vim.lsp.buf.code_action)
-    set("<Leader>lcr", vim.lsp.codelens.refresh)
+    set("gd", vim.lsp.buf.definition, "Go to definition [LSP]")
+    set("gr", vim.lsp.buf.references, "Find references [LSP]")
+    set("<S-k>", vim.lsp.buf.hover, "Hover documentation [LSP]")
+    set("<Leader>lf", function() vim.lsp.buf.format({ async = true }) end, "Format file [LSP]")
+    set("<Leader>lr", vim.lsp.buf.rename, "Rename variable [LSP]")
+    set("<Leader>la", vim.lsp.buf.code_action, "Show actions [LSP]")
+    set("<Leader>lcr", vim.lsp.codelens.refresh, "Refresh codelens [LSP]")
   end
 
   local config = {

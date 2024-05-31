@@ -1,5 +1,5 @@
-vim.keymap.set("n", "<bs>", "<nop>") -- Unmap Backspace
-vim.keymap.set("n", "<space>", "<nop>") -- Unmap Space
+vim.keymap.set("n", "<bs>", "<nop>", { desc = "Unmap backspace [User]" })
+vim.keymap.set("n", "<space>", "<nop>", { desc = "Unmap space [User]" })
 vim.g.mapleader = " " -- vim.keymap.set Leader key
 
 -- vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>", { desc = "Create new tab" })
@@ -15,5 +15,11 @@ vim.g.mapleader = " " -- vim.keymap.set Leader key
 -- vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
 -- vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 
-vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
-vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Turn off hlsearch with Esc" })
+vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode [User]" })
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Turn off hlsearch with Esc [User]" })
+
+-- Move one or more selected lines up and down (in Visual mode)
+-- TODO: don't modify undo list; TODO: probably replace with lua function
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { silent = true, desc = "Move selection 1 row up [User]" })
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { silent = true, desc = "Move selection 1 row down [User]" })
+

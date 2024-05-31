@@ -48,7 +48,7 @@ end)
 
 gs.setup(options)
 
-vim.keymap.set("n", "<leader>gr", gs.reset_hunk)
-vim.keymap.set("n", "<leader>gR", gs.reset_buffer)
-vim.keymap.set("n", "<leader>gk", utils.center_move(gs.prev_hunk))
-vim.keymap.set("n", "<leader>gj", utils.center_move(gs.next_hunk))
+vim.keymap.set("n", "<leader>gr", gs.reset_hunk, { desc = "Reset hunk [Gitsigns]" })
+vim.keymap.set("n", "<leader>gR", gs.reset_buffer, { desc = "Reset buffer [Gitsigns]" })
+vim.keymap.set("n", "<leader>gk", utils.center_move(gs.prev_hunk), { desc = "Go to previous hunk [Gitsigns]" })
+vim.keymap.set("n", "<leader>gj", utils.center_move(gs.next_hunk), { desc = "Go to next hunk [Gitsigns" })

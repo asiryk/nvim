@@ -18,7 +18,7 @@ local spec = {
   "nvim-tree/nvim-web-devicons",
   {
     "echasnovski/mini.nvim",
-    config = function() require("mini.files").setup() end,
+    config = function() require("plugins.mini") end,
   },
   { -- treesitter
     "nvim-treesitter/nvim-treesitter",

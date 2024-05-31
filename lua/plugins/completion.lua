@@ -71,7 +71,7 @@ local function open()
     cmp.complete()
   end
 end
-vim.keymap.set("i", "<C-p>", open)
-vim.keymap.set("i", "<C-n>", open)
+vim.keymap.set("i", "<C-p>", open, { desc = "Open completion window [Cmp]" })
+vim.keymap.set("i", "<C-n>", open, { desc = "Open completion window [Cmp]" })
 
 cmp.setup(options)
