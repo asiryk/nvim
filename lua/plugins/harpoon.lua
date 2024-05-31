@@ -12,7 +12,7 @@ local function set_keymap(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { silent
 set_keymap("<Leader>ha", harpoon_mark.add_file, "Add file [Harpoon]")
 set_keymap("<Leader>ho", function()
   harpoon_ui.toggle_quick_menu()
-  vim.wo.winblend = 20
+  vim.wo.winblend = G.const.default_winblend
 end, "Open menu [Harpoon]")
 set_keymap("<C-J>", utils.center_move(bind(harpoon_ui.nav_file, 1)), "File 1 [Harpoon]")
 set_keymap("<C-K>", utils.center_move(bind(harpoon_ui.nav_file, 2)), "File 2 [Harpoon]")
