@@ -14,6 +14,8 @@ vim.keymap.set("n", "<Leader>fh", builtin.help_tags)
 local ignore_files = {
   -- folders
   "node_modules/",
+  "bin/",
+  "obj/",
 
   -- files
   "^.*%.ogg$",

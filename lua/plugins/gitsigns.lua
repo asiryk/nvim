@@ -1,6 +1,6 @@
 local gs = require("gitsigns")
-local icons = require("ui.icons").ui
-local utils = require("core.utils")
+local icons = require("colorscheme.icons").ui
+local utils = require("custom").utils
 
 local options = {
   signs = {

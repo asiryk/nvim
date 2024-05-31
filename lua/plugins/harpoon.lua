@@ -3,7 +3,7 @@ local present = pcall(require, "harpoon")
 if not present then return end
 
 local bind = require("plenary.fun").bind
-local utils = require("core.utils")
+local utils = require("custom").utils
 local harpoon_mark = require("harpoon.mark")
 local harpoon_ui = require("harpoon.ui")
 

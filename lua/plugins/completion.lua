@@ -1,6 +1,16 @@
+do -- set up luasnip
+  local luasnip = require("luasnip")
+  local options = {
+    history = true,
+    updateevents = "TextChanged,TextChangedI",
+  }
+  luasnip.config.set_config(options)
+end
+
+
 local cmp = require("cmp")
 local luasnip = require("luasnip")
-local icons = require("ui.icons").lspkind
+local icons = require("colorscheme.icons").lspkind
 
 vim.opt.completeopt = "menuone,noselect"
 

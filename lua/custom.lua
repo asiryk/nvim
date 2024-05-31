@@ -1,5 +1,17 @@
 local utils = {}
 
+G = {}
+G.plugin_hl = {} -- array of functions to be applied by colorscheme
+G.const = {
+  default_winblend = 15,
+}
+G.utils = utils
+G.bufnr = vim.api.nvim_get_current_buf
+G.log = function (msg)
+  vim.notify(vim.inspect(msg), vim.log.levels.DEBUG)
+end
+
+
 function utils.get_buf_size_in_bytes(buf)
   local line_count = vim.api.nvim_buf_line_count(buf)
   return vim.api.nvim_buf_get_offset(buf, line_count)
@@ -23,4 +35,6 @@ function utils.remove_trailin_whitespace()
   end
 end
 
-return utils
+return {
+  utils = utils
+}
