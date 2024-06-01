@@ -10,6 +10,7 @@ do -- download lazy if not exists
       lazypath,
     })
   end
+  ---@diagnostic disable-next-line: undefined-field
   vim.opt.rtp:prepend(lazypath)
 end
 
@@ -36,13 +37,13 @@ local spec = {
   { -- lsp
     "neovim/nvim-lspconfig",
     dependencies = {
-      "folke/neodev.nvim",
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
+      "WhoIsSethDaniel/mason-tool-installer.nvim",
       -- formatting
       "stevearc/conform.nvim",
     },
-    config = function() require("plugins.lsp") end
+    config = function() require("plugins.lsp") end,
   },
   { -- completion
     "hrsh7th/nvim-cmp",
@@ -51,10 +52,10 @@ local spec = {
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
       "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-nvim-lua",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
     },
+    config = function() require("plugins.completion") end,
   },
   { -- telescope
     "nvim-telescope/telescope.nvim",
@@ -100,10 +101,4 @@ require("lazy").setup(spec)
 --     vim.keymap.set("n", "<leader>ut", vim.cmd.UndotreeToggle)
 --   end,
 --   commit = "aa93a7e"
--- },
-
-
--- ["kyazdani42/nvim-tree.lua"] = {
---   config = function() require("plugins.nvim-tree") end,
---   keys = { "<C-N>", "<Leader>n" },
 -- },

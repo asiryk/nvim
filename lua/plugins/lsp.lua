@@ -1,169 +1,117 @@
-do -- set up mason
-  local mason = require("mason")
-  local mason_registry = require("mason-registry")
-  local mason_api = require("mason.api.command")
+require("mason").setup({ max_concurrent_installers = 10 })
+require("mason-lspconfig").setup()
+local lspconfig = require("lspconfig")
 
-  mason.setup({
-    max_concurrent_installers = 10,
-  })
+local function on_attach(_, buffer)
+  local function set(mode, lhs, rhs, desc) vim.keymap.set(mode, lhs, rhs, { buffer = buffer, desc = desc }) end
+  local function format()
+    require("conform").format({ async = true, lsp_fallback = true })
+  end
+  local function definition()
+    vim.api.nvim_create_autocmd("CursorMoved", {
+      once = true,
+      callback = function() require("custom").utils.center_move()() end,
+      desc = "Center move after async lsp definition jump"
+    })
+    vim.lsp.buf.definition()
+  end
 
-  local ensure_installed = {
-    -- lsp
-    "lua-language-server",
-    "typescript-language-server",
-    "clangd",
-    "css-lsp",
-    "html-lsp",
-    "json-lsp",
-    "eslint-lsp",
-    "docker-compose-language-service",
-    "dockerfile-language-server",
+  set("n", "gd", definition, "Go to definition [LSP]")
+  set("n", "gr", vim.lsp.buf.references, "Find references [LSP]")
+  set("n", "<S-k>", vim.lsp.buf.hover, "Hover documentation [LSP]")
+  set({ "n", "v" }, "<Leader>lf", format, "Format [LSP], [Conform]")
+  set("n", "<Leader>lr", vim.lsp.buf.rename, "Rename variable [LSP]")
+  set("n", "<Leader>la", vim.lsp.buf.code_action, "Show actions [LSP]")
+  set("n", "<Leader>lcr", vim.lsp.codelens.refresh, "Refresh codelens [LSP]")
+end
 
-    -- other
-    "prettierd", -- todo prettierd
+local config = {
+  rust_analyzer = {},
+  tsserver = {},
+  lua_ls = {
+    on_attach = on_attach,
+    settings = {
+      Lua = {
+        runtime = { version = "LuaJIT" },
+        workspace = {
+          checkThirdParty = false,
+          library = {
+            "${3rd}/luv/library",
+            unpack(vim.api.nvim_get_runtime_file("", true)),
+          },
+        },
+        completion = {
+          callSnippet = "Replace",
+        },
+        telemetry = { enable = false },
+      },
+    },
+  },
+  cssls = {},
+  clangd = {},
+  csharp_ls = {},
+  dockerls = {},
+  docker_compose_language_service = {},
+}
+
+local default_config = {
+  flags = { debounce_text_changes = 150 },
+  on_attach = function(client, buffer)
+    on_attach(client, buffer)
+  end,
+}
+
+require("mason-tool-installer").setup({
+  ensure_installed = vim.list_extend({
+    "eslint_d",
+    "prettierd",
     "stylua",
     "luacheck",
     "clang-format",
+  }, vim.tbl_keys(config))
+})
+
+vim.lsp.set_log_level(vim.lsp.protocol.MessageType.Error)
+for server_name, server_config in pairs(config) do
+  local cfg = vim.tbl_extend("force", default_config, server_config)
+  lspconfig[server_name].setup(cfg)
+end
+vim.lsp.set_log_level(vim.lsp.protocol.MessageType.Error)
+
+require("conform").setup({
+  formatters_by_ft = {
+    lua = { "stylua" },
+    javascript = { "prettierd" },
+    typescript = { "prettierd" },
   }
+})
 
-  local function not_installed(packages)
-    return vim.tbl_filter(
-      function(package) return not mason_registry.is_installed(package) end,
-      packages
-    )
-  end
-
-  local function autoinstall(packages)
-    vim.schedule(function()
-      -- try close packer window if it is opened
-      local opened_win = vim.api.nvim_get_current_win()
-      pcall(vim.api.nvim_win_close, opened_win, true)
-
-      mason_api.MasonInstall(packages)
-    end)
-  end
-
-  local function prompt(packages, fn)
-    local joined = table.concat(packages, "\n")
-    local msg = "Do you want to autoinstall these packages? y/n: "
-    local prompt_msg = string.format("%s\n%s", joined, msg)
-
-    vim.ui.input(
-      { prompt = prompt_msg },
-      function(input) fn(input ~= nil and input:sub(1, 1) == "y") end
-    )
-  end
-
-  local function execute(packages)
-    if #packages > 0 then
-      prompt(packages, function(should_install)
-        if should_install then autoinstall(packages) end
-      end)
-    end
-  end
-
-  execute(not_installed(ensure_installed))
+local signs = { Error = "", Warn = "", Hint = "", Info = "" }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "None" })
 end
 
-do -- set up lspconfig
-  local lspconfig = require("lspconfig")
-
-  local servers = {
-    "rust_analyzer",
-    "tsserver",
-    "lua_ls",
-    -- "html",
-    -- "jsonls",
-    "eslint",
-    -- "cssls",
-    "clangd",
-    "csharp_ls",
-    "dockerls",
-    "docker_compose_language_service",
-  }
-
-  local function disable_formatting(client)
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
+vim.lsp.handlers["textDocument/hover"] = function(err, result, ctx, cfg)
+  -- make lsp documentation window with rounded borders
+  cfg = cfg or {}
+  cfg.border = "rounded"
+  local _, winid = vim.lsp.handlers.hover(err, result, ctx, cfg)
+  if winid ~= nil then
+    vim.api.nvim_set_option_value("winhl", "NormalFloat:None,FloatBorder:CmpBorder", { win = winid })
   end
-
-  local function on_attach(_, buffer)
-    local function set(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { buffer = buffer, desc = desc }) end
-
-    -- TODO: center async goto definition with use of :h lsp-handler
-    -- https://www.reddit.com/r/neovim/comments/r756ur/how_can_you_center_the_cursor_when_going_to/
-    set("gd", vim.lsp.buf.definition, "Go to definition [LSP]")
-    set("gr", vim.lsp.buf.references, "Find references [LSP]")
-    set("<S-k>", vim.lsp.buf.hover, "Hover documentation [LSP]")
-    set("<Leader>lf", function() vim.lsp.buf.format({ async = true }) end, "Format file [LSP]")
-    set("<Leader>lr", vim.lsp.buf.rename, "Rename variable [LSP]")
-    set("<Leader>la", vim.lsp.buf.code_action, "Show actions [LSP]")
-    set("<Leader>lcr", vim.lsp.codelens.refresh, "Refresh codelens [LSP]")
-  end
-
-  local config = {
-    default = {
-      flags = { debounce_text_changes = 150 },
-      on_attach = function(client, buffer)
-        on_attach(client, buffer)
-      end,
-    },
-    lua_ls = {
-      on_attach = on_attach,
-      settings = {
-        Lua = {
-          runtime = { version = "LuaJIT" },
-          workspace = {
-            checkThirdParty = false,
-            library = {
-              "${3rd}/luv/library",
-              unpack(vim.api.nvim_get_runtime_file("", true)),
-            },
-          },
-          completion = {
-            callSnippet = "Replace",
-          },
-          telemetry = { enable = false },
-        },
-      },
-    },
-    tsserver = {
-      on_attach = function(client, buffer)
-        disable_formatting(client)
-        on_attach(client, buffer)
-      end,
-    },
-  }
-
-  for _, server_name in ipairs(servers) do
-    local default_config = config.default
-    local specific_config = config[server_name]
-    if specific_config == nil then
-      lspconfig[server_name].setup(default_config)
-    else
-      lspconfig[server_name].setup(vim.tbl_extend("force", default_config, specific_config))
-    end
-  end
-
-  local signs = { Error = "", Warn = "", Hint = "", Info = "" }
-  for type, icon in pairs(signs) do
-    local hl = "DiagnosticSign" .. type
-    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "None" })
-  end
-
-  vim.lsp.handlers["textDocument/hover"] = function(err, result, ctx, cfg)
-    -- make lsp documentation window with rounded borders
-    cfg = cfg or {}
-    cfg.border = "rounded"
-    local _, winid = vim.lsp.handlers.hover(err, result, ctx, cfg)
-    if winid ~= nil then
-      vim.api.nvim_win_set_option(winid, "winhl", "NormalFloat:None,FloatBorder:CmpBorder")
-    end
-  end
-
-  -- local autocmd = vim.api.nvim_create_autocmd
-  -- autocmd("BufWinEnter", { -- Don't run LSP for large files.
-  --   pattern = "*",
-  --   callback = function() vim.cmd([[if line2byte(line("$") + 1) > 1000000 | LspStop | endif]]) end,
-  -- })
 end
+
+local lsp_show_message = vim.lsp.handlers["window/showMessage"]
+vim.lsp.handlers["window/showMessage"] = function(err, result, ctx, cfg)
+  -- Only show messages of warning severity
+  if result and result.type <= vim.lsp.protocol.MessageType.Warning then
+    lsp_show_message(err, result, ctx, cfg)
+  end
+end
+
+-- local autocmd = vim.api.nvim_create_autocmd
+-- autocmd("BufWinEnter", { -- Don't run LSP for large files.
+--   pattern = "*",
+--   callback = function() vim.cmd([[if line2byte(line("$") + 1) > 1000000 | LspStop | endif]]) end,
+--

@@ -7,10 +7,7 @@ G.const = {
 }
 G.utils = utils
 G.bufnr = vim.api.nvim_get_current_buf
-G.log = function (msg)
-  vim.notify(vim.inspect(msg), vim.log.levels.DEBUG)
-end
-
+G.log = function(msg) vim.notify(vim.inspect(msg), vim.log.levels.DEBUG) end
 
 function utils.get_buf_size_in_bytes(buf)
   local line_count = vim.api.nvim_buf_line_count(buf)
@@ -22,7 +19,7 @@ end
 -- NOTE: the function shoud be synchrounous
 function utils.center_move(fn)
   return function()
-    fn()
+    if type(fn) == "function" then fn() end
     vim.cmd("norm! zz")
   end
 end
@@ -36,5 +33,5 @@ function utils.remove_trailin_whitespace()
 end
 
 return {
-  utils = utils
+  utils = utils,
 }
