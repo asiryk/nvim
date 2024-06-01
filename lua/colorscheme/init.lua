@@ -82,3 +82,6 @@ autocmd("TextYankPost", {
 })
 
 onedark()
+-- colorscheme habamax
+-- colorscheme quiet
+-- colorscheme slate

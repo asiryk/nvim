@@ -48,7 +48,13 @@ end)
 
 gs.setup(options)
 
+local function nav_hunk(direction)
+  return utils.center_move(function()
+    gs.nav_hunk(direction, { navigation_message = false })
+  end)
+end
+
 vim.keymap.set("n", "<leader>gr", gs.reset_hunk, { desc = "Reset hunk [Gitsigns]" })
 vim.keymap.set("n", "<leader>gR", gs.reset_buffer, { desc = "Reset buffer [Gitsigns]" })
-vim.keymap.set("n", "<leader>gk", utils.center_move(gs.prev_hunk), { desc = "Go to previous hunk [Gitsigns]" })
-vim.keymap.set("n", "<leader>gj", utils.center_move(gs.next_hunk), { desc = "Go to next hunk [Gitsigns" })
+vim.keymap.set("n", "<leader>gk", nav_hunk("prev"), { desc = "Go to previous hunk [Gitsigns]" })
+vim.keymap.set("n", "<leader>gj", nav_hunk("next"), { desc = "Go to next hunk [Gitsigns" })
