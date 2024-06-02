@@ -19,6 +19,7 @@ local function on_attach(_, buffer)
   set("n", "gd", definition, "Go to definition [LSP]")
   set("n", "gr", vim.lsp.buf.references, "Find references [LSP]")
   set("n", "<S-k>", vim.lsp.buf.hover, "Hover documentation [LSP]")
+  set("i", "<C-k>", vim.lsp.buf.signature_help, "Hover signature help [LSP]")
   set({ "n", "v" }, "<Leader>lf", format, "Format [LSP], [Conform]")
   set("n", "<Leader>lr", vim.lsp.buf.rename, "Rename variable [LSP]")
   set("n", "<Leader>la", vim.lsp.buf.code_action, "Show actions [LSP]")
@@ -92,15 +93,18 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "None" })
 end
 
-vim.lsp.handlers["textDocument/hover"] = function(err, result, ctx, cfg)
-  -- make lsp documentation window with rounded borders
-  cfg = cfg or {}
-  cfg.border = "rounded"
-  local _, winid = vim.lsp.handlers.hover(err, result, ctx, cfg)
-  if winid ~= nil then
+local function style_window(lsp_handler)
+  return function(err, result, ctx, cfg)
+    cfg = cfg or {}
+    cfg.border = "rounded"
+    local _, winid = lsp_handler(err, result, ctx, cfg)
+    if type(winid) ~= "number" then return end
     vim.api.nvim_set_option_value("winhl", "NormalFloat:None,FloatBorder:CmpBorder", { win = winid })
   end
 end
+
+vim.lsp.handlers["textDocument/hover"] = style_window(vim.lsp.handlers["textDocument/hover"])
+vim.lsp.handlers["textDocument/signatureHelp"] = style_window(vim.lsp.handlers["textDocument/signatureHelp"])
 
 local lsp_show_message = vim.lsp.handlers["window/showMessage"]
 vim.lsp.handlers["window/showMessage"] = function(err, result, ctx, cfg)
