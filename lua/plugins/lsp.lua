@@ -27,6 +27,7 @@ local function on_attach(_, buffer)
 end
 
 local config = {
+  gopls = {},
   rust_analyzer = {},
   tsserver = {},
   lua_ls = {

@@ -79,6 +79,10 @@ local spec = {
     tag = "v0.8.1"
   },
   {
+    "sindrets/diffview.nvim",
+    -- config = function() require("plugins.gitsigns") end,
+  },
+  {
     "jinh0/eyeliner.nvim",
     opts = { highlight_on_key = true, dim = true }
   },
