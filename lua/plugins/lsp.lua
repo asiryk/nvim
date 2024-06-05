@@ -43,6 +43,7 @@ local config = {
           },
         },
         completion = {
+          keywordSnippet = "Disable",
           callSnippet = "Replace",
         },
         telemetry = { enable = false },

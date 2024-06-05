@@ -32,6 +32,20 @@ function utils.remove_trailin_whitespace()
   end
 end
 
+function utils.new_buf(text, open)
+  if type(text) ~= "string" then return end
+  local lines = {}
+  for line in text:gmatch("([^\n]*)\n?") do
+    table.insert(lines, line)
+  end
+  local buf = vim.api.nvim_create_buf(true, true)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  if open then
+    vim.api.nvim_set_current_buf(buf)
+  end
+  return buf
+end
+
 return {
   utils = utils,
 }

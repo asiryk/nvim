@@ -31,6 +31,13 @@ local function window()
   }
 end
 
+local src_map = {
+  luasnip = "LuaSnip",
+  nvim_lsp = "LSP",
+  path = "Path",
+  buffer = "Buffer",
+}
+
 local options = {
   window = {
     completion = window(),
@@ -40,8 +47,9 @@ local options = {
     expand = function(args) luasnip.lsp_expand(args.body) end,
   },
   formatting = {
-    format = function(_, vim_item)
-      vim_item.kind = string.format("%s %s", icons[vim_item.kind], vim_item.kind)
+    format = function(e, vim_item)
+      local src = src_map[e.source.name]
+      vim_item.kind = string.format("%s %s [%s]", icons[vim_item.kind], vim_item.kind, src)
       return vim_item
     end,
   },
@@ -59,7 +67,7 @@ local options = {
   },
   sources = {
     { name = "luasnip", priority = 1 },
-    { name = "nvim_lsp", priority = 2 },
+    { name = "nvim_lsp", priority = 100 },
     { name = "path", priority = 4 },
     { name = "buffer", priority = 5 },
   },
