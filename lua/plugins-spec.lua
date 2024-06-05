@@ -54,6 +54,7 @@ local spec = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
+      "supermaven-inc/supermaven-nvim",
     },
     config = function() require("plugins.completion") end,
   },

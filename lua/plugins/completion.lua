@@ -19,6 +19,10 @@ do -- set up luasnip
   end, { silent = true, desc = "Jump prev item [LuaSnip]" })
 end
 
+require("supermaven-nvim").setup({
+  -- disable_inline_completion = true,
+}) -- set up supermaven
+
 local cmp = require("cmp")
 local luasnip = require("luasnip")
 local icons = require("colorscheme.icons").lspkind
@@ -47,6 +51,7 @@ local src_map = {
   nvim_lsp = "LSP",
   path = "Path",
   buffer = "Buffer",
+  supermaven = "AI",
 }
 
 local options = {
@@ -81,6 +86,7 @@ local options = {
     { name = "nvim_lsp", priority = 100 },
     { name = "path", priority = 4 },
     { name = "buffer", priority = 5 },
+    -- { name = "supermaven", priority = 60000 },
   },
 }
 

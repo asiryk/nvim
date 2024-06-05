@@ -117,6 +117,7 @@ M.lspkind = {
   Calendar = "",
   Watch = "",
   Package = "",
+  Supermaven = "",
 }
 
 --local kind_icons = {
