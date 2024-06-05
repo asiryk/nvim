@@ -5,8 +5,19 @@ do -- set up luasnip
     updateevents = "TextChanged,TextChangedI",
   }
   luasnip.config.set_config(options)
-end
 
+  vim.keymap.set({"i", "s"}, "<C-l>", function()
+    if luasnip.expand_or_jumpable() then
+      luasnip.expand_or_jump()
+    end
+  end, { silent = true, desc = "Jump next item [LuaSnip]" })
+
+  vim.keymap.set({"i", "s"}, "<C-h>", function()
+    if luasnip.jumpable(-1) then
+      luasnip.jump(-1)
+    end
+  end, { silent = true, desc = "Jump prev item [LuaSnip]" })
+end
 
 local cmp = require("cmp")
 local luasnip = require("luasnip")
