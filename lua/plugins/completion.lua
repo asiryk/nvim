@@ -83,9 +83,6 @@ local options = {
     { name = "path", priority = 4 },
     { name = "buffer", priority = 5 },
   },
-  experimental = {
-    ghost_text = true,
-  },
 }
 
 local function open()

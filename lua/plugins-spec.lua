@@ -88,6 +88,13 @@ local spec = {
     opts = { highlight_on_key = true, dim = true }
   },
   {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    opts = {
+      scope = { enabled = false },
+    }
+  },
+  {
     "mattn/emmet-vim",
     ft = { "html", "svelte", "astro", "handlebars" },
     build = ":EmmetInstall",
