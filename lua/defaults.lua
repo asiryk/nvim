@@ -49,6 +49,7 @@ vim.keymap.set("n", "<S-g>", "<S-g>zz")
 
 vim.keymap.set("n", "n", "nzzzv") -- TODO: don't pollute :reg by pressing x, pasting, etc
 vim.keymap.set("n", "N", "Nzzzv")
+-- TODO: center when jumping to a mark
 
 -- Add position to jumplist if moving more than 5 lines up or down
 vim.keymap.set("n", "j", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'j']], { expr = true })

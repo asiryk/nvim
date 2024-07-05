@@ -29,7 +29,8 @@ end
 local config = {
   gopls = {},
   rust_analyzer = {},
-  tsserver = {},
+  -- tsserver = {},
+  vtsls = {},
   lua_ls = {
     on_attach = on_attach,
     settings = {
