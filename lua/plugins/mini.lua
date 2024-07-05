@@ -1,8 +1,8 @@
 local augroup = vim.api.nvim_create_augroup("mini", {})
 
 do -- mini files
-  require("mini.files").setup()
   local files = require("mini.files")
+  files.setup()
 
   local function open_current()
     files.open(vim.api.nvim_buf_get_name(0))
@@ -34,6 +34,45 @@ do -- mini files
       vim.api.nvim_win_set_config(win_id, { border = "rounded" })
     end,
     desc = "Customize mini.files winblend [Mini.files]"
+  })
+
+  local function open_in_finder()
+    local entry = files.get_fs_entry()
+    do -- sanity check
+      if entry == nil then
+        local lines_to_iter = math.min(100, vim.api.nvim_buf_line_count(0))
+        for i = 1, lines_to_iter do
+          local e = files.get_fs_entry(nil, i)
+          if e ~= nil then
+            entry = e
+            break
+          end
+        end
+        if entry == nil then
+          local msg = "Failed to get file information"
+          vim.notify(msg, vim.log.levels.WARN)
+          return
+        end
+      end
+    end
+
+    local dir = nil
+    if entry.fs_type == "file" then
+      dir = vim.fs.dirname(entry.path)
+    else
+      dir = entry.path
+    end
+    os.execute("open " .. dir)
+  end
+
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "MiniFilesBufferCreate",
+    group = augroup,
+    callback = function(args)
+      local buf_id = args.data.buf_id
+      vim.keymap.set("n", "go", open_in_finder, { buffer = buf_id })
+    end,
+    desc = "Set buffer keymaps [Mini.files]"
   })
 end
 
