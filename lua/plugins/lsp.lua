@@ -75,12 +75,11 @@ require("mason-tool-installer").setup({
   }, vim.tbl_keys(config))
 })
 
-vim.lsp.set_log_level(vim.lsp.protocol.MessageType.Error)
+vim.lsp.set_log_level("off")
 for server_name, server_config in pairs(config) do
   local cfg = vim.tbl_extend("force", default_config, server_config)
   lspconfig[server_name].setup(cfg)
 end
-vim.lsp.set_log_level(vim.lsp.protocol.MessageType.Error)
 
 require("conform").setup({
   formatters_by_ft = {

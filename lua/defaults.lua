@@ -121,7 +121,7 @@ local default_plugins = {
   "optwin",
   "compiler",
   "bugreport",
-  "ftplugin",
+  -- "ftplugin",
 }
 
 for _, plugin in pairs(default_plugins) do

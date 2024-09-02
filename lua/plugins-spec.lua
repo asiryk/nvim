@@ -81,7 +81,7 @@ local spec = {
   },
   {
     "sindrets/diffview.nvim",
-    -- config = function() require("plugins.gitsigns") end,
+    config = function() require("plugins.diffview") end,
   },
   {
     "jinh0/eyeliner.nvim",
