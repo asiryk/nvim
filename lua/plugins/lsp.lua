@@ -2,6 +2,18 @@ require("mason").setup({ max_concurrent_installers = 10 })
 require("mason-lspconfig").setup()
 local lspconfig = require("lspconfig")
 
+local function open_float_diagnostics()
+  local opts = {
+    border = "rounded",
+    focusable = false,
+  }
+
+  local _, win_id = vim.diagnostic.open_float(nil, opts)
+  if type(win_id) == "number" then
+    vim.api.nvim_set_option_value("winhl", "NormalFloat:None,FloatBorder:CmpBorder", { win = win_id })
+  end
+end
+
 local function on_attach(_, buffer)
   local function set(mode, lhs, rhs, desc) vim.keymap.set(mode, lhs, rhs, { buffer = buffer, desc = desc }) end
   local function format()
@@ -24,6 +36,7 @@ local function on_attach(_, buffer)
   set("n", "<Leader>lr", vim.lsp.buf.rename, "Rename variable [LSP]")
   set("n", "<Leader>la", vim.lsp.buf.code_action, "Show actions [LSP]")
   set("n", "<Leader>lcr", vim.lsp.codelens.refresh, "Refresh codelens [LSP]")
+  set("n", "<Leader>lh", open_float_diagnostics, "Open vim diagnostic window [LSP]")
 end
 
 local config = {
