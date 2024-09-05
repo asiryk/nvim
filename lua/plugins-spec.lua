@@ -99,10 +99,8 @@ local spec = {
     ft = { "html", "svelte", "astro", "handlebars" },
     build = ":EmmetInstall",
   },
-  {
-    "j-hui/fidget.nvim",
-    opts = {},
-  },
+  { "j-hui/fidget.nvim", opts = {} },
+  { "stevearc/dressing.nvim", opts = {} },
   -- colorschemes
   "sainnhe/everforest",
   "navarasu/onedark.nvim",
