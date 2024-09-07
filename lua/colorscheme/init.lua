@@ -4,6 +4,8 @@ local ok_onedark = pcall(require, "onedark")
 
 if not ok_everforest and not ok_onedark then return end
 
+local local_storage = require("local_storage")
+
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 
@@ -81,47 +83,10 @@ autocmd("TextYankPost", {
   end,
 })
 
-local function cfg_file_path()
-  return vim.fn.stdpath("data") .. "/colorscheme.properties"
-end
-
-local function save_data(data)
-  local filepath = cfg_file_path()
-  local file = io.open(filepath, "w")
-  if file then
-    local str = ""
-    for k, v in pairs(data) do
-      local row = string.format("%s=%s", k, v)
-      str = str .. "\n" .. row
-    end
-    file:write(str)
-    file:close()
-  else
-    vim.notify("Failed to open file " .. filepath, vim.log.levels.ERROR)
-  end
-end
-
-local function load_data()
-  local filepath = cfg_file_path()
-  local ok, file_content = pcall(vim.fn.readfile, filepath)
-  if ok and #file_content > 0 then
-    local tbl = {}
-    for _, row in pairs(file_content) do
-      if row ~= "" then
-        local splited = vim.split(row, "=", { trimempty = true })
-        tbl[splited[1]] = splited[2]
-      end
-    end
-
-    return tbl
-  else
-    return nil
-  end
-end
-
+---@param data ColorschemeStorage
 local function switch_colorscheme(data)
-  if data.colorscheme == "onedark" then
-    if data.appearance == "light" then
+  if data.name == "onedark" then
+    if data.variant == "light" then
       onedark("light")
     else
       onedark("darker")
@@ -130,17 +95,19 @@ local function switch_colorscheme(data)
 end
 
 local function load_colorscheme()
-  local persisted = load_data()
-  if persisted == nil then
+  local data = local_storage.get_data()
+  if (data == nil or data.colorscheme == nil) then
     onedark("darker")
+    --- @type ColorschemeStorage
     local cfg = {
-      colorscheme = "onedark",
-      appearance = "dark",
+      name = "onedark",
+      variant = "dark",
     }
-    save_data(cfg)
-    return
+    local_storage.persist_data({
+      colorscheme = cfg
+    })
   else
-    switch_colorscheme(persisted)
+    switch_colorscheme(data.colorscheme)
   end
 end
 
@@ -149,15 +116,20 @@ local function set_color_scheme()
     { "onedark" },
     { prompt = "Select colorscheme:" },
     function(colorscheme)
+      if (colorscheme == nil) then return end
       vim.ui.select(
         { "dark", "light" },
         { prompt = "Select appearance:" },
         function(appearance)
+          if (appearance == nil) then return end
+          --- @type ColorschemeStorage
           local cfg = {
-            colorscheme = colorscheme,
-            appearance = appearance,
+            name = colorscheme,
+            variant = appearance,
           }
-          save_data(cfg)
+          local_storage.persist_data({
+            colorscheme = cfg
+          })
           switch_colorscheme(cfg)
         end
       )
@@ -170,6 +142,8 @@ vim.api.nvim_create_user_command(
   set_color_scheme,
   {}
 )
+
+vim.keymap.set("n", "<leader>ct", set_color_scheme, { desc = "Configure theme [User]" })
 
 load_colorscheme()
 

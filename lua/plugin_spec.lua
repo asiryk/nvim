@@ -15,7 +15,10 @@ do -- download lazy if not exists
 end
 
 local spec = {
-  "nvim-lua/plenary.nvim",
+  {
+    "nvim-lua/plenary.nvim",
+    lazy = false,
+  },
   "nvim-tree/nvim-web-devicons",
   {
     "echasnovski/mini.nvim",
@@ -100,7 +103,17 @@ local spec = {
     build = ":EmmetInstall",
   },
   { "j-hui/fidget.nvim", opts = {} },
-  { "stevearc/dressing.nvim", opts = {} },
+  {
+    "stevearc/dressing.nvim",
+    opts = {
+      input = {
+        win_options = {
+          winblend = G.const.default_winblend,
+          winhighlight = "NormalFloat:None,FloatBorder:CmpBorder"
+        },
+      },
+    },
+  },
   -- colorschemes
   "sainnhe/everforest",
   "navarasu/onedark.nvim",
