@@ -95,6 +95,12 @@ local spec = {
     main = "ibl",
     opts = {
       scope = { enabled = false },
+      debounce = 10,
+      indent = {
+        char = "│",
+        tab_char = "║",
+        smart_indent_cap = false,
+      },
     }
   },
   {
