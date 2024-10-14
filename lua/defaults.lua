@@ -55,6 +55,17 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n", "j", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'j']], { expr = true })
 vim.keymap.set("n", "k", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'k']], { expr = true })
 
+-- Control window
+vim.keymap.set("n", "<M-h>", "<C-w>h")
+vim.keymap.set("n", "<M-j>", "<C-w>j")
+vim.keymap.set("n", "<M-k>", "<C-w>k")
+vim.keymap.set("n", "<M-l>", "<C-w>l")
+
+vim.keymap.set("n", "<C-M-h>", "<C-w><")
+vim.keymap.set("n", "<C-M-j>", "<C-w>-")
+vim.keymap.set("n", "<C-M-k>", "<C-w>+")
+vim.keymap.set("n", "<C-M-l>", "<C-w>>")
+
 local defaults_augroup = vim.api.nvim_create_augroup("defaults", {})
 
 vim.api.nvim_create_autocmd("BufEnter", {
