@@ -1,0 +1,15 @@
+-- local Terminal = require("toggleterm.terminal").Terminal
+-- local repl = Terminal:new({ cmd = "lazygit", hidden = true })
+--
+-- local cmd = [[
+--   clj -Sdeps '{:deps {nrepl/nrepl {:mvn/version "1.0.0"} cider/cider-nrepl {:mvn/version "0.42.1"}}}' \
+--     --main nrepl.cmdline \
+--     --middleware '["cider.nrepl/cider-middleware"]' \
+--     --interactive
+-- ]]
+--
+-- local function start_repl()
+--   print(cmd)
+-- end
+--
+-- vim.keymap.set("n", "<leader>le", start_repl, { silent = true, desc = "Start REPL"})

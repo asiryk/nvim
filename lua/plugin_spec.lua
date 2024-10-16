@@ -120,6 +120,31 @@ local spec = {
       },
     },
   },
+  {
+    "Olical/conjure",
+    ft = { "clojure", "fennel" },
+    lazy = true,
+    init = function()
+    end,
+
+    -- Optional cmp-conjure integration
+    dependencies = { "PaterJason/cmp-conjure" },
+  },
+  {
+    "PaterJason/cmp-conjure",
+    lazy = true,
+  },
+  {
+    "julienvincent/nvim-paredit",
+    config = function()
+      require("nvim-paredit").setup({
+        indent = {
+          enabled = true,
+        }
+      })
+    end
+  },
+  { "akinsho/toggleterm.nvim", config = function() require("plugins.toggleterm") end  },
   -- colorschemes
   "sainnhe/everforest",
   "navarasu/onedark.nvim",

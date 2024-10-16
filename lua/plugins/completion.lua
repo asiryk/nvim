@@ -48,6 +48,7 @@ local src_map = {
   path = "Path",
   buffer = "Buffer",
   supermaven = "AI",
+  conjure = "Conjure",
 }
 
 local options = {
@@ -61,6 +62,7 @@ local options = {
   formatting = {
     format = function(e, vim_item)
       local src = src_map[e.source.name]
+      if src == nil then src = e.source.name end
       vim_item.kind = string.format("%s %s [%s]", icons[vim_item.kind], vim_item.kind, src)
       return vim_item
     end,
@@ -79,6 +81,7 @@ local options = {
   },
   sources = {
     { name = "luasnip", priority = 1 },
+    { name = "conjure", priority = 200 },
     { name = "nvim_lsp", priority = 100 },
     { name = "path", priority = 4 },
     { name = "buffer", priority = 5 },

@@ -1,6 +1,7 @@
 vim.keymap.set("n", "<bs>", "<nop>", { desc = "Unmap backspace [User]" })
 vim.keymap.set("n", "<space>", "<nop>", { desc = "Unmap space [User]" })
 vim.g.mapleader = " " -- vim.keymap.set Leader key
+vim.g.maplocalleader = ","
 
 -- vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>", { desc = "Create new tab" })
 -- vim.keymap.set({ "n", "i", "v" }, "<C-L>", "<cmd>tabnext<CR>", { desc = "Switch to right tab" })

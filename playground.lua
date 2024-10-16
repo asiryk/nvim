@@ -40,6 +40,7 @@
 --     position = nil, -- get em all
 --   }
 -- end
+
 -- local function get_options(result)
 --   local option_strings = {}
 --
@@ -59,3 +60,33 @@
 ---
 --- LSP rust-analyzer runnables
 ---
+
+
+-- vim.ui.input({ prompt = 'enter colorscheme mode' }, function(input)
+--   vim.print(input)
+-- end)
+
+-- vim.ui.input({ prompt = "Commit message: " }, function(msg)
+--   if not msg then return end
+--   -- vim.print(msg);
+-- end)
+
+
+-- vim.ui.select({ 'tabs', 'spaces' }, {
+--   prompt = 'Select tabs or spaces:',
+--   format_item = function(item)
+--     return "I'd like to choose " .. item
+--   end,
+-- }, function(choice)
+--     print(choice)
+--     -- if choice == 'spaces' then
+--     --   vim.o.expandtab = true
+--     -- else
+--     --   vim.o.expandtab = false
+--     -- end
+--   end)
+
+local RingBuffer = require("ring_buffer")
+local storage_buffer = RingBuffer.new(10)
+storage_buffer:push(1)
+vim.print(#storage_buffer)

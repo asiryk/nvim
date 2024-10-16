@@ -46,6 +46,7 @@ ts_config.setup({
     "vim",
     "vimdoc",
     "c",
+    "clojure",
     "go",
     "gomod",
     "gosum",

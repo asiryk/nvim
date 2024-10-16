@@ -64,6 +64,12 @@ local config = {
       },
     },
   },
+  clojure_lsp = {
+    on_attach = function(client, buffer)
+      client.server_capabilities.completionProvider = false
+      on_attach(client, buffer)
+    end,
+  },
   cssls = {},
   clangd = {},
   csharp_ls = {},
