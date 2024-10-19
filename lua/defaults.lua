@@ -141,9 +141,27 @@ end
 
 -------------------- Cross-plugin configuration --------------------
 
-G.config = {
-  window = {
-    --- @type "none" | "single" | "double" | "rounded" | "solid" | "shadow"
-    border = "rounded"
-  }
-}
+do
+  ---Annotate this function in order to see completions for
+  ---the actual config table.
+  ---@generic T : table
+  ---@param tbl T The input table to observe.
+  ---@param callback function The function
+  ---@return T tbl The same table, now observed.
+  local function t(tbl, callback)
+    return G.utils.observed_table(tbl, callback)
+  end
+
+  local r = function(key, value)
+    vim.api.nvim_exec_autocmds("User", {
+      pattern = "ReloadConfig", data = { key = key, value = value }
+    })
+  end
+
+  G.config = t({
+    window = t({
+      --- @type "none" | "single" | "double" | "rounded" | "solid" | "shadow"
+      border = "rounded"
+    }, r),
+  }, r)
+end

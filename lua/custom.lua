@@ -46,6 +46,18 @@ function utils.new_buf(text, open)
   return buf
 end
 
+function utils.observed_table(tbl, callback)
+  local observed = {}
+  local mt = {
+    __index = tbl,
+    __newindex = function(_, key, value)
+      tbl[key] = value
+      if type(callback) == "function" then callback(key, value) end
+    end,
+  }
+  return setmetatable(observed, mt)
+end
+
 return {
   utils = utils,
 }
