@@ -5,7 +5,9 @@ do -- mini files
   files.setup()
 
   local function open_current()
-    files.open(vim.api.nvim_buf_get_name(0))
+    local path_str = vim.api.nvim_buf_get_name(0)
+    local ok = pcall(files.open, path_str)
+    if not ok then files.open() end
   end
 
   vim.keymap.set("n", "<C-n>", open_current,
