@@ -31,7 +31,10 @@ do -- mini files
     callback = function(args)
       local win_id = args.data.win_id
       vim.wo[win_id].winblend = G.const.default_winblend
-      vim.api.nvim_win_set_config(win_id, { border = "rounded" })
+      local border = G.config.window.border
+      -- mini requires border for file names
+      if border == "none" then border = "solid" end
+      vim.api.nvim_win_set_config(win_id, { border = border })
     end,
     desc = "Customize mini.files winblend [Mini.files]"
   })

@@ -25,22 +25,39 @@ local icons = require("colorscheme.icons").lspkind
 
 vim.opt.completeopt = "menuone,noselect"
 
-local function window()
-  local hl_name = "CmpBorder"
+local function make_window_config()
+  local winhighlight = "Normal:CmpPmenu,CursorLine:PmenuSel,Search:None"
+  local borders = {
+    single = { "┌", "─", "┐", "│", "┘", "─", "└", "│" },
+    double = { "╔", "═", "╗", "║", "╝", "═", "╚", "║" },
+    rounded = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+  }
+
+  local function make(style)
+    local b = borders[style]
+    if b == nil then return { border = style } end
+    local cfg = {
+      border = vim.tbl_map(
+        function(v) return { v, "CmpBorder" } end,
+        b
+      ),
+      winhighlight = winhighlight,
+    }
+
+    return cfg
+  end
+
   return {
-    border = {
-      { "╭", hl_name },
-      { "─", hl_name },
-      { "╮", hl_name },
-      { "│", hl_name },
-      { "╯", hl_name },
-      { "─", hl_name },
-      { "╰", hl_name },
-      { "│", hl_name },
-    },
-    winhighlight = "Normal:CmpPmenu,CursorLine:PmenuSel,Search:None"
+    none = make("none"),
+    single = make("single"),
+    double = make("double"),
+    rounded = make("rounded"),
+    solid = make("solid"),
+    shadow = make("shadow"),
   }
 end
+
+local window_cfg = make_window_config()
 
 local src_map = {
   luasnip = "LuaSnip",
@@ -52,8 +69,8 @@ local src_map = {
 
 local options = {
   window = {
-    completion = window(),
-    documentation = window(),
+    completion = window_cfg[G.config.window.border],
+    documentation = window_cfg[G.config.window.border],
   },
   snippet = {
     expand = function(args) luasnip.lsp_expand(args.body) end,

@@ -3,15 +3,30 @@ require("mason-lspconfig").setup()
 local lspconfig = require("lspconfig")
 
 local function open_float_diagnostics()
-  local opts = {
-    border = "rounded",
-    focusable = false,
+  local function open_generic(style, is_set_hl)
+    return function()
+      local opts = {
+        border = style,
+        focusable = false,
+      }
+
+      local _, win_id = vim.diagnostic.open_float(nil, opts)
+      if is_set_hl and type(win_id) == "number" then
+        vim.api.nvim_set_option_value("winhl", "NormalFloat:None,FloatBorder:CmpBorder", { win = win_id })
+      end
+    end
+  end
+
+  local window_cfg = {
+    none = open_generic("none", false),
+    single = open_generic("single", true),
+    double = open_generic("double", true),
+    rounded = open_generic("rounded", true),
+    solid = open_generic("solid", false),
+    shadow = open_generic("shadow", false),
   }
 
-  local _, win_id = vim.diagnostic.open_float(nil, opts)
-  if type(win_id) == "number" then
-    vim.api.nvim_set_option_value("winhl", "NormalFloat:None,FloatBorder:CmpBorder", { win = win_id })
-  end
+  window_cfg[G.config.window.border]()
 end
 
 local function on_attach(_, buffer)
@@ -109,12 +124,28 @@ for type, icon in pairs(signs) do
 end
 
 local function style_window(lsp_handler)
+  local function open_generic(style, is_set_hl)
+    return function(err, result, ctx, cfg)
+      cfg = cfg or {}
+      cfg.border = style
+      local _, winid = lsp_handler(err, result, ctx, cfg)
+      if is_set_hl and type(winid) == "number" then
+        vim.api.nvim_set_option_value("winhl", "NormalFloat:None,FloatBorder:CmpBorder", { win = winid })
+      end
+    end
+  end
+
+  local window_cfg = {
+    none = open_generic("none", false),
+    single = open_generic("single", true),
+    double = open_generic("double", true),
+    rounded = open_generic("rounded", true),
+    solid = open_generic("solid", false),
+    shadow = open_generic("shadow", false),
+  }
+
   return function(err, result, ctx, cfg)
-    cfg = cfg or {}
-    cfg.border = "rounded"
-    local _, winid = lsp_handler(err, result, ctx, cfg)
-    if type(winid) ~= "number" then return end
-    vim.api.nvim_set_option_value("winhl", "NormalFloat:None,FloatBorder:CmpBorder", { win = winid })
+    window_cfg[G.config.window.border](err, result, ctx, cfg)
   end
 end
 
