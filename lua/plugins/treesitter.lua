@@ -26,7 +26,7 @@ ts_config.setup({
       return false
     end,
   },
-  indent = { enable = true },
+  -- indent = { enable = true },
   playground = {
     enable = true,
   },
@@ -58,6 +58,7 @@ ts_config.setup({
     "bash",
     "sql",
     "c_sharp",
+    "scheme",
   },
   textobjects = {
     select = {

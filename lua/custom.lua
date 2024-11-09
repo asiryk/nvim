@@ -1,5 +1,6 @@
 local utils = {}
 
+L = {} --- for language-specific storage
 G = {}
 G.plugin_hl = {} -- array of functions to be applied by colorscheme
 G.const = {
@@ -56,6 +57,16 @@ function utils.observed_table(tbl, callback)
     end,
   }
   return setmetatable(observed, mt)
+end
+
+function utils.read_file(filepath)
+  local file = io.open(filepath, "r")
+  if not file then
+    error("Could not open query file: " .. filepath)
+  end
+  local str = file:read("*a") -- Read entire file
+  file:close()
+  return str
 end
 
 return {

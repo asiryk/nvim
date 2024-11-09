@@ -59,9 +59,9 @@ telescope.load_extension("fzf")
 local actions = require("telescope.actions")
 local pickers = require("telescope.pickers")
 local finders = require("telescope.finders")
-local devicons = require('nvim-web-devicons')
+local devicons = require("nvim-web-devicons")
 local conf = require("telescope.config").values
-local entry_display = require('telescope.pickers.entry_display')
+local entry_display = require("telescope.pickers.entry_display")
 
 local function get_modified_files()
   local handle = io.popen("git status --porcelain")
