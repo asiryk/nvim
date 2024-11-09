@@ -130,6 +130,7 @@ local function set_color_scheme()
           local_storage.persist_data({
             colorscheme = cfg
           })
+          vim.opt.background = appearance
           switch_colorscheme(cfg)
         end
       )

@@ -47,24 +47,25 @@ vim.keymap.set("n", "<C-b>", "<C-b>zz")
 
 vim.keymap.set("n", "<S-g>", "<S-g>zz")
 
-vim.keymap.set("n", "n", "nzzzv") -- TODO: don't pollute :reg by pressing x, pasting, etc
+vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
--- TODO: center when jumping to a mark
+
+vim.keymap.set("n", "'", function() -- center after mark
+  local c = vim.fn.getchar()
+  c = vim.fn.nr2char(c)
+  vim.cmd("normal! '" .. c)
+  vim.cmd("normal! zz")
+end, { noremap = true, silent = true })
+vim.keymap.set("n", "`", function() -- cneter after mark
+  local c = vim.fn.getchar()
+  c = vim.fn.nr2char(c)
+  vim.cmd("normal! `" .. c)
+  vim.cmd("normal! zz")
+end, { noremap = true, silent = true })
 
 -- Add position to jumplist if moving more than 5 lines up or down
 vim.keymap.set("n", "j", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'j']], { expr = true })
 vim.keymap.set("n", "k", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'k']], { expr = true })
-
--- Control window
-vim.keymap.set("n", "<M-h>", "<C-w>h")
-vim.keymap.set("n", "<M-j>", "<C-w>j")
-vim.keymap.set("n", "<M-k>", "<C-w>k")
-vim.keymap.set("n", "<M-l>", "<C-w>l")
-
-vim.keymap.set("n", "<C-M-h>", "<C-w><")
-vim.keymap.set("n", "<C-M-j>", "<C-w>-")
-vim.keymap.set("n", "<C-M-k>", "<C-w>+")
-vim.keymap.set("n", "<C-M-l>", "<C-w>>")
 
 local defaults_augroup = vim.api.nvim_create_augroup("defaults", {})
 
@@ -85,9 +86,10 @@ vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
 
     local buf = vim.api.nvim_get_current_buf()
     local file = vim.api.nvim_buf_get_name(buf)
+    local exists = vim.loop.fs_stat(file) ~= nil
     local attached = file ~= ""
 
-    if modifiable and no_buftype and attached then
+    if exists and modifiable and no_buftype and attached then
       vim.cmd("silent update")
     end
   end,

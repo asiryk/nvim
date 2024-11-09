@@ -26,6 +26,7 @@ local icons = require("colorscheme.icons").lspkind
 vim.opt.completeopt = "menuone,noselect"
 
 local function make_window_config()
+  -- Don't highlight search results in cmp popup.
   local winhighlight = "Normal:CmpPmenu,CursorLine:PmenuSel,Search:None"
   local borders = {
     single = { "┌", "─", "┐", "│", "┘", "─", "└", "│" },
