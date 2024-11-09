@@ -86,4 +86,14 @@ local function methods_picker()
     :find()
 end
 
-vim.keymap.set("n", "<LocalLeader>fm", methods_picker)
+local buffer = vim.api.nvim_get_current_buf()
+vim.keymap.set(
+  "n",
+  "<Leader>ftm",
+  methods_picker,
+  { buffer = buffer, desc = "Find methods in a file [Telescope]" }
+)
+
+-- set this highlight group to function since
+-- lsp highlight gruop highlights methods for some reason
+vim.api.nvim_set_hl(0, "@lsp.type.class", { link = "@function" })
