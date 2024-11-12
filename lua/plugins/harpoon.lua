@@ -14,10 +14,10 @@ set_keymap("<Leader>ho", function()
   harpoon_ui.toggle_quick_menu()
   vim.wo.winblend = G.const.default_winblend
 end, "Open menu [Harpoon]")
-set_keymap("<C-J>", utils.center_move(bind(harpoon_ui.nav_file, 1)), "File 1 [Harpoon]")
-set_keymap("<C-K>", utils.center_move(bind(harpoon_ui.nav_file, 2)), "File 2 [Harpoon]")
-set_keymap("<C-L>", utils.center_move(bind(harpoon_ui.nav_file, 3)), "File 3 [Harpoon]")
-set_keymap("<C-;>", utils.center_move(bind(harpoon_ui.nav_file, 4)), "File 4 [Harpoon]")
+set_keymap("<C-h>", utils.center_move(bind(harpoon_ui.nav_file, 1)), "File 1 [Harpoon]")
+set_keymap("<C-j>", utils.center_move(bind(harpoon_ui.nav_file, 2)), "File 2 [Harpoon]")
+set_keymap("<C-k>", utils.center_move(bind(harpoon_ui.nav_file, 3)), "File 3 [Harpoon]")
+set_keymap("<C-l>", utils.center_move(bind(harpoon_ui.nav_file, 4)), "File 4 [Harpoon]")
 
 table.insert(G.plugin_hl, function(color)
   -- Make Harpoon transparent
