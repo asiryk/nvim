@@ -50,15 +50,30 @@ vim.keymap.set("n", "<S-g>", "<S-g>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
+local function is_mark_set(c)
+  local res = vim.fn.getpos("'" .. c)
+  return res[2] ~= 0
+end
+
+
 vim.keymap.set("n", "'", function() -- center after mark
   local c = vim.fn.getchar()
   c = vim.fn.nr2char(c)
+  if not is_mark_set(c) then
+    vim.notify("E20: Mark not set", vim.log.levels.ERROR)
+    return
+  end
   vim.cmd("normal! '" .. c)
   vim.cmd("normal! zz")
 end, { noremap = true, silent = true })
-vim.keymap.set("n", "`", function() -- cneter after mark
+
+vim.keymap.set("n", "`", function() -- center after mark
   local c = vim.fn.getchar()
   c = vim.fn.nr2char(c)
+  if not is_mark_set(c) then
+    vim.notify("E20: Mark not set", vim.log.levels.ERROR)
+    return
+  end
   vim.cmd("normal! `" .. c)
   vim.cmd("normal! zz")
 end, { noremap = true, silent = true })
