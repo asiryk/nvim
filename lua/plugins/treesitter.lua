@@ -57,8 +57,8 @@ ts_config.setup({
     "dockerfile",
     "bash",
     "sql",
-    "c_sharp",
     "scheme",
+    "zig",
   },
   textobjects = {
     select = {

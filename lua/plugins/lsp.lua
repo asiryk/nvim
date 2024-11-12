@@ -58,7 +58,6 @@ local config = {
   gopls = {},
   rust_analyzer = {},
   ts_ls = {},
-  -- vtsls = {},
   lua_ls = {
     on_attach = on_attach,
     settings = {
@@ -81,9 +80,9 @@ local config = {
   },
   cssls = {},
   clangd = {},
-  csharp_ls = {},
   dockerls = {},
   docker_compose_language_service = {},
+  zls = {},
 }
 
 local default_config = {
@@ -99,7 +98,6 @@ require("mason-tool-installer").setup({
     "prettierd",
     "stylua",
     "luacheck",
-    "clang-format",
   }, vim.tbl_keys(config))
 })
 
