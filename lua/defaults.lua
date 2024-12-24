@@ -26,6 +26,7 @@ vim.opt.undofile = true
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 -- vim.opt.inccommand = "split" -- Preview supstitutions live
+vim.o.statusline = "%F %h%m%r%=%-14.(%l,%c%V%) %P" -- modify status line to include full path to the file
 
 -- Set undo breakpoints: Every time following key ({"<CR>", "."})
 -- gets pressed, it stops current change, so the next "undo"

@@ -86,7 +86,7 @@ vim.api.nvim_create_autocmd("FileType", {
 require("treesitter-context").setup({
   enable = true,
   -- throttle = true, -- Throttles plugin updates (may improve performance)
-  -- max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
+  max_lines = 10, -- How many lines the window should span. Values <= 0 mean no limit.
   -- show_all_context = true,
   patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
     -- For all filetypes
