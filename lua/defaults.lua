@@ -115,7 +115,16 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   desc = "Remove trailing whitespace on pressing :w",
   group = defaults_augroup,
   pattern = "*",
-  callback = G.utils.remove_trailin_whitespace,
+  callback = function()
+    local filetype = vim.bo.filetype
+    local filetype_allowed = filetype ~= "markdown"
+
+    if vim.bo.modifiable and filetype_allowed then
+      local cursor_pos = vim.api.nvim_win_get_cursor(0)
+      vim.cmd("%s/\\s\\+$//e")
+      vim.api.nvim_win_set_cursor(0, cursor_pos)
+    end
+  end,
 })
 
 -- Disable some default plugins
