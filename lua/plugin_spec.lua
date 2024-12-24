@@ -80,7 +80,7 @@ local spec = {
   {
     "lewis6991/gitsigns.nvim",
     config = function() require("plugins.gitsigns") end,
-    tag = "v0.8.1"
+    tag = "v0.9.0"
   },
   {
     "sindrets/diffview.nvim",
