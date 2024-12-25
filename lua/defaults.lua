@@ -129,7 +129,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 
 -- Disable some default plugins
 local default_plugins = {
-  "2html_plugin",
+  -- "2html_plugin",
   "getscript",
   "getscriptPlugin",
   "gzip",
