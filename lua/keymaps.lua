@@ -48,6 +48,9 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { silent = true, desc = "Move selec
 -- vim.keymap.set("n", "<C-M-k>", "<C-w>+")
 -- vim.keymap.set("n", "<C-M-l>", "<C-w>>")
 
-vim.keymap.set("v", "<leader>y", '"+y', { desc = "Yank into system clipboard" })
-vim.keymap.set("n", "<leader>p", '"+p', { desc = "Paste from system clipboard" })
+vim.keymap.set("v", "<leader>y", '"+y', { desc = "Yank into system clipboard [User]" })
+vim.keymap.set("n", "<leader>p", '"+p', { desc = "Paste from system clipboard [User]" })
 
+vim.keymap.set("n", "<leader>xf", "<cmd>source %<CR>", { desc = "Execute lua file [User]" })
+vim.keymap.set("n", "<leader>xx", ":.lua<CR>", { desc = "Execute current lua line [User]" })
+vim.keymap.set("v", "<leader>x", ":lua<CR>", { desc = "Execute visual lua selection [User]" })
