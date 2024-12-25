@@ -49,6 +49,9 @@ local spec = {
     config = function() require("plugins.lsp") end,
   },
   { -- completion
+    -- Probably replace it with blink.nvim. Only if blink has better
+    -- highlight groups support (doesn't mess highlights on theme change),
+    -- and snippets work either the same or better.
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     dependencies = {
@@ -81,6 +84,9 @@ local spec = {
     "lewis6991/gitsigns.nvim",
     config = function() require("plugins.gitsigns") end,
     tag = "v0.9.0"
+  },
+  {
+    "tpope/vim-fugitive",
   },
   {
     "sindrets/diffview.nvim",
