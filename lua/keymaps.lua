@@ -1,3 +1,6 @@
+-- zg - add to spell list
+-- zug -- undo add to spell list
+
 local keymaps_augroup = vim.api.nvim_create_augroup("keymaps", {})
 
 vim.keymap.set("n", "<bs>", "<nop>", { desc = "Unmap backspace [User]" })
@@ -79,7 +82,6 @@ local uk_to_en = {
     ["д"] = "l",
     ["ж"] = ";",
     ["є"] = "'",
-    ["ʼ"] = "\\",
     ["ґ"] = "`",
     ["я"] = "z",
     ["ч"] = "x",
@@ -90,11 +92,10 @@ local uk_to_en = {
     ["ь"] = "m",
     ["б"] = ",",
     ["ю"] = ".",
-    ["."] = "/",
 }
 
 for uk, en in pairs(uk_to_en) do
-    vim.keymap.set({ "n", "v" }, uk, en)
-    vim.keymap.set({ "n", "v" }, "<C-"..uk..">", "<C-"..en..">")
-    vim.keymap.set({ "n", "v" }, vim.fn.toupper(uk), vim.fn.toupper(en))
+    vim.keymap.set({ "n", "v", "o" }, uk, en)
+    vim.keymap.set({ "n", "v", "o" }, "<C-"..uk..">", "<C-"..en..">")
+    vim.keymap.set({ "n", "v", "o" }, vim.fn.toupper(uk), vim.fn.toupper(en))
 end
