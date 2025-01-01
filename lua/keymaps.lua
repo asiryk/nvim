@@ -54,3 +54,47 @@ vim.keymap.set("n", "<leader>p", '"+p', { desc = "Paste from system clipboard [U
 vim.keymap.set("n", "<leader>xf", "<cmd>source %<CR>", { desc = "Execute lua file [User]" })
 vim.keymap.set("n", "<leader>xx", ":.lua<CR>", { desc = "Execute current lua line [User]" })
 vim.keymap.set("v", "<leader>x", ":lua<CR>", { desc = "Execute visual lua selection [User]" })
+
+local uk_to_en = {
+    ["й"] = "q",
+    ["ц"] = "w",
+    ["у"] = "e",
+    ["к"] = "r",
+    ["е"] = "t",
+    ["н"] = "y",
+    ["г"] = "u",
+    ["ш"] = "i",
+    ["щ"] = "o",
+    ["з"] = "p",
+    ["х"] = "[",
+    ["ї"] = "]",
+    ["ф"] = "a",
+    ["і"] = "s",
+    ["в"] = "d",
+    ["а"] = "f",
+    ["п"] = "g",
+    ["р"] = "h",
+    ["о"] = "j",
+    ["л"] = "k",
+    ["д"] = "l",
+    ["ж"] = ";",
+    ["є"] = "'",
+    ["ʼ"] = "\\",
+    ["ґ"] = "`",
+    ["я"] = "z",
+    ["ч"] = "x",
+    ["с"] = "c",
+    ["м"] = "v",
+    ["и"] = "b",
+    ["т"] = "n",
+    ["ь"] = "m",
+    ["б"] = ",",
+    ["ю"] = ".",
+    ["."] = "/",
+}
+
+for uk, en in pairs(uk_to_en) do
+    vim.keymap.set({ "n", "v" }, uk, en)
+    vim.keymap.set({ "n", "v" }, "<C-"..uk..">", "<C-"..en..">")
+    vim.keymap.set({ "n", "v" }, vim.fn.toupper(uk), vim.fn.toupper(en))
+end
