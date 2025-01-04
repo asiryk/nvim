@@ -69,6 +69,42 @@ function utils.read_file(filepath)
   return str
 end
 
+local function term_split_cmd()
+  local term_buf = nil
+  local term_win = nil
+
+  return function(cmd)
+    -- Close the previous buffer and window if they exist
+    if term_buf and vim.api.nvim_buf_is_valid(term_buf) then
+      if term_win and vim.api.nvim_win_is_valid(term_win) then
+        vim.api.nvim_win_close(term_win, true)
+      end
+      vim.api.nvim_buf_delete(term_buf, { force = true })
+    end
+
+
+    local prev_win = vim.api.nvim_get_current_win()
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.cmd.vsplit()
+    local win = vim.api.nvim_get_current_win()
+    vim.api.nvim_win_set_buf(win, buf)
+    local _ = vim.fn.termopen(cmd)
+
+    vim.api.nvim_set_option_value("number", false, { scope = "local", win = win })
+    vim.api.nvim_set_option_value("relativenumber", false, { scope = "local", win = win })
+    vim.keymap.set("n", "q", ":bd!<CR>", { buffer = buf, silent = true })
+
+    term_buf = buf
+    term_win = win
+
+    vim.api.nvim_set_current_win(prev_win)
+  end
+end
+
+-- Example
+--term_split_cmd ({ "git", "log", "--oneline", "-10" })
+utils.term_split_cmd = term_split_cmd()
+
 return {
   utils = utils,
 }
