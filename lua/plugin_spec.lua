@@ -64,6 +64,11 @@ local spec = {
     },
     config = function() require("plugins.completion") end,
   },
+  {
+    "supermaven-inc/supermaven-nvim",
+    commit = "07d20fce48a5629686aefb0a7cd4b25e33947d50",
+    config = function() require("plugins.ai") end,
+  },
   { -- telescope
     "nvim-telescope/telescope.nvim",
     config = function() require("plugins.telescope") end,
