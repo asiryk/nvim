@@ -11,6 +11,7 @@ vim.opt.expandtab = true -- Use tabs instead of spaces
 vim.opt.tabstop = 4 -- Amount of spaces the tab is displayed
 vim.opt.shiftwidth = 2 -- Amount of spaces to use for each step of (auto)indent
 vim.opt.smartindent = true -- Copy indent from the previous line
+vim.opt.exrc = true -- Use .nvim.lua file for per-project configuration
 vim.opt.termguicolors = true -- Set 24 bit colors
 vim.opt.laststatus = 3 -- Set global status line
 vim.opt.hlsearch = true -- Don't highlight searches

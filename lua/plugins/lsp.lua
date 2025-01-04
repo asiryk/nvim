@@ -32,7 +32,7 @@ end
 local function on_attach(_, buffer)
   local function set(mode, lhs, rhs, desc) vim.keymap.set(mode, lhs, rhs, { buffer = buffer, desc = desc }) end
   local function format()
-    require("conform").format({ async = true, lsp_fallback = true })
+    require("conform").format({ async = true, bufnr = buffer })
   end
   local function definition()
     vim.api.nvim_create_autocmd("CursorMoved", {
