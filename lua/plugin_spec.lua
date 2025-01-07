@@ -91,7 +91,15 @@ local spec = {
     tag = "v0.8.1"
   },
   {
-    "tpope/vim-fugitive",
+    "NeogitOrg/neogit",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "sindrets/diffview.nvim",
+      "nvim-telescope/telescope.nvim",
+    },
+    config = function()
+      require("neogit").setup({})
+    end,
   },
   {
     "sindrets/diffview.nvim",
