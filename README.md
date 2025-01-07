@@ -56,3 +56,24 @@ rm -rf ~/.cache/nvim
   vim.cmd('Git log -L' .. vim.fn.line('.') .. ',' .. vim.fn.line('.') .. ':' .. vim.fn.expand('%'))
 
   ```
+
+## Useful things I want to remember
+
+### Fix very long lines
+
+Set a width, and split very long lines with the ones that
+fit into specified width
+
+```
+:set textwidth=90
+:g/^/normal gq$
+```
+
+### Spell check
+
+```
+:set spell spelllang=uk,en
+```
+
+`zg` - add custom word to dictionary
+`zug` - remove custom word from dictionary
