@@ -29,11 +29,13 @@ local function open_float_diagnostics()
   window_cfg[G.config.window.border]()
 end
 
+local function format()
+  require("conform").format({ async = true })
+end
+vim.keymap.set({ "n", "v" }, "<Leader>lf", format, { desc = "Format [LSP], [Conform]" })
+
 local function on_attach(_, buffer)
   local function set(mode, lhs, rhs, desc) vim.keymap.set(mode, lhs, rhs, { buffer = buffer, desc = desc }) end
-  local function format()
-    require("conform").format({ async = true, bufnr = buffer })
-  end
   local function definition()
     vim.api.nvim_create_autocmd("CursorMoved", {
       once = true,
@@ -47,7 +49,6 @@ local function on_attach(_, buffer)
   set("n", "gr", vim.lsp.buf.references, "Find references [LSP]")
   set("n", "<S-k>", vim.lsp.buf.hover, "Hover documentation [LSP]")
   set("i", "<C-k>", vim.lsp.buf.signature_help, "Hover signature help [LSP]")
-  set({ "n", "v" }, "<Leader>lf", format, "Format [LSP], [Conform]")
   set("n", "<Leader>lr", vim.lsp.buf.rename, "Rename variable [LSP]")
   set("n", "<Leader>la", vim.lsp.buf.code_action, "Show actions [LSP]")
   set("n", "<Leader>lcr", vim.lsp.codelens.refresh, "Refresh codelens [LSP]")
@@ -112,6 +113,9 @@ require("conform").setup({
     lua = { "stylua" },
     javascript = { "prettierd" },
     typescript = { "prettierd" },
+    typescriptreact = { "prettierd" },
+    javascriptreact = { "prettierd" },
+    json = { "prettierd" },
   }
 })
 

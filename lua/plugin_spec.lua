@@ -60,14 +60,21 @@ local spec = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
-      "supermaven-inc/supermaven-nvim",
     },
     config = function() require("plugins.completion") end,
   },
   {
     "supermaven-inc/supermaven-nvim",
     commit = "07d20fce48a5629686aefb0a7cd4b25e33947d50",
-    config = function() require("plugins.ai") end,
+    config = function()
+      vim.api.nvim_create_user_command(
+        "AIStart",
+        function() vim.notify("Turned on AI", vim.log.levels.INFO) end,
+        { desc = "Manually turn on AI completion [User]" }
+      )
+      require("supermaven-nvim").setup({})
+    end,
+    cmd = "AIStart",
   },
   { -- telescope
     "nvim-telescope/telescope.nvim",
@@ -88,26 +95,17 @@ local spec = {
   {
     "lewis6991/gitsigns.nvim",
     config = function() require("plugins.gitsigns") end,
-    tag = "v0.8.1"
+    tag = "v0.8.1",
   },
-  {
-    "NeogitOrg/neogit",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "sindrets/diffview.nvim",
-      "nvim-telescope/telescope.nvim",
-    },
-    config = function()
-      require("neogit").setup({})
-    end,
-  },
+  { "tpope/vim-fugitive" },
   {
     "sindrets/diffview.nvim",
     config = function() require("plugins.diffview") end,
+    keys = { "<Leader>g" },
   },
   {
     "jinh0/eyeliner.nvim",
-    opts = { highlight_on_key = true, dim = true }
+    opts = { highlight_on_key = true, dim = true },
   },
   {
     "lukas-reineke/indent-blankline.nvim",
@@ -120,7 +118,7 @@ local spec = {
         tab_char = "║",
         smart_indent_cap = false,
       },
-    }
+    },
   },
   {
     "mattn/emmet-vim",
@@ -134,7 +132,7 @@ local spec = {
       input = {
         win_options = {
           winblend = G.const.default_winblend,
-          winhighlight = "NormalFloat:None,FloatBorder:CmpBorder"
+          winhighlight = "NormalFloat:None,FloatBorder:CmpBorder",
         },
       },
     },
