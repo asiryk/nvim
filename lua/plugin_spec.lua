@@ -143,8 +143,21 @@ local spec = {
     opts = {},
   },
   {
-    "mbbill/undotree",
+    "catgoose/nvim-colorizer.lua",
+    config = function()
+      vim.api.nvim_create_user_command(
+        "Color",
+        function() vim.notify("Turned Color", vim.log.levels.INFO) end,
+        { desc = "Manually turn on Color [User]" }
+      )
+      require("colorizer").setup({
+        filetypes = { "*" },
+      })
+    end,
+    cmd = "Color",
   },
+  "mbbill/undotree",
+
   -- colorschemes
   "navarasu/onedark.nvim",
 }
