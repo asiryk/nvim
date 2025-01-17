@@ -142,17 +142,11 @@ local spec = {
     event = "FileType qf",
     opts = {},
   },
+  {
+    "mbbill/undotree",
+  },
   -- colorschemes
   "navarasu/onedark.nvim",
 }
 
 require("lazy").setup(spec)
-
--- consider later
---
--- ["mbbill/undotree"] = {
---   config = function()
---     vim.keymap.set("n", "<leader>ut", vim.cmd.UndotreeToggle)
---   end,
---   commit = "aa93a7e"
--- },
