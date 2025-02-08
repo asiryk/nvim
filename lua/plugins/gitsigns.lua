@@ -4,46 +4,44 @@ local utils = require("custom").utils
 
 local options = {
   signs = {
-    add = {
-      hl = "GitSignsAdd",
-      text = icons.block,
-      numhl = "GitSignsAddNr",
-      linehl = "GitSignsAddLn",
-    },
-    change = {
-      hl = "GitSignsChange",
-      text = icons.block,
-      numhl = "GitSignsChangeNr",
-      linehl = "GitSignsChangeLn",
-    },
-    delete = {
-      hl = "GitSignsDelete",
-      text = icons.triangle,
-      numhl = "GitSignsDeleteNr",
-      linehl = "GitSignsDeleteLn",
-    },
-    topdelete = {
-      hl = "GitSignsDelete",
-      text = icons.triangle,
-      numhl = "GitSignsDeleteNr",
-      linehl = "GitSignsDeleteLn",
-    },
-    changedelete = {
-      hl = "GitSignsChange",
-      text = icons.block,
-      numhl = "GitSignsChangeNr",
-      linehl = "GitSignsChangeLn",
-    },
+    add = { text = icons.block },
+    change = { text = icons.block },
+    delete = { text = icons.dash },
+    topdelete = { text = icons.dash },
+    changedelete = { text = icons.block },
   },
-  yadm = { enable = false },
+  signs_staged = {
+    add = { text = icons.block_thin },
+    change = { text = icons.block_thin },
+    delete = { text = icons.dash },
+    topdelete = { text = icons.dash },
+    changedelete = { text = icons.block_thin },
+  },
 }
 
 table.insert(G.plugin_hl, function(c)
-  vim.cmd([[highlight GitSignsAdd guibg=None guifg=]] .. c.green)
-  vim.cmd([[highlight GitSignsChange guibg=None guifg=]] .. c.cyan)
-  vim.cmd([[highlight GitSignsDelete guibg=None guifg=]] .. c.light_grey)
-  vim.cmd([[highlight WinSeparator guibg=None]]) -- Remove borders for window separators
-  vim.cmd([[highlight SignColumn guibg=None]]) -- Remove background from signs column
+  vim.api.nvim_set_hl(0, "GitSignsAdd", { link = "GitSignsAdd", bg = "none", fg = c.green })
+  vim.api.nvim_set_hl(0, "GitSignsAddLn", { link = "GitSignsAddLn" })
+  vim.api.nvim_set_hl(0, "GitSignsAddNr", { link = "GitSignsAddNr" })
+
+  vim.api.nvim_set_hl(0, "GitSignsChange", { link = "GitSignsChange", bg = "none", fg = c.cyan })
+  vim.api.nvim_set_hl(0, "GitSignsChangeLn", { link = "GitSignsChangeLn" })
+  vim.api.nvim_set_hl(0, "GitSignsChangeNr", { link = "GitSignsChangeNr" })
+
+  vim.api.nvim_set_hl(0, "GitSignsChangedelete", { link = "GitSignsChange" })
+  vim.api.nvim_set_hl(0, "GitSignsChangedeleteLn", { link = "GitSignsChangeLn" })
+  vim.api.nvim_set_hl(0, "GitSignsChangedeleteNr", { link = "GitSignsChangeNr" })
+
+  vim.api.nvim_set_hl(0, "GitSignsDelete", { link = "GitSignsDelete", bg = "none", fg = c.red })
+  vim.api.nvim_set_hl(0, "GitSignsDeleteLn", { link = "GitSignsDeleteLn" })
+  vim.api.nvim_set_hl(0, "GitSignsDeleteNr", { link = "GitSignsDeleteNr" })
+
+  vim.api.nvim_set_hl(0, "GitSignsTopdelete", { link = "GitSignsDelete" })
+  vim.api.nvim_set_hl(0, "GitSignsTopdeleteLn", { link = "GitSignsDeleteLn" })
+  vim.api.nvim_set_hl(0, "GitSignsTopdeleteNr", { link = "GitSignsDeleteNr" })
+
+  -- vim.cmd([[highlight WinSeparator guibg=None]]) -- Remove borders for window separators
+  -- vim.cmd([[highlight SignColumn guibg=None]]) -- Remove background from signs column
 end)
 
 gs.setup(options)

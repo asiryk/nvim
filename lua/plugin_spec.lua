@@ -95,7 +95,7 @@ local spec = {
   {
     "lewis6991/gitsigns.nvim",
     config = function() require("plugins.gitsigns") end,
-    tag = "v0.8.1",
+    tag = "v1.0.0",
   },
   { "tpope/vim-fugitive" },
   {
