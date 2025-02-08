@@ -40,6 +40,12 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Turn off hlsearch 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { silent = true, desc = "Move selection 1 row up [User]" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { silent = true, desc = "Move selection 1 row down [User]" })
 
+vim.api.nvim_create_user_command(
+  "WrapSelection",
+  "g/./normal gq$",
+  { desc = "Wrap selection by textwidth [User]" }
+)
+
 -- Control window
 -- vim.keymap.set("n", "<M-h>", "<C-w>h")
 -- vim.keymap.set("n", "<M-j>", "<C-w>j")

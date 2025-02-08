@@ -8,19 +8,15 @@ ts_config.setup({
     disable = function(_, buf)
       -- Check for general file size
       local buf_size = utils.get_buf_size_in_bytes(buf)
-      local max_filesize = 1000000; -- 1MB
-      if buf_size > max_filesize then
-        return true
-      end
+      local max_filesize = 1000000 -- 1MB
+      if buf_size > max_filesize then return true end
 
       -- Check for the length of the longest line
       local max_line_length = 1000 -- 1000 characters
       local line_count = vim.api.nvim_buf_line_count(buf)
       for i = 1, line_count do
         local line_length = vim.fn.getbufline(buf, i)[1]:len()
-        if line_length > max_line_length then
-          return true
-        end
+        if line_length > max_line_length then return true end
       end
 
       return false
@@ -71,8 +67,8 @@ ts_config.setup({
         ["ib"] = { query = "@block.inner", desc = "Select inside block" },
         ["ac"] = { query = "@comment.outer", desc = "Select around comment" },
         ["ic"] = { query = "@comment.inner", desc = "Select inside comment" },
-      }
-    }
+      },
+    },
   },
 })
 
