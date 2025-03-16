@@ -72,7 +72,13 @@ local spec = {
         function() vim.notify("Turned on AI", vim.log.levels.INFO) end,
         { desc = "Manually turn on AI completion [User]" }
       )
-      require("supermaven-nvim").setup({})
+      require("supermaven-nvim").setup({
+        keymaps = {
+          accept_suggestion = "<C-l>",
+          clear_suggestion = "<C-]>",
+          accept_word = "<C-j>",
+        },
+      })
     end,
     cmd = "AIStart",
   },

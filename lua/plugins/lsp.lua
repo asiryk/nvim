@@ -80,6 +80,7 @@ local config = {
     },
   },
   cssls = {},
+  tailwindcss = {},
   clangd = {},
   dockerls = {},
   docker_compose_language_service = {},
