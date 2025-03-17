@@ -32,6 +32,7 @@ do -- create buf logger
     vim.api.nvim_win_set_buf(0, buf)
   end
 
+  vim.api.nvim_create_user_command("OpenLog", open_log, { desc = "Open log buffer" })
   G.log = log
   G.open_log = open_log
 end
