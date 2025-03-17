@@ -1,3 +1,5 @@
+vim.opt.completeopt = "menuone,noselect"
+
 do -- set up luasnip
   local luasnip = require("luasnip")
   local options = {
@@ -6,59 +8,20 @@ do -- set up luasnip
   }
   luasnip.config.set_config(options)
 
-  vim.keymap.set({"i", "s"}, "<C-l>", function()
-    if luasnip.expand_or_jumpable() then
-      luasnip.expand_or_jump()
-    end
+  vim.keymap.set({ "i", "s" }, "<C-l>", function()
+    if luasnip.expand_or_jumpable() then luasnip.expand_or_jump() end
   end, { silent = true, desc = "Jump next item [LuaSnip]" })
 
-  vim.keymap.set({"i", "s"}, "<C-h>", function()
-    if luasnip.jumpable(-1) then
-      luasnip.jump(-1)
-    end
+  vim.keymap.set({ "i", "s" }, "<C-h>", function()
+    if luasnip.jumpable(-1) then luasnip.jump(-1) end
   end, { silent = true, desc = "Jump prev item [LuaSnip]" })
 end
 
-local cmp = require("cmp")
-local luasnip = require("luasnip")
-local icons = require("colorscheme.icons").lspkind
-
-vim.opt.completeopt = "menuone,noselect"
-
-local function make_window_config()
-  -- Don't highlight search results in cmp popup.
-  local winhighlight = "Normal:CmpPmenu,CursorLine:PmenuSel,Search:None"
-  local borders = {
-    single = { "┌", "─", "┐", "│", "┘", "─", "└", "│" },
-    double = { "╔", "═", "╗", "║", "╝", "═", "╚", "║" },
-    rounded = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-  }
-
-  local function make(style)
-    local b = borders[style]
-    if b == nil then return { border = style } end
-    local cfg = {
-      border = vim.tbl_map(
-        function(v) return { v, "CmpBorder" } end,
-        b
-      ),
-      winhighlight = winhighlight,
-    }
-
-    return cfg
-  end
-
-  return {
-    none = make("none"),
-    single = make("single"),
-    double = make("double"),
-    rounded = make("rounded"),
-    solid = make("solid"),
-    shadow = make("shadow"),
-  }
-end
-
 local function make_cmp_config()
+  local cmp = require("cmp")
+  local luasnip = require("luasnip")
+  local icons = require("colorscheme.icons").lspkind
+
   local src_map = {
     luasnip = "LuaSnip",
     nvim_lsp = "LSP",
@@ -67,11 +30,15 @@ local function make_cmp_config()
     supermaven = "AI",
   }
 
-  local window_cfg = make_window_config()
+  local window_cfg = {
+    border = G.config.window.border,
+    winhighlight = "NormalFloat:Normal,FloatBorder:Normal,CursorLine:PmenuSel,Search:None",
+  }
+
   local options = {
     window = {
-      completion = window_cfg[G.config.window.border],
-      documentation = window_cfg[G.config.window.border],
+      completion = window_cfg,
+      documentation = window_cfg,
     },
     snippet = {
       expand = function(args) luasnip.lsp_expand(args.body) end,
@@ -79,7 +46,8 @@ local function make_cmp_config()
     formatting = {
       format = function(e, vim_item)
         local src = src_map[e.source.name]
-        vim_item.kind = string.format("%s %s [%s]", icons[vim_item.kind], vim_item.kind, src)
+        vim_item.kind =
+          string.format("%s %s [%s]", icons[vim_item.kind], vim_item.kind, src)
         return vim_item
       end,
     },
@@ -106,21 +74,16 @@ local function make_cmp_config()
   return options
 end
 
-local function open()
-  if not cmp.visible() then
-    cmp.complete()
+local function setup_cmp()
+  local cmp = require("cmp")
+
+  local function open()
+    if not cmp.visible() then cmp.complete() end
   end
+  vim.keymap.set("i", "<C-p>", open, { desc = "Open completion window [Cmp]" })
+  vim.keymap.set("i", "<C-n>", open, { desc = "Open completion window [Cmp]" })
+
+  cmp.setup(make_cmp_config())
 end
-vim.keymap.set("i", "<C-p>", open, { desc = "Open completion window [Cmp]" })
-vim.keymap.set("i", "<C-n>", open, { desc = "Open completion window [Cmp]" })
 
-cmp.setup(make_cmp_config())
-
-local cmp_augroup = vim.api.nvim_create_augroup("cmp", {})
-vim.api.nvim_create_autocmd("User", {
-  pattern = "ReloadConfig",
-  group = cmp_augroup,
-  callback = function()
-    cmp.setup(make_cmp_config())
-  end,
-})
+setup_cmp()
