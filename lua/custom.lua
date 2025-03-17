@@ -7,8 +7,34 @@ G.const = {
   default_winblend = 15,
 }
 G.utils = utils
-G.bufnr = vim.api.nvim_get_current_buf
-G.log = function(msg) vim.notify(vim.inspect(msg), vim.log.levels.DEBUG) end
+
+do -- create buf logger
+  local function get_log_buffer()
+    if G._log_bufnr and vim.api.nvim_buf_is_valid(G._log_bufnr) then
+      return G._log_bufnr
+    end
+    local log_buf = vim.api.nvim_create_buf(true, true)
+    vim.api.nvim_buf_set_name(log_buf, "Logger")
+    G._log_bufnr = log_buf
+    return log_buf
+  end
+
+  local function log(msg)
+    local lines = vim.split(vim.inspect(msg), "\n", { plain = true })
+    local buf = get_log_buffer()
+    local line_count = vim.api.nvim_buf_line_count(buf)
+    vim.api.nvim_buf_set_lines(buf, line_count, line_count, false, lines)
+  end
+
+  local function open_log()
+    local buf = get_log_buffer()
+    vim.cmd("vsplit")
+    vim.api.nvim_win_set_buf(0, buf)
+  end
+
+  G.log = log
+  G.open_log = open_log
+end
 
 function utils.get_buf_size_in_bytes(buf)
   local line_count = vim.api.nvim_buf_line_count(buf)
@@ -41,9 +67,7 @@ function utils.new_buf(text, open)
   end
   local buf = vim.api.nvim_create_buf(true, true)
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-  if open then
-    vim.api.nvim_set_current_buf(buf)
-  end
+  if open then vim.api.nvim_set_current_buf(buf) end
   return buf
 end
 
@@ -61,9 +85,7 @@ end
 
 function utils.read_file(filepath)
   local file = io.open(filepath, "r")
-  if not file then
-    error("Could not open query file: " .. filepath)
-  end
+  if not file then error("Could not open query file: " .. filepath) end
   local str = file:read("*a") -- Read entire file
   file:close()
   return str
@@ -81,7 +103,6 @@ local function term_split_cmd()
       end
       vim.api.nvim_buf_delete(term_buf, { force = true })
     end
-
 
     local prev_win = vim.api.nvim_get_current_win()
     local buf = vim.api.nvim_create_buf(false, true)
