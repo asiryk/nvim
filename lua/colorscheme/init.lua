@@ -51,7 +51,20 @@ local function load_colorscheme()
   M.on_colorscheme_changed({ match = vim.g.colors_name })
 end
 
-local function set_color_scheme()
+function M.set_color_scheme(colorscheme, appearance)
+  --- @type ColorschemeStorage
+  local cfg = {
+    name = colorscheme,
+    variant = appearance,
+  }
+  local_storage.persist_data({
+    colorscheme = cfg,
+  })
+  vim.opt.background = appearance
+  switch_colorscheme(cfg)
+end
+
+function M.prompt_color_scheme()
   vim.ui.select({ "onedark" }, { prompt = "Select colorscheme:" }, function(colorscheme)
     if colorscheme == nil then return end
     vim.ui.select(
@@ -59,16 +72,7 @@ local function set_color_scheme()
       { prompt = "Select appearance:" },
       function(appearance)
         if appearance == nil then return end
-        --- @type ColorschemeStorage
-        local cfg = {
-          name = colorscheme,
-          variant = appearance,
-        }
-        local_storage.persist_data({
-          colorscheme = cfg,
-        })
-        vim.opt.background = appearance
-        switch_colorscheme(cfg)
+        M.set_color_scheme(colorscheme, appearance)
       end
     )
   end)
@@ -108,29 +112,36 @@ local function hl_overrides()
 end
 
 function M.on_colorscheme_changed(a)
-  do
-    -- Highlight current line number
-    vim.opt.cursorline = true
-    vim.cmd("hi clear CursorLine")
-    local c = require("onedark.colors")
+  vim.schedule(function()
+    do
+      -- Highlight current line number
+      vim.opt.cursorline = true
+      vim.cmd("hi clear CursorLine")
+      local c = require("onedark.colors")
 
-    -- Apply plugin highlights
-    for _, func in ipairs(G.plugin_hl) do
-      func(c)
+      -- Apply plugin highlights
+      for _, func in ipairs(G.plugin_hl) do
+        func(c)
+      end
     end
-  end
 
-  do -- Apply custom overrides
-    local name = a.match
-    local override = hl_overrides()[name]
-    if type(override) == "table" then
-      local bg = vim.o.background
-      local fn = override[bg]
-      local fn_base = override["base"]
-      if type(fn_base) == "function" then fn_base() end
-      if type(fn) == "function" then fn() end
+    do -- Apply custom overrides
+      local name = a.match
+      local override = hl_overrides()[name]
+      if type(override) == "table" then
+        local bg = vim.o.background
+        local fn = override[bg]
+        local fn_base = override["base"]
+        if type(fn_base) == "function" then fn_base() end
+        if type(fn) == "function" then fn() end
+      end
+
+      -- For some reason it doesn't get updated after switching theme
+      -- (but only on autocmd)
+      require("ibl").update({})
     end
-  end
+
+  end)
 end
 
 --#region autocmd
@@ -142,6 +153,22 @@ autocmd("ColorScheme", {
   pattern = "*",
   group = group,
   callback = M.on_colorscheme_changed,
+})
+
+-- Read more about this autocmd
+-- https://github.com/neovim/neovim/pull/31350
+-- https://contour-terminal.org/vt-extensions/color-palette-update-notifications/#when-to-send-out-the-dsr
+autocmd("OptionSet", {
+  pattern = "background",
+  group = group,
+  callback = function(e)
+    local bg = vim.o.background
+    if bg == "dark" then
+      M.set_color_scheme("onedark", "dark")
+    else
+      M.set_color_scheme("onedark", "light")
+    end
+  end,
 })
 
 -- Highilight yanked text for a short time
@@ -163,7 +190,7 @@ autocmd("TextYankPost", {
 --#endregion
 
 -- Call stuff.
-vim.api.nvim_create_user_command("SetColorscheme", set_color_scheme, {})
-vim.keymap.set("n", "<leader>ct", set_color_scheme, { desc = "Configure theme [User]" })
+vim.api.nvim_create_user_command("SetColorscheme", M.prompt_color_scheme, {})
+vim.keymap.set("n", "<leader>ct", M.prompt_color_scheme, { desc = "Configure theme [User]" })
 
 load_colorscheme()
