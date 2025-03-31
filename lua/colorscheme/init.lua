@@ -80,15 +80,6 @@ end
 local function hl_overrides()
   -- The structure of a table: "<theme-name>"."<background>".overrides()
   return {
-    ["default"] = {
-      -- Make indent blankline rules visible on selecion.
-      ["dark"] = function()
-        vim.api.nvim_set_hl(0, "Visual", { bg = "NvimDarkGray3" })
-      end,
-      ["light"] = function()
-        vim.api.nvim_set_hl(0, "Visual", { bg = "NvimLightGray3" })
-      end,
-    },
     ["onedark"] = {
       ["base"] = function()
         vim.api.nvim_set_hl(0, "NormalFloat", { link = "Normal" })
@@ -136,10 +127,6 @@ function M.on_colorscheme_changed(a)
         if type(fn_base) == "function" then fn_base() end
         if type(fn) == "function" then fn() end
       end
-
-      -- For some reason it doesn't get updated after switching theme
-      -- (but only on autocmd)
-      require("ibl").update({})
     end
 
   end)

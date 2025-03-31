@@ -24,6 +24,18 @@ local spec = {
     "echasnovski/mini.nvim",
     config = function() require("plugins.mini") end,
   },
+  {
+    "folke/snacks.nvim",
+    opts = {
+      bigfile = { enabled = true },
+      indent = {
+        enabled = true,
+        hl = "SnacksIndent",
+        scope = { hl = "SnacksIndent1" },
+        animate = { enabled = false },
+      },
+    },
+  },
   { -- treesitter
     "nvim-treesitter/nvim-treesitter",
     dependencies = {
@@ -114,19 +126,6 @@ local spec = {
     opts = { highlight_on_key = true, dim = true },
   },
   {
-    "lukas-reineke/indent-blankline.nvim",
-    main = "ibl",
-    opts = {
-      scope = { enabled = false },
-      debounce = 10,
-      indent = {
-        char = "│",
-        tab_char = "║",
-        smart_indent_cap = false,
-      },
-    },
-  },
-  {
     "mattn/emmet-vim",
     ft = { "html", "svelte", "astro", "handlebars" },
     build = ":EmmetInstall",
@@ -138,7 +137,6 @@ local spec = {
       input = {
         win_options = {
           winblend = G.const.default_winblend,
-          winhighlight = "NormalFloat:None,FloatBorder:CmpBorder",
         },
       },
     },
