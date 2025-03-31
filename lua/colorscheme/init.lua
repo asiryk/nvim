@@ -26,7 +26,6 @@ local function switch_colorscheme(data)
   if data.name == "onedark" then
     if data.variant == "light" then
       onedark("light")
-      vim.o.background = "light"
     else
       onedark("darker")
     end

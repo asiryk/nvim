@@ -1,6 +1,19 @@
-require("mason").setup({ max_concurrent_installers = 10 })
+local mason_cfg = { max_concurrent_installers = 10 }
+require("mason").setup(mason_cfg)
 require("mason-lspconfig").setup()
 local lspconfig = require("lspconfig")
+
+vim.diagnostic.config({
+  virtual_lines = true,
+  signs = {
+    text = {
+      -- [vim.diagnostic.severity.ERROR] = "",
+      -- [vim.diagnostic.severity.WARN] = "",
+      -- [vim.diagnostic.severity.HINT] = "",
+      -- [vim.diagnostic.severity.INFO] = "",
+    },
+  },
+})
 
 local function open_float_diagnostics()
   local function open_generic(style, is_set_hl)
@@ -119,12 +132,6 @@ require("conform").setup({
     json = { "prettierd" },
   }
 })
-
-local signs = { Error = "", Warn = "", Hint = "", Info = "" }
-for type, icon in pairs(signs) do
-  local hl = "DiagnosticSign" .. type
-  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "None" })
-end
 
 local function style_window(lsp_handler)
   local function open_generic(style, is_set_hl)
