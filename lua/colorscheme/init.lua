@@ -91,6 +91,8 @@ local function hl_overrides()
     },
     ["onedark"] = {
       ["base"] = function()
+        vim.api.nvim_set_hl(0, "NormalFloat", { link = "Normal" })
+        vim.api.nvim_set_hl(0, "FloatBorder", { link = "Normal" })
         do -- Set neat line for TreesitterContext
           local normal_bg = vim.api.nvim_get_hl(0, { name = "Normal" }).bg
           local c = require("onedark.colors")

@@ -4,7 +4,7 @@ require("mason-lspconfig").setup()
 local lspconfig = require("lspconfig")
 
 vim.diagnostic.config({
-  virtual_lines = true,
+  virtual_lines = { current_line = true },
   signs = {
     text = {
       -- [vim.diagnostic.severity.ERROR] = "",
@@ -14,33 +14,6 @@ vim.diagnostic.config({
     },
   },
 })
-
-local function open_float_diagnostics()
-  local function open_generic(style, is_set_hl)
-    return function()
-      local opts = {
-        border = style,
-        focusable = false,
-      }
-
-      local _, win_id = vim.diagnostic.open_float(nil, opts)
-      if is_set_hl and type(win_id) == "number" then
-        vim.api.nvim_set_option_value("winhl", "NormalFloat:None,FloatBorder:CmpBorder", { win = win_id })
-      end
-    end
-  end
-
-  local window_cfg = {
-    none = open_generic("none", false),
-    single = open_generic("single", true),
-    double = open_generic("double", true),
-    rounded = open_generic("rounded", true),
-    solid = open_generic("solid", false),
-    shadow = open_generic("shadow", false),
-  }
-
-  window_cfg[G.config.window.border]()
-end
 
 local function format()
   require("conform").format({ async = true })
@@ -60,12 +33,12 @@ local function on_attach(_, buffer)
 
   set("n", "gd", definition, "Go to definition [LSP]")
   set("n", "gr", vim.lsp.buf.references, "Find references [LSP]")
-  set("n", "<S-k>", vim.lsp.buf.hover, "Hover documentation [LSP]")
-  set("i", "<C-k>", vim.lsp.buf.signature_help, "Hover signature help [LSP]")
+  set("n", "<S-k>", function() vim.lsp.buf.hover({ border = "rounded" }) end, "Hover documentation [LSP]")
+  set("i", "<C-k>", function() vim.lsp.buf.signature_help({ border = "rounded" }) end, "Hover signature help [LSP]")
   set("n", "<Leader>lr", vim.lsp.buf.rename, "Rename variable [LSP]")
   set("n", "<Leader>la", vim.lsp.buf.code_action, "Show actions [LSP]")
   set("n", "<Leader>lcr", vim.lsp.codelens.refresh, "Refresh codelens [LSP]")
-  set("n", "<Leader>lh", open_float_diagnostics, "Open vim diagnostic window [LSP]")
+  set("n", "<Leader>lh", function() vim.diagnostic.open_float({ border = "rounded" }) end, "Open vim diagnostic window [LSP]")
 end
 
 local config = {
@@ -132,35 +105,6 @@ require("conform").setup({
     json = { "prettierd" },
   }
 })
-
-local function style_window(lsp_handler)
-  local function open_generic(style, is_set_hl)
-    return function(err, result, ctx, cfg)
-      cfg = cfg or {}
-      cfg.border = style
-      local _, winid = lsp_handler(err, result, ctx, cfg)
-      if is_set_hl and type(winid) == "number" then
-        vim.api.nvim_set_option_value("winhl", "NormalFloat:None,FloatBorder:CmpBorder", { win = winid })
-      end
-    end
-  end
-
-  local window_cfg = {
-    none = open_generic("none", false),
-    single = open_generic("single", true),
-    double = open_generic("double", true),
-    rounded = open_generic("rounded", true),
-    solid = open_generic("solid", false),
-    shadow = open_generic("shadow", false),
-  }
-
-  return function(err, result, ctx, cfg)
-    window_cfg[G.config.window.border](err, result, ctx, cfg)
-  end
-end
-
-vim.lsp.handlers["textDocument/hover"] = style_window(vim.lsp.handlers["textDocument/hover"])
-vim.lsp.handlers["textDocument/signatureHelp"] = style_window(vim.lsp.handlers["textDocument/signatureHelp"])
 
 local lsp_show_message = vim.lsp.handlers["window/showMessage"]
 vim.lsp.handlers["window/showMessage"] = function(err, result, ctx, cfg)
