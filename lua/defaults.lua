@@ -1,7 +1,7 @@
 -- Following remaps don't add new features/keybindings, but improve existing ones
 
 vim.opt.mouse = "a" -- Enable mouse support
-vim.opt.mousemodel = "extend" -- Disable mouse context menu
+vim.opt.mousemodel = "popup_setpos" -- Disable mouse context menu
 vim.opt.cursorline = false -- Don't highlight current line
 vim.opt.number = true -- Show line numbers
 vim.opt.relativenumber = true -- Show line number starting at cursor position
@@ -14,7 +14,6 @@ vim.opt.smartindent = true -- Copy indent from the previous line
 vim.opt.exrc = true -- Use .nvim.lua file for per-project configuration
 vim.opt.termguicolors = true -- Set 24 bit colors
 vim.opt.laststatus = 3 -- Set global status line
-vim.opt.hlsearch = true -- Don't highlight searches
 vim.opt.ignorecase = true -- Ignore case when searching
 vim.opt.smartcase = true -- If capitals are present, do case-sensitive search
 vim.opt.pumblend = G.const.default_winblend -- Blend colors with compositor

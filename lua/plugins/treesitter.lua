@@ -104,6 +104,17 @@ require("treesitter-context").setup({
       "impl_item",
     },
 
+    -- Probably should contribute to og. plugin to include namespaces, etc.
+    -- typescript = {
+    --   "class_declaration",
+    --   "abstract_class_declaration",
+    --   "type_alias_declaration",
+    --   "internal_module",
+    --   "export_statement",
+    --   "statement_block",
+    --   "namespace_declaration",
+    -- },
+
     typescript = {
       "class_declaration",
       "abstract_class_declaration",
