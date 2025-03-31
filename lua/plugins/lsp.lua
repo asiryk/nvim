@@ -5,14 +5,6 @@ local lspconfig = require("lspconfig")
 
 vim.diagnostic.config({
   virtual_lines = { current_line = true },
-  signs = {
-    text = {
-      -- [vim.diagnostic.severity.ERROR] = "",
-      -- [vim.diagnostic.severity.WARN] = "",
-      -- [vim.diagnostic.severity.HINT] = "",
-      -- [vim.diagnostic.severity.INFO] = "",
-    },
-  },
 })
 
 local function format()
@@ -32,7 +24,6 @@ local function on_attach(_, buffer)
   end
 
   set("n", "gd", definition, "Go to definition [LSP]")
-  set("n", "gr", vim.lsp.buf.references, "Find references [LSP]")
   set("n", "<S-k>", function() vim.lsp.buf.hover({ border = "rounded" }) end, "Hover documentation [LSP]")
   set("i", "<C-k>", function() vim.lsp.buf.signature_help({ border = "rounded" }) end, "Hover signature help [LSP]")
   set("n", "<Leader>lr", vim.lsp.buf.rename, "Rename variable [LSP]")
@@ -74,7 +65,7 @@ local config = {
 }
 
 local default_config = {
-  flags = { debounce_text_changes = 150 },
+  flags = { debounce_text_changes = 75 },
   on_attach = function(client, buffer)
     on_attach(client, buffer)
   end,
@@ -106,16 +97,11 @@ require("conform").setup({
   }
 })
 
-local lsp_show_message = vim.lsp.handlers["window/showMessage"]
-vim.lsp.handlers["window/showMessage"] = function(err, result, ctx, cfg)
-  -- Only show messages of warning severity
-  if result and result.type <= vim.lsp.protocol.MessageType.Warning then
-    lsp_show_message(err, result, ctx, cfg)
-  end
-end
-
--- local autocmd = vim.api.nvim_create_autocmd
--- autocmd("BufWinEnter", { -- Don't run LSP for large files.
---   pattern = "*",
---   callback = function() vim.cmd([[if line2byte(line("$") + 1) > 1000000 | LspStop | endif]]) end,
---
+-- TODO: see if without this everything is ok, and remove it.
+-- local lsp_show_message = vim.lsp.handlers["window/showMessage"]
+-- vim.lsp.handlers["window/showMessage"] = function(err, result, ctx, cfg)
+--   -- Only show messages of warning severity
+--   if result and result.type <= vim.lsp.protocol.MessageType.Warning then
+--     lsp_show_message(err, result, ctx, cfg)
+--   end
+-- end
