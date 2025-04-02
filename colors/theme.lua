@@ -1,4 +1,7 @@
-local M = {}
+local F = {}
+local S = {
+  added_highlights = {},
+}
 
 ---@class Palette
 ---@field black string
@@ -33,7 +36,7 @@ local M = {}
 ---@field light Palette
 
 ---@return Theme
-function M.init_theme()
+function F.build_palette()
   local onedark = {
     dark = {
       black = "#0e1013",
@@ -64,32 +67,32 @@ function M.init_theme()
       diff_text = "#274964",
     },
     light = {
-      black = "#0e1013",
-      bg0 = "#1f2329",
-      bg1 = "#282c34",
-      bg2 = "#30363f",
-      bg3 = "#323641",
-      bg_d = "#181b20",
-      bg_blue = "#61afef",
-      bg_yellow = "#e8c88c",
-      fg = "#a0a8b7",
-      purple = "#bf68d9",
-      green = "#8ebd6b",
-      orange = "#cc9057",
-      blue = "#4fa6ed",
-      yellow = "#e2b86b",
-      cyan = "#48b0bd",
-      red = "#e55561",
-      grey = "#535965",
-      light_grey = "#7a818e",
-      dark_cyan = "#266269",
-      dark_red = "#8b3434",
-      dark_yellow = "#835d1a",
-      dark_purple = "#7e3992",
-      diff_add = "#272e23",
-      diff_delete = "#2d2223",
-      diff_change = "#172a3a",
-      diff_text = "#274964",
+      black = "#101012",
+      bg0 = "#fafafa",
+      bg1 = "#f0f0f0",
+      bg2 = "#e6e6e6",
+      bg3 = "#dcdcdc",
+      bg_d = "#c9c9c9",
+      bg_blue = "#68aee8",
+      bg_yellow = "#e2c792",
+      fg = "#383a42",
+      purple = "#a626a4",
+      green = "#50a14f",
+      orange = "#c18401",
+      blue = "#4078f2",
+      yellow = "#986801",
+      cyan = "#0184bc",
+      red = "#e45649",
+      grey = "#a0a1a7",
+      light_grey = "#818387",
+      dark_cyan = "#2b5d63",
+      dark_red = "#833b3b",
+      dark_yellow = "#7c5c20",
+      dark_purple = "#79428a",
+      diff_add = "#e2fbe4",
+      diff_delete = "#fce2e5",
+      diff_change = "#e2ecfb",
+      diff_text = "#cad3e0",
     },
   }
 
@@ -97,8 +100,10 @@ function M.init_theme()
 end
 
 ---@param theme Theme
-function M.init_highlights(theme)
-  local c = theme[vim.o.background]
+---@param appearance "dark" | "light"
+---@return table<string, vim.api.keyset.highlight>
+function F.build_highlights(theme, appearance)
+  local c = theme[appearance]
 
   local code_style = {
     comments = { italic = true },
@@ -181,12 +186,12 @@ function M.init_highlights(theme)
     debugPC = { fg = c.bg0, bg = c.green },
     debugBreakpoint = { fg = c.bg0, bg = c.red },
     ToolbarButton = { fg = c.bg0, bg = c.bg_blue },
-    FloatBorder = { fg = c.grey, bg = c.bg1 },
-    NormalFloat = { fg = c.fg, bg = c.bg1 },
+    FloatBorder = { fg = c.fg, bg = "none" },
+    NormalFloat = { fg = c.fg, bg = c.bg0 },
   }
 
   hl.syntax = {
-    String = M.extend({ fg = c.green }, code_style.strings),
+    String = F.extend({ fg = c.green }, code_style.strings),
     Character = { fg = c.orange },
     Number = { fg = c.orange },
     Float = { fg = c.orange },
@@ -194,31 +199,31 @@ function M.init_highlights(theme)
     Type = { fg = c.yellow },
     Structure = { fg = c.yellow },
     StorageClass = { fg = c.yellow },
-    Identifier = M.extend({ fg = c.red }, code_style.variables),
+    Identifier = F.extend({ fg = c.red }, code_style.variables),
     Constant = { fg = c.cyan },
     PreProc = { fg = c.purple },
     PreCondit = { fg = c.purple },
     Include = { fg = c.purple },
-    Keyword = M.extend({ fg = c.purple }, code_style.keywords),
+    Keyword = F.extend({ fg = c.purple }, code_style.keywords),
     Define = { fg = c.purple },
     Typedef = { fg = c.yellow },
     Exception = { fg = c.purple },
-    Conditional = M.extend({ fg = c.purple }, code_style.keywords),
-    Repeat = M.extend({ fg = c.purple }, code_style.keywords),
+    Conditional = F.extend({ fg = c.purple }, code_style.keywords),
+    Repeat = F.extend({ fg = c.purple }, code_style.keywords),
     Statement = { fg = c.purple },
     Macro = { fg = c.red },
     Error = { fg = c.purple },
     Label = { fg = c.purple },
     Special = { fg = c.red },
     SpecialChar = { fg = c.red },
-    Function = M.extend({ fg = c.blue }, code_style.functions),
+    Function = F.extend({ fg = c.blue }, code_style.functions),
     Operator = { fg = c.purple },
     Title = { fg = c.cyan },
     Tag = { fg = c.green },
     Delimiter = { fg = c.lightGrey },
-    Comment = M.extend({ fg = c.grey }, code_style.comments),
-    SpecialComment = M.extend({ fg = c.grey }, code_style.comments),
-    Todo = M.extend({ fg = c.red }, code_style.comments),
+    Comment = F.extend({ fg = c.grey }, code_style.comments),
+    SpecialComment = F.extend({ fg = c.grey }, code_style.comments),
+    Todo = F.extend({ fg = c.red }, code_style.comments),
   }
 
   hl.treesitter = {
@@ -227,13 +232,13 @@ function M.init_highlights(theme)
     ["@attribute.typescript"] = { fg = c.blue },
     ["@boolean"] = { fg = c.orange },
     ["@character"] = { fg = c.orange },
-    ["@comment"] = M.extend({ fg = c.grey }, code_style.comments),
-    ["@comment.todo"] = M.extend({ fg = c.red }, code_style.comments),
-    ["@comment.todo.unchecked"] = M.extend({ fg = c.red }, code_style.comments),
-    ["@comment.todo.checked"] = M.extend({ fg = c.green }, code_style.comments),
-    ["@constant"] = M.extend({ fg = c.orange }, code_style.constants),
-    ["@constant.builtin"] = M.extend({ fg = c.orange }, code_style.constants),
-    ["@constant.macro"] = M.extend({ fg = c.orange }, code_style.constants),
+    ["@comment"] = F.extend({ fg = c.grey }, code_style.comments),
+    ["@comment.todo"] = F.extend({ fg = c.red }, code_style.comments),
+    ["@comment.todo.unchecked"] = F.extend({ fg = c.red }, code_style.comments),
+    ["@comment.todo.checked"] = F.extend({ fg = c.green }, code_style.comments),
+    ["@constant"] = F.extend({ fg = c.orange }, code_style.constants),
+    ["@constant.builtin"] = F.extend({ fg = c.orange }, code_style.constants),
+    ["@constant.macro"] = F.extend({ fg = c.orange }, code_style.constants),
     ["@constructor"] = { fg = c.yellow, bold = true },
     ["@diff.add"] = hl.common["DiffAdded"],
     ["@diff.delete"] = hl.common["DiffDeleted"],
@@ -241,18 +246,18 @@ function M.init_highlights(theme)
     ["@diff.minus"] = hl.common["DiffDeleted"],
     ["@diff.delta"] = hl.common["DiffChanged"],
     ["@error"] = { fg = c.fg },
-    ["@function"] = M.extend({ fg = c.blue }, code_style.functions),
-    ["@function.builtin"] = M.extend({ fg = c.cyan }, code_style.functions),
-    ["@function.macro"] = M.extend({ fg = c.cyan }, code_style.functions),
-    ["@function.method"] = M.extend({ fg = c.blue }, code_style.functions),
-    ["@keyword"] = M.extend({ fg = c.purple }, code_style.keywords),
-    ["@keyword.conditional"] = M.extend({ fg = c.purple }, code_style.keywords),
+    ["@function"] = F.extend({ fg = c.blue }, code_style.functions),
+    ["@function.builtin"] = F.extend({ fg = c.cyan }, code_style.functions),
+    ["@function.macro"] = F.extend({ fg = c.cyan }, code_style.functions),
+    ["@function.method"] = F.extend({ fg = c.blue }, code_style.functions),
+    ["@keyword"] = F.extend({ fg = c.purple }, code_style.keywords),
+    ["@keyword.conditional"] = F.extend({ fg = c.purple }, code_style.keywords),
     ["@keyword.directive"] = { fg = c.purple },
     ["@keyword.exception"] = { fg = c.purple },
-    ["@keyword.function"] = M.extend({ fg = c.purple }, code_style.functions),
+    ["@keyword.function"] = F.extend({ fg = c.purple }, code_style.functions),
     ["@keyword.import"] = { fg = c.purple },
-    ["@keyword.operator"] = M.extend({ fg = c.purple }, code_style.keywords),
-    ["@keyword.repeat"] = M.extend({ fg = c.purple }, code_style.keywords),
+    ["@keyword.operator"] = F.extend({ fg = c.purple }, code_style.keywords),
+    ["@keyword.repeat"] = F.extend({ fg = c.purple }, code_style.keywords),
     ["@label"] = { fg = c.red },
     ["@markup.emphasis"] = { fg = c.fg, italic = true },
     ["@markup.environment"] = { fg = c.fg },
@@ -275,9 +280,9 @@ function M.init_highlights(theme)
     ["@property"] = { fg = c.cyan },
     ["@punctuation.delimiter"] = { fg = c.lightGrey },
     ["@punctuation.bracket"] = { fg = c.lightGrey },
-    ["@string"] = M.extend({ fg = c.green }, code_style.strings),
-    ["@string.regexp"] = M.extend({ fg = c.orange }, code_style.strings),
-    ["@string.escape"] = M.extend({ fg = c.red }, code_style.strings),
+    ["@string"] = F.extend({ fg = c.green }, code_style.strings),
+    ["@string.regexp"] = F.extend({ fg = c.orange }, code_style.strings),
+    ["@string.escape"] = F.extend({ fg = c.red }, code_style.strings),
     ["@string.special.symbol"] = { fg = c.cyan },
     ["@tag"] = { fg = c.purple },
     ["@tag.attribute"] = { fg = c.yellow },
@@ -288,8 +293,8 @@ function M.init_highlights(theme)
     ["@danger"] = { fg = c.fg },
     ["@type"] = { fg = c.yellow },
     ["@type.builtin"] = { fg = c.orange },
-    ["@variable"] = M.extend({ fg = c.fg }, code_style.variables),
-    ["@variable.builtin"] = M.extend({ fg = c.red }, code_style.variables),
+    ["@variable"] = F.extend({ fg = c.fg }, code_style.variables),
+    ["@variable.builtin"] = F.extend({ fg = c.red }, code_style.variables),
     ["@variable.member"] = { fg = c.cyan },
     ["@variable.parameter"] = { fg = c.red },
     ["@markup.heading.1.markdown"] = { fg = c.red, bold = true },
@@ -336,21 +341,72 @@ end
 
 ---@param ... table Two or more tables
 ---@return table table Merged table
-function M.extend(...) return vim.tbl_extend("force", ...) end
+function F.extend(...) return vim.tbl_extend("force", ...) end
 
-function M.apply_highlight(highlight)
+function F.once(fn)
+  local called = false
+  return function()
+    if not called then
+      fn()
+      called = true
+    end
+  end
+end
+
+function F.apply_highlight(highlight)
   for group, hl in pairs(highlight) do
     vim.api.nvim_set_hl(0, group, hl)
   end
 end
 
-function M.setup()
-  local theme = M.init_theme()
-  local hl = M.init_highlights(theme)
+function F.init_autocmds()
+  local group = vim.api.nvim_create_augroup("theme", {})
 
-  for _, highlight in pairs(hl) do
-    M.apply_highlight(highlight)
-  end
+  -- Highilight yanked text for a short time
+  vim.api.nvim_create_autocmd("TextYankPost", {
+    pattern = "*",
+    group = group,
+    callback = function()
+      -- Only highlight in normal mode, not in visual
+      local mode = vim.api.nvim_get_mode()["mode"]
+      if mode == "no" then
+        vim.highlight.on_yank({
+          higroup = "Visual",
+          timeout = 75,
+        })
+      end
+    end,
+  })
+
+  S.autocmds_loaded = true
 end
 
-M.setup()
+function F.apply_theme()
+  local theme = F.build_palette()
+  local hl = F.build_highlights(theme, vim.o.background)
+  for _, highlight in pairs(hl) do
+    F.apply_highlight(highlight)
+  end
+  for _, highlight_fn in pairs(S.added_highlights) do
+    F.apply_highlight(highlight_fn(vim.o.background))
+  end
+  vim.g.colors_name = "theme"
+end
+
+---@param fn fun(palette: Palette): (string, table<string, vim.api.keyset.highlight>)
+function F.add_highlights(fn)
+  local palette = F.build_palette()
+  local scope, highlights = fn(palette[vim.o.background])
+  for _, highlight in pairs(highlights) do
+    F.apply_highlight(highlight)
+  end
+  S.added_highlights[scope] = fn
+end
+
+F.once(F.init_autocmds)()
+F.apply_theme()
+
+return {
+  apply_theme = F.apply_theme,
+  add_highlights = F.add_highlights,
+}
