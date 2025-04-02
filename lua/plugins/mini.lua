@@ -38,7 +38,7 @@ do -- mini files
       if border == "none" then border = "solid" end
       vim.api.nvim_win_set_config(win_id, { border = border })
     end,
-    desc = "Customize mini.files winblend [Mini.files]"
+    desc = "Customize mini.files winblend [Mini.files]",
   })
 
   local function open_in_finder()
@@ -77,7 +77,7 @@ do -- mini files
       local buf_id = args.data.buf_id
       vim.keymap.set("n", "go", open_in_finder, { buffer = buf_id })
     end,
-    desc = "Set buffer keymaps [Mini.files]"
+    desc = "Set buffer keymaps [Mini.files]",
   })
 end
 
@@ -103,8 +103,8 @@ do
       { mode = "x", keys = "`" },
 
       -- Registers
-      { mode = "n", keys = "\"" },
-      { mode = "x", keys = "\"" },
+      { mode = "n", keys = '"' },
+      { mode = "x", keys = '"' },
       { mode = "i", keys = "<C-r>" },
       { mode = "c", keys = "<C-r>" },
 
@@ -127,7 +127,35 @@ do
     },
   })
 
-  table.insert(G.plugin_hl, function(color)
-    vim.api.nvim_set_hl(0, "MiniClueBorder", { bg = nil, fg = color.light_grey })
+  table.insert(
+    G.plugin_hl,
+    function(color)
+      vim.api.nvim_set_hl(0, "MiniClueBorder", { bg = nil, fg = color.light_grey })
+    end
+  )
+end
+
+do
+  require("mini.cursorword").setup({
+    delay = 25,
+  })
+  table.insert(G.plugin_hl, function()
+    vim.api.nvim_set_hl(0, "MiniCursorword", { link = "CursorColumn" })
+    vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", {})
   end)
+end
+
+do
+  local hipatterns = require("mini.hipatterns")
+  hipatterns.setup({
+    highlighters = {
+      -- Highlight standalone 'FIXME', 'TODO', 'NOTE'
+      fixme = { pattern = "%f[%w]()FIXME()%f[%W]", group = "MiniHipatternsFixme" },
+      todo = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
+      note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
+
+      -- Highlight hex color strings (`#rrggbb`) using that color
+      hex_color = hipatterns.gen_highlighter.hex_color(),
+    },
+  })
 end
