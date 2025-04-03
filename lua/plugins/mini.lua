@@ -140,11 +140,11 @@ do
   vim.api.nvim_set_hl(0, "MiniCursorword", { link = "CursorColumn" })
   vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", {})
 
-  require("theme").add_highlights(function()
+  require("theme").add_highlights(function(c)
     -- Need to update the MiniCursorword when colorscheme changes
     -- because it doesn't get updated automatically for some reason
     local highlights = {
-      MiniCursorword = { link = "CursorColumn" },
+      MiniCursorword = { bg = c.bg2 },
       MiniCursorwordCurrent = {},
     }
     return "mini-cursorword", highlights
