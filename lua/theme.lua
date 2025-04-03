@@ -134,7 +134,7 @@ function F.build_highlights(theme, appearance)
     lCursor = { reverse = true },
     CursorIM = { reverse = true },
     CursorColumn = { bg = c.bg1 },
-    CursorLine = { bg = c.bg1 },
+    CursorLine = { bg = "none" },
     ColorColumn = { bg = c.bg1 },
     CursorLineNr = { fg = c.fg },
     LineNr = { fg = c.grey },
@@ -429,7 +429,11 @@ function F.add_highlights(fn)
   S.added_highlights[scope] = fn
 end
 
-function F.setup() F.init_autocmds() end
+function F.setup()
+  F.init_autocmds()
+  -- Set cursorline (highlights set up to highlight only line number)
+  vim.o.cursorline = true
+end
 
 return {
   setup = F.once(F.setup),
