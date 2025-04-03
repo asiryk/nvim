@@ -21,6 +21,23 @@ do -- mini files
     { desc = "Open working directory in last used state [Mini.files]" }
   )
 
+  --- It looks like mini files reloads highlight groups
+  --- every time the window is opened.
+  --- TODO: check a better way to setup these highlights only once
+  local function set_highlights()
+    require("theme").add_highlights(function(c)
+      local highlights = {
+        MiniFilesBorder = { fg = c.cyan },
+        MiniFilesBorderModified = { fg = c.yellow },
+        MiniFilesNormal = { fg = c.fg },
+      }
+
+      return "mini-files", highlights
+    end)
+  end
+
+  set_highlights()
+
   vim.api.nvim_create_autocmd("User", {
     pattern = "MiniFilesWindowOpen",
     group = augroup,
@@ -31,6 +48,7 @@ do -- mini files
       -- mini requires border for file names
       if border == "none" then border = "solid" end
       vim.api.nvim_win_set_config(win_id, { border = border })
+      set_highlights()
     end,
     desc = "Customize mini.files winblend [Mini.files]",
   })
@@ -73,18 +91,6 @@ do -- mini files
     end,
     desc = "Set buffer keymaps [Mini.files]",
   })
-
-  do
-    require("theme").add_highlights(function(c)
-      local highlights = {
-        MiniFilesBorder = { fg = c.cyan },
-        MiniFilesBorderModified = { fg = c.yellow },
-        MiniFilesNormal = { fg = c.fg },
-      }
-
-      return "mini-files", highlights
-    end)
-  end
 end
 
 do
