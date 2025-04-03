@@ -61,7 +61,7 @@ do -- mini files
     else
       dir = entry.path
     end
-    os.execute("open " .. dir)
+    vim.ui.open(dir)
   end
 
   vim.api.nvim_create_autocmd("User", {
