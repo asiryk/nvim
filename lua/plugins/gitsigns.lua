@@ -19,29 +19,30 @@ local options = {
   },
 }
 
-table.insert(G.plugin_hl, function(c)
-  vim.api.nvim_set_hl(0, "GitSignsAdd", { link = "GitSignsAdd", bg = "none", fg = c.green })
-  vim.api.nvim_set_hl(0, "GitSignsAddLn", { link = "GitSignsAddLn" })
-  vim.api.nvim_set_hl(0, "GitSignsAddNr", { link = "GitSignsAddNr" })
+require("theme").add_highlights(function(c)
+  local highlights = {
+    GitSignsAdd = { link = "GitSignsAdd", bg = "none", fg = c.green },
+    GitSignsAddLn = { link = "GitSignsAddLn" },
+    GitSignsAddNr = { link = "GitSignsAddNr" },
 
-  vim.api.nvim_set_hl(0, "GitSignsChange", { link = "GitSignsChange", bg = "none", fg = c.cyan })
-  vim.api.nvim_set_hl(0, "GitSignsChangeLn", { link = "GitSignsChangeLn" })
-  vim.api.nvim_set_hl(0, "GitSignsChangeNr", { link = "GitSignsChangeNr" })
+    GitSignsChange = { link = "GitSignsChange", bg = "none", fg = c.cyan },
+    GitSignsChangeLn = { link = "GitSignsChangeLn" },
+    GitSignsChangeNr = { link = "GitSignsChangeNr" },
 
-  vim.api.nvim_set_hl(0, "GitSignsChangedelete", { link = "GitSignsChange" })
-  vim.api.nvim_set_hl(0, "GitSignsChangedeleteLn", { link = "GitSignsChangeLn" })
-  vim.api.nvim_set_hl(0, "GitSignsChangedeleteNr", { link = "GitSignsChangeNr" })
+    GitSignsChangedelete = { link = "GitSignsChange" },
+    GitSignsChangedeleteLn = { link = "GitSignsChangeLn" },
+    GitSignsChangedeleteNr = { link = "GitSignsChangeNr" },
 
-  vim.api.nvim_set_hl(0, "GitSignsDelete", { link = "GitSignsDelete", bg = "none", fg = c.red })
-  vim.api.nvim_set_hl(0, "GitSignsDeleteLn", { link = "GitSignsDeleteLn" })
-  vim.api.nvim_set_hl(0, "GitSignsDeleteNr", { link = "GitSignsDeleteNr" })
+    GitSignsDelete = { link = "GitSignsDelete", bg = "none", fg = c.red },
+    GitSignsDeleteLn = { link = "GitSignsDeleteLn" },
+    GitSignsDeleteNr = { link = "GitSignsDeleteNr" },
 
-  vim.api.nvim_set_hl(0, "GitSignsTopdelete", { link = "GitSignsDelete" })
-  vim.api.nvim_set_hl(0, "GitSignsTopdeleteLn", { link = "GitSignsDeleteLn" })
-  vim.api.nvim_set_hl(0, "GitSignsTopdeleteNr", { link = "GitSignsDeleteNr" })
+    GitSignsTopdelete = { link = "GitSignsDelete" },
+    GitSignsTopdeleteLn = { link = "GitSignsDeleteLn" },
+    GitSignsTopdeleteNr = { link = "GitSignsDeleteNr" },
+  }
 
-  -- vim.cmd([[highlight WinSeparator guibg=None]]) -- Remove borders for window separators
-  -- vim.cmd([[highlight SignColumn guibg=None]]) -- Remove background from signs column
+  return "gitsigns", highlights
 end)
 
 gs.setup(options)

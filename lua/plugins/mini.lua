@@ -26,7 +26,7 @@ do -- mini files
     group = augroup,
     callback = function(args)
       local win_id = args.data.win_id
-      vim.wo[win_id].winblend = G.const.default_winblend
+      vim.wo[win_id].winblend = vim.o.pumblend
       local border = G.config.window.border
       -- mini requires border for file names
       if border == "none" then border = "solid" end
@@ -130,21 +130,25 @@ do
       -- miniclue.gen_clues.z(),
     },
   })
-
-  table.insert(
-    G.plugin_hl,
-    function(color)
-      vim.api.nvim_set_hl(0, "MiniClueBorder", { bg = nil, fg = color.light_grey })
-    end
-  )
 end
 
 do
   require("mini.cursorword").setup({
     delay = 25,
   })
+
   vim.api.nvim_set_hl(0, "MiniCursorword", { link = "CursorColumn" })
   vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", {})
+
+  require("theme").add_highlights(function()
+    -- Need to update the MiniCursorword when colorscheme changes
+    -- because it doesn't get updated automatically for some reason
+    local highlights = {
+      MiniCursorword = { link = "CursorColumn" },
+      MiniCursorwordCurrent = {},
+    }
+    return "mini-cursorword", highlights
+  end)
 end
 
 do

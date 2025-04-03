@@ -16,7 +16,7 @@ vim.opt.termguicolors = true -- Set 24 bit colors
 vim.opt.laststatus = 3 -- Set global status line
 vim.opt.ignorecase = true -- Ignore case when searching
 vim.opt.smartcase = true -- If capitals are present, do case-sensitive search
-vim.opt.pumblend = G.const.default_winblend -- Blend colors with compositor
+vim.opt.pumblend = 15 -- Blend colors with compositor
 vim.opt.scrolloff = 10 -- Leave some space while scrolling
 vim.opt.list = true -- Allow listchars to display
 vim.opt.listchars = { trail = "·", tab = "» ", nbsp = "␣" }

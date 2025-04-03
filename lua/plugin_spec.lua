@@ -136,7 +136,7 @@ local spec = {
     opts = {
       input = {
         win_options = {
-          winblend = G.const.default_winblend,
+          winblend = vim.o.pumblend,
         },
       },
     },

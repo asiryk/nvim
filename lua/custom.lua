@@ -2,10 +2,6 @@ local utils = {}
 
 L = {} --- for language-specific storage
 G = {}
-G.plugin_hl = {} -- array of functions to be applied by colorscheme
-G.const = {
-  default_winblend = 15,
-}
 G.utils = utils
 
 do -- create buf logger
