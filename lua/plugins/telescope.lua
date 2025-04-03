@@ -129,3 +129,20 @@ local function modified_git_files_picker()
 end
 
 vim.keymap.set("n", "<Leader>fg", modified_git_files_picker, { desc = "Find modified Git files [Telescope]" })
+
+do
+  require("theme").add_highlights(function(c)
+    local highlights = {
+      TelescopeBorder = { fg = c.red },
+      TelescopePromptBorder = { fg = c.cyan },
+      TelescopeResultsBorder = { fg = c.cyan },
+      TelescopePreviewBorder = { fg = c.cyan },
+      TelescopeMatching = { fg = c.orange, bold = true },
+      TelescopePromptPrefix = { fg = c.green },
+      TelescopeSelection = { bg = c.bg2 },
+      TelescopeSelectionCaret = { fg = c.yellow },
+    }
+
+    return "telescope", highlights
+  end)
+end

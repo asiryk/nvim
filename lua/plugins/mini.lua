@@ -21,12 +21,6 @@ do -- mini files
     { desc = "Open working directory in last used state [Mini.files]" }
   )
 
-  table.insert(G.plugin_hl, function(color)
-    vim.api.nvim_set_hl(0, "MiniFilesBorder", { bg = nil, fg = color.light_grey })
-    vim.api.nvim_set_hl(0, "MiniFilesBorderModified", { bg = nil, fg = color.yellow })
-    vim.api.nvim_set_hl(0, "MiniFilesNormal", { bg = nil, fg = color.fg })
-  end)
-
   vim.api.nvim_create_autocmd("User", {
     pattern = "MiniFilesWindowOpen",
     group = augroup,
@@ -79,6 +73,18 @@ do -- mini files
     end,
     desc = "Set buffer keymaps [Mini.files]",
   })
+
+  do
+    require("theme").add_highlights(function(c)
+      local highlights = {
+        MiniFilesBorder = { fg = c.cyan },
+        MiniFilesBorderModified = { fg = c.yellow },
+        MiniFilesNormal = { fg = c.fg },
+      }
+
+      return "mini-files", highlights
+    end)
+  end
 end
 
 do
@@ -139,10 +145,8 @@ do
   require("mini.cursorword").setup({
     delay = 25,
   })
-  table.insert(G.plugin_hl, function()
-    vim.api.nvim_set_hl(0, "MiniCursorword", { link = "CursorColumn" })
-    vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", {})
-  end)
+  vim.api.nvim_set_hl(0, "MiniCursorword", { link = "CursorColumn" })
+  vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", {})
 end
 
 do

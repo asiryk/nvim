@@ -106,3 +106,14 @@ require("treesitter-context").setup({
     },
   },
 })
+
+do
+  require("theme").add_highlights(function(c)
+    local highlights = {
+      TreesitterContext = { bg = c.bg0 },
+      TreesitterContextBottom = { bg = c.bg0, sp = c.fg, underline = true },
+    }
+
+    return "treesitter-context", highlights
+  end)
+end
