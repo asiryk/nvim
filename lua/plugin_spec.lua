@@ -120,7 +120,6 @@ local spec = {
   {
     "sindrets/diffview.nvim",
     config = function() require("plugins.diffview") end,
-    keys = { "<Leader>g" },
   },
   {
     "jinh0/eyeliner.nvim",
