@@ -2,5 +2,5 @@
 require("custom")
 require("defaults")
 require("keymaps")
-vim.cmd.colorscheme("theme")
+vim.cmd.colorscheme("custom")
 require("plugin_spec")

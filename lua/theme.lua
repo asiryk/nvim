@@ -418,7 +418,7 @@ function F.apply_theme()
     local _, highlights = highlight_fn(theme[vim.o.background])
     F.apply_highlight(highlights)
   end
-  vim.g.colors_name = "theme"
+  vim.g.colors_name = "custom"
 end
 
 --- Add custom highlights and apply them immediately
