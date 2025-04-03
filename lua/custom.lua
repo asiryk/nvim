@@ -32,9 +32,18 @@ do -- create buf logger
     vim.api.nvim_win_set_buf(0, buf)
   end
 
-  vim.api.nvim_create_user_command("OpenLog", open_log, { desc = "Open log buffer" })
+  vim.api.nvim_create_user_command("LogOpen", open_log, { desc = "Open log buffer" })
   G.log = log
   G.open_log = open_log
+end
+
+function utils.if_loaded(pkg_pattern, fn)
+  for k in pairs(package.loaded) do
+    if k:match(pkg_pattern) then
+      fn()
+      break
+    end
+  end
 end
 
 function utils.get_buf_size_in_bytes(buf)

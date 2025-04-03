@@ -13,10 +13,17 @@ local M = {}
 local function onedark(style)
   if not style then style = "darker" end
 
+  vim.opt.cursorline = true
+
   local theme = require("onedark")
   theme.setup({
     style = style,
     transparent = false,
+    highlights = {
+      ["CursorLine"] = { bg = "none", fg = "none" },
+      ["MiniCursorword"] = { bg = "$bg1", gui = "NONE", fmt = "NONE" },
+      ["MiniCursorwordCurrent"] = { bg = "NONE", gui = "NONE", fmt = "NONE" },
+    },
   })
   theme.load()
 end
@@ -33,20 +40,25 @@ local function switch_colorscheme(data)
 end
 
 local function load_colorscheme()
-  local data = local_storage.get_data()
-  if data == nil or data.colorscheme == nil then
+  if vim.o.background == "light" then
     onedark("darker")
-    --- @type ColorschemeStorage
-    local cfg = {
-      name = "onedark",
-      variant = "dark",
-    }
-    local_storage.persist_data({
-      colorscheme = cfg,
-    })
   else
-    switch_colorscheme(data.colorscheme)
+    onedark("light")
   end
+  -- local data = local_storage.get_data()
+  -- if data == nil or data.colorscheme == nil then
+  --   onedark("darker")
+  --   --- @type ColorschemeStorage
+  --   local cfg = {
+  --     name = "onedark",
+  --     variant = "dark",
+  --   }
+  --   local_storage.persist_data({
+  --     colorscheme = cfg,
+  --   })
+  -- else
+  --   switch_colorscheme(data.colorscheme)
+  -- end
   M.on_colorscheme_changed({ match = vim.g.colors_name })
 end
 
@@ -107,8 +119,8 @@ function M.on_colorscheme_changed(a)
   vim.schedule(function()
     do
       -- Highlight current line number
-      vim.opt.cursorline = true
-      vim.cmd("hi clear CursorLine")
+      -- vim.opt.cursorline = true
+      -- vim.cmd("hi clear CursorLine")
       local c = require("onedark.colors")
 
       -- Apply plugin highlights
