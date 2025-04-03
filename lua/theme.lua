@@ -415,16 +415,17 @@ function F.apply_theme()
     F.apply_highlight(highlight)
   end
   for _, highlight_fn in pairs(S.added_highlights) do
-    local _, highlights = highlight_fn(vim.o.background)
+    local _, highlights = highlight_fn(theme[vim.o.background])
     F.apply_highlight(highlights)
   end
   vim.g.colors_name = "theme"
 end
 
+--- Add custom highlights and apply them immediately
 ---@param fn fun(palette: Palette): (string, table<string, vim.api.keyset.highlight>)
 function F.add_highlights(fn)
-  local palette = F.build_palette()
-  local scope, highlights = fn(palette[vim.o.background])
+  local theme = F.build_palette()
+  local scope, highlights = fn(theme[vim.o.background])
   F.apply_highlight(highlights)
   S.added_highlights[scope] = fn
 end
