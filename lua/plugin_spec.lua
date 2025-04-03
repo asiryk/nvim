@@ -161,9 +161,6 @@ local spec = {
     cmd = "Color",
   },
   "mbbill/undotree",
-
-  -- colorschemes
-  "navarasu/onedark.nvim",
 }
 
 require("lazy").setup(spec)

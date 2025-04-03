@@ -20,7 +20,7 @@ end
 local function make_cmp_config()
   local cmp = require("cmp")
   local luasnip = require("luasnip")
-  local icons = require("colorscheme.icons").lspkind
+  local icons = require("icons").lspkind
 
   local src_map = {
     luasnip = "LuaSnip",
