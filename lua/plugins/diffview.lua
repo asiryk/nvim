@@ -50,6 +50,15 @@ function F.current_file_history_with_author()
   )
 end
 
+function F.current_file_history_selected_lines(opts)
+  local file = vim.fn.expand("%")
+  local start_line = opts.line1
+  local end_line = opts.line2
+
+  local cmd = string.format("DiffviewFileHistory -L%d,%d:%s", start_line, end_line, file)
+  vim.cmd(cmd)
+end
+
 vim.keymap.set(
   "n",
   "<leader>gd",
@@ -57,14 +66,27 @@ vim.keymap.set(
   { desc = "Toggle Git Diff [Diffview]" }
 )
 
-vim.api.nvim_create_user_command("DiffPreset", function()
+vim.api.nvim_create_user_command("DiffPreset", function(opts)
   vim.ui.select({
     "Current file: filter by author",
+    "Current file: selected lines",
   }, { prompt = "Select preset:" }, function(selected)
     if selected == "Current file: filter by author" then
       F.current_file_history_with_author()
+    elseif selected == "Current file: selected lines" then
+      F.current_file_history_selected_lines(opts)
     end
   end)
 end, {
+  range = true,
   desc = "Select one of multiple preset diff configurations [User]",
 })
+
+vim.api.nvim_create_user_command(
+  "DiffLines",
+  function(opts) F.current_file_history_selected_lines(opts) end,
+  {
+    range = true,
+    desc = "Show file history for selected lines [User]",
+  }
+)
