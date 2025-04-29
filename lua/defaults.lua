@@ -19,7 +19,7 @@ vim.opt.smartcase = true -- If capitals are present, do case-sensitive search
 vim.opt.pumblend = 15 -- Blend colors with compositor
 vim.opt.scrolloff = 10 -- Leave some space while scrolling
 vim.opt.list = true -- Allow listchars to display
-vim.opt.listchars = { trail = "·", tab = "» ", nbsp = "␣" }
+vim.opt.listchars = { trail = "·", tab = "  ", nbsp = "␣" } -- tab = "» ",
 vim.opt.showmode = false
 vim.opt.breakindent = true
 vim.opt.undofile = true
