@@ -144,7 +144,7 @@ do
     -- Need to update the MiniCursorword when colorscheme changes
     -- because it doesn't get updated automatically for some reason
     local highlights = {
-      MiniCursorword = { bg = c.bg2 },
+      MiniCursorword = { bg = c.bg_hl },
       MiniCursorwordCurrent = {},
     }
     return "mini-cursorword", highlights

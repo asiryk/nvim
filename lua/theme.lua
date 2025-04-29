@@ -13,6 +13,7 @@ end)()
 ---@field bg2 string
 ---@field bg3 string
 ---@field bg_d string
+---@field bg_hl string
 ---@field bg_blue string
 ---@field bg_yellow string
 ---@field fg string
@@ -46,8 +47,9 @@ function F.build_palette()
       bg0 = "#1f2329",
       bg1 = "#282c34",
       bg2 = "#30363f",
-      bg3 = "#323641",
+      bg3 = "#383d4d",
       bg_d = "#181b20",
+      bg_hl = "#323641",
       bg_blue = "#61afef",
       bg_yellow = "#e8c88c",
       fg = "#a0a8b7",
@@ -76,6 +78,7 @@ function F.build_palette()
       bg2 = "#e6e6e6",
       bg3 = "#dcdcdc",
       bg_d = "#c9c9c9",
+      bg_hl = "#f0f0f0",
       bg_blue = "#68aee8",
       bg_yellow = "#e2c792",
       fg = "#383a42",
