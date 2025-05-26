@@ -4,6 +4,8 @@ require("diffview").setup({
   },
 })
 
+-- NOTE: Show diff for a single commit ":DiffviewOpen <commit-hash>^!"
+
 local F = {}
 
 --- check if diffview is open in current tab

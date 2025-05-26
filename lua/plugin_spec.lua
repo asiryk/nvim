@@ -115,7 +115,10 @@ local spec = {
     config = function() require("plugins.gitsigns") end,
     tag = "v1.0.2",
   },
-  { "tpope/vim-fugitive" },
+  {
+    "tpope/vim-fugitive",
+    config = function() require("plugins.fugitive") end,
+  },
   {
     "sindrets/diffview.nvim",
     config = function() require("plugins.diffview") end,
