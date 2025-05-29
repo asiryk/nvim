@@ -1,7 +1,6 @@
 local mason_cfg = { max_concurrent_installers = 10 }
 require("mason").setup(mason_cfg)
 require("mason-lspconfig").setup()
-local lspconfig = require("lspconfig")
 
 vim.diagnostic.config({
   virtual_lines = { current_line = true },
@@ -37,14 +36,29 @@ local config = {
   rust_analyzer = {},
   ts_ls = {},
   lua_ls = {
-    on_attach = on_attach,
-    settings = {
-      Lua = {
+    on_init = function(client)
+      -- Skip configuration if there is a luarc file in the project
+      if client.workspace_folders then
+        local path = client.workspace_folders[1].name
+        if
+          path ~= vim.fn.stdpath("config")
+          and (
+            vim.uv.fs_stat(path .. "/.luarc.json")
+            or vim.uv.fs_stat(path .. "/.luarc.jsonc")
+          )
+        then
+          return
+        end
+      end
+
+      local config = {
         runtime = { version = "LuaJIT" },
         workspace = {
           checkThirdParty = false,
           library = {
+            vim.env.VIMRUNTIME,
             "${3rd}/luv/library",
+            "${3rd}/busted/library",
             unpack(vim.api.nvim_get_runtime_file("", true)),
           },
         },
@@ -53,8 +67,13 @@ local config = {
           callSnippet = "Replace",
         },
         telemetry = { enable = false },
-      },
-    },
+      }
+
+      client.config.settings.Lua =
+        vim.tbl_deep_extend("force", client.config.settings.Lua, config)
+    end,
+    on_attach = on_attach,
+    settings = { Lua = {} },
   },
   cssls = {},
   tailwindcss = {},
@@ -66,9 +85,7 @@ local config = {
 
 local default_config = {
   flags = { debounce_text_changes = 75 },
-  on_attach = function(client, buffer)
-    on_attach(client, buffer)
-  end,
+  on_attach = function(client, buffer) on_attach(client, buffer) end,
 }
 
 require("mason-tool-installer").setup({
@@ -77,13 +94,13 @@ require("mason-tool-installer").setup({
     "prettierd",
     "stylua",
     "luacheck",
-  }, vim.tbl_keys(config))
+  }, vim.tbl_keys(config)),
 })
 
 vim.lsp.set_log_level("off")
+vim.lsp.enable(vim.tbl_keys(config))
 for server_name, server_config in pairs(config) do
-  local cfg = vim.tbl_extend("force", default_config, server_config)
-  lspconfig[server_name].setup(cfg)
+  vim.lsp.config(server_name, vim.tbl_extend("force", default_config, server_config))
 end
 
 require("conform").setup({
@@ -94,14 +111,5 @@ require("conform").setup({
     typescriptreact = { "prettierd" },
     javascriptreact = { "prettierd" },
     json = { "prettierd" },
-  }
+  },
 })
-
--- TODO: see if without this everything is ok, and remove it.
--- local lsp_show_message = vim.lsp.handlers["window/showMessage"]
--- vim.lsp.handlers["window/showMessage"] = function(err, result, ctx, cfg)
---   -- Only show messages of warning severity
---   if result and result.type <= vim.lsp.protocol.MessageType.Warning then
---     lsp_show_message(err, result, ctx, cfg)
---   end
--- end
