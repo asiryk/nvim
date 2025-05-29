@@ -86,12 +86,16 @@ vim.api.nvim_create_autocmd("MenuPopup", {
       vim.cmd([[amenu disable PopUp.Git\ Copy\ Hash]])
 
       if ft == "git" then
-        if cword:match("^%x+$") then
+        if F.is_git_hash(cword) then
           vim.cmd([[amenu enable PopUp.Git\ Diff\ Hash]])
           vim.cmd([[amenu enable PopUp.Git\ Copy\ Hash]])
           any_git_menu = true
         end
       end
+    end
+
+    if any_git_menu and F.is_git_hash(cword) then
+      vim.cmd([[amenu enable PopUp.Git\ Diff\ Hash]])
     end
 
     if any_git_menu then
@@ -101,6 +105,8 @@ vim.api.nvim_create_autocmd("MenuPopup", {
     end
   end,
 })
+
+function F.is_git_hash(str) return type(str) == "string" and str:match("^%x+$") end
 
 function F.is_git_hunk()
   local gitsigns = package.loaded.gitsigns
