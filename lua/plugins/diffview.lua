@@ -92,3 +92,5 @@ vim.api.nvim_create_user_command(
     desc = "Show file history for selected lines [User]",
   }
 )
+
+return F
