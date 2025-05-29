@@ -86,9 +86,9 @@ vim.api.nvim_create_autocmd("MenuPopup", {
     end
 
     if any_git_menu then
-      vim.cmd([[amenu enable PopUp.?\ No\ Git\ Repo]])
-    else
       vim.cmd([[amenu disable PopUp.?\ No\ Git\ Repo]])
+    else
+      vim.cmd([[amenu enable PopUp.?\ No\ Git\ Repo]])
     end
   end,
 })
