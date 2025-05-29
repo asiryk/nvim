@@ -11,6 +11,7 @@ vim.cmd([[
   amenu PopUp.-1-                         <NOP>
   anoremenu PopUp.?\ No\ Git\ Repo        <cmd>lua vim.notify("Not inside Git repository", vim.log.levels.WARN)<CR>
   anoremenu PopUp.Git\ Blame              <cmd>Gitsigns blame<CR>
+  anoremenu PopUp.Git\ Blame\ Close       <C-w>q
   anoremenu PopUp.Git\ Blame\ Line        <cmd>Gitsigns blame_line<CR>
   anoremenu PopUp.Git\ Preview\ Hunk      <cmd>Gitsigns preview_hunk<CR>
   anoremenu PopUp.Git\ Diff\ Open         <cmd>DiffviewOpen<CR>
@@ -42,12 +43,18 @@ vim.api.nvim_create_autocmd("MenuPopup", {
 
     do -- Git Gitsigns
       vim.cmd([[amenu disable PopUp.Git\ Blame]])
+      vim.cmd([[amenu disable PopUp.Git\ Blame\ Close]])
       vim.cmd([[amenu disable PopUp.Git\ Blame\ Line]])
       vim.cmd([[amenu disable PopUp.Git\ Preview\ Hunk]])
       if is_git_buf then
         vim.cmd([[amenu enable PopUp.Git\ Blame]])
         vim.cmd([[amenu enable PopUp.Git\ Blame\ Line]])
         if F.is_git_hunk() then vim.cmd([[amenu enable PopUp.Git\ Preview\ Hunk]]) end
+        any_git_menu = true
+      end
+
+      if ft == "gitsigns-blame" then
+        vim.cmd([[amenu enable PopUp.Git\ Blame\ Close]])
         any_git_menu = true
       end
     end
