@@ -51,7 +51,7 @@ local config = {
         end
       end
 
-      local config = {
+      local nvim_config = {
         runtime = { version = "LuaJIT" },
         workspace = {
           checkThirdParty = false,
@@ -59,7 +59,9 @@ local config = {
             vim.env.VIMRUNTIME,
             "${3rd}/luv/library",
             "${3rd}/busted/library",
-            unpack(vim.api.nvim_get_runtime_file("", true)),
+
+            -- this impacts performance, but loads stuff from plugins
+            -- unpack(vim.api.nvim_get_runtime_file("", true)),
           },
         },
         completion = {
@@ -70,7 +72,7 @@ local config = {
       }
 
       client.config.settings.Lua =
-        vim.tbl_deep_extend("force", client.config.settings.Lua, config)
+        vim.tbl_deep_extend("force", client.config.settings.Lua, nvim_config)
     end,
     on_attach = on_attach,
     settings = { Lua = {} },
