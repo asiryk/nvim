@@ -10,6 +10,10 @@ vim.cmd([[
   inoremenu PopUp.Select\ All             <C-Home><C-O>VG
   anoremenu PopUp.Git\ Diff\ Hash         <cmd>lua require("plugins.fugitive").open_commit_diff_under_cursor()<CR>
   anoremenu PopUp.Git\ Copy\ Hash         "+yiw
+  nnoremenu PopUp.-1-                     <NOP>
+  nnoremenu PopUp.Close\ Window           <C-w>q
+  nnoremenu PopUp.Split\ Vertical         <C-w>v
+  nnoremenu PopUp.Split\ Horizontal       <C-w>s
   "
 ]])
 
