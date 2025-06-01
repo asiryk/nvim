@@ -17,6 +17,9 @@ local options = {
     topdelete = { text = icons.dash },
     changedelete = { text = icons.block_thin },
   },
+  preview_config = {
+    border = G.config.window.border,
+  },
 }
 
 require("theme").add_highlights(function(c)
