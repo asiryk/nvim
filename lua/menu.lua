@@ -11,13 +11,14 @@ vim.cmd([[
   amenu PopUp.-1-                         <NOP>
   anoremenu PopUp.?\ No\ Git\ Repo        <cmd>lua vim.notify("Not inside Git repository", vim.log.levels.WARN)<CR>
   anoremenu PopUp.Git\ Blame              <cmd>Gitsigns blame<CR>
-  anoremenu PopUp.Git\ Blame\ Close       <cmd>lua __CloseGitBlame()<CR>
+  anoremenu PopUp.Git\ Blame\ Close       <cmd>lua PopUpMenu.close_git_blame()<CR>
   anoremenu PopUp.Git\ Blame\ Line        <cmd>Gitsigns blame_line<CR>
   anoremenu PopUp.Git\ Preview\ Hunk      <cmd>Gitsigns preview_hunk<CR>
   anoremenu PopUp.Git\ Diff\ Open         <cmd>DiffviewOpen<CR>
   anoremenu PopUp.Git\ Diff\ Close        <cmd>DiffviewClose<CR>
   anoremenu PopUp.Git\ Diff\ Preset       <cmd>DiffPreset<CR>
   anoremenu PopUp.Git\ Diff\ Hash         <cmd>lua require("plugins.fugitive").open_commit_diff_under_cursor()<CR>
+  anoremenu PopUp.Git\ Revert\ Commit     <cmd>lua PopUpMenu.revert_commit_under_cursor()<CR>
   anoremenu PopUp.Git\ Copy\ Hash         "+yiw
   amenu PopUp.-2-                         <NOP>
   nnoremenu PopUp.Close\ Window           <C-w>q
@@ -25,6 +26,8 @@ vim.cmd([[
   nnoremenu PopUp.Split\ Horizontal       <C-w>s
   "
 ]])
+
+PopUpMenu = {}
 
 local F = {}
 
@@ -83,11 +86,13 @@ vim.api.nvim_create_autocmd("MenuPopup", {
 
     do -- Git Fugitive
       vim.cmd([[amenu disable PopUp.Git\ Diff\ Hash]])
+      vim.cmd([[amenu disable PopUp.Git\ Revert\ Commit]])
       vim.cmd([[amenu disable PopUp.Git\ Copy\ Hash]])
 
       if ft == "git" then
         if F.is_git_hash(cword) then
           vim.cmd([[amenu enable PopUp.Git\ Diff\ Hash]])
+          vim.cmd([[amenu enable PopUp.Git\ Revert\ Commit]])
           vim.cmd([[amenu enable PopUp.Git\ Copy\ Hash]])
           any_git_menu = true
         end
@@ -138,7 +143,12 @@ function F.get_blame_win()
   return -1
 end
 
-function __CloseGitBlame()
+function PopUpMenu.close_git_blame()
   local win = F.get_blame_win()
   if win >= 0 then vim.api.nvim_win_close(win, true) end
+end
+
+function PopUpMenu.revert_commit_under_cursor()
+  local hash = vim.fn.expand("<cword>")
+  vim.cmd("Git revert " .. hash)
 end
