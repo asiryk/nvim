@@ -24,11 +24,25 @@ local spec = {
     config = function() require("plugins.mini") end,
   },
   {
+    -- TODO: replace by folke/snacks.nvim indent plugin
+    -- when the bug with harpoon/diffview is fixed.
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    opts = {
+      indent = { char = "│" },
+      scope = { enabled = false },
+      debounce = 10,
+    },
+  },
+  {
     "folke/snacks.nvim",
     opts = {
       bigfile = { enabled = true },
+
+      -- The best indentation plugin so far, except it throws error when
+      -- open files with telescope/diffview on fresh nvim start.
       indent = {
-        enabled = true,
+        enabled = false,
         hl = "SnacksIndent",
         scope = { hl = "SnacksIndent1" },
         animate = { enabled = false },
