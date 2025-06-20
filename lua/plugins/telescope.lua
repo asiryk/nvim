@@ -56,6 +56,7 @@ telescope.load_extension("fzf")
 ---
 --- pickers
 ---
+local themes = require("telescope.themes")
 local actions = require("telescope.actions")
 local pickers = require("telescope.pickers")
 local finders = require("telescope.finders")
@@ -129,6 +130,31 @@ local function modified_git_files_picker()
 end
 
 vim.keymap.set("n", "<Leader>fg", modified_git_files_picker, { desc = "Find modified Git files [Telescope]" })
+
+local function open_harpoon_files(harpoon_files)
+  local file_paths = {}
+  for _, item in ipairs(harpoon_files.items) do
+    table.insert(file_paths, item.value)
+  end
+
+  require("telescope.pickers")
+    .new(themes.get_dropdown({}), {
+      prompt_title = "Harpoon",
+      finder = require("telescope.finders").new_table({
+        results = file_paths,
+      }),
+      -- previewer = conf.file_previewer({}),
+      sorter = conf.generic_sorter({}),
+    })
+    :find()
+end
+
+vim.keymap.set(
+  "n",
+  "<leader>hf",
+  function() open_harpoon_files(require("harpoon"):list()) end,
+  { desc = "Open harpoon window [Telescope]" }
+)
 
 require("theme").add_highlights(function(c)
   local highlights = {
