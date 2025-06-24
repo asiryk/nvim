@@ -1,6 +1,13 @@
 local harpoon = require("harpoon")
 local utils = require("custom").utils
 
+harpoon:setup({
+  settings = {
+    save_on_toggle = true,
+    save_on_change = true,
+  },
+})
+
 local function set_keymap(lhs, rhs, desc)
   vim.keymap.set("n", lhs, rhs, { silent = true, desc = desc })
 end
