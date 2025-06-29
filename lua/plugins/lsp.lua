@@ -113,5 +113,6 @@ require("conform").setup({
     typescriptreact = { "prettierd" },
     javascriptreact = { "prettierd" },
     json = { "prettierd" },
+    xml = { "xmllint" },
   },
 })
