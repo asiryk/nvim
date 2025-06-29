@@ -144,6 +144,15 @@ local spec = {
     },
   },
   {
+    "kevinhwang91/nvim-ufo",
+    dependencies = {
+      "kevinhwang91/promise-async",
+    },
+    config = function()
+      require("plugins.ufo")
+    end
+  },
+  {
     "stevearc/quicker.nvim",
     event = "FileType qf",
     opts = {},
