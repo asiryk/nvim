@@ -59,6 +59,14 @@ local spec = {
     },
     config = function() require("plugins.lsp") end,
   },
+  -- {
+  --   "saghen/blink.cmp",
+  --   dependencies = { "L3MON4D3/LuaSnip" },
+  --   version = "1.*",
+  --   config = function()
+  --     require("plugins.blink")
+  --   end,
+  -- },
   { -- completion
     -- Probably replace it with blink.nvim. Only if blink has better
     -- highlight groups support (doesn't mess highlights on theme change),
