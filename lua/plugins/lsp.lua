@@ -12,23 +12,40 @@ end
 vim.keymap.set({ "n", "v" }, "<Leader>lf", format, { desc = "Format [LSP], [Conform]" })
 
 local function on_attach(_, buffer)
-  local function set(mode, lhs, rhs, desc) vim.keymap.set(mode, lhs, rhs, { buffer = buffer, desc = desc }) end
+  local function set(mode, lhs, rhs, desc)
+    vim.keymap.set(mode, lhs, rhs, { buffer = buffer, desc = desc })
+  end
   local function definition()
     vim.api.nvim_create_autocmd("CursorMoved", {
       once = true,
       callback = function() require("custom").utils.center_move()() end,
-      desc = "Center move after async lsp definition jump"
+      desc = "Center move after async lsp definition jump",
     })
     vim.lsp.buf.definition()
   end
 
   set("n", "gd", definition, "Go to definition [LSP]")
-  set("n", "<S-k>", function() vim.lsp.buf.hover({ border = "rounded" }) end, "Hover documentation [LSP]")
-  set("i", "<C-k>", function() vim.lsp.buf.signature_help({ border = "rounded" }) end, "Hover signature help [LSP]")
+  set(
+    "n",
+    "<S-k>",
+    function() vim.lsp.buf.hover({ border = G.config.window.border }) end,
+    "Hover documentation [LSP]"
+  )
+  set(
+    "i",
+    "<C-k>",
+    function() vim.lsp.buf.signature_help({ border = G.config.window.border }) end,
+    "Hover signature help [LSP]"
+  )
   set("n", "<Leader>lr", vim.lsp.buf.rename, "Rename variable [LSP]")
   set("n", "<Leader>la", vim.lsp.buf.code_action, "Show actions [LSP]")
   set("n", "<Leader>lcr", vim.lsp.codelens.refresh, "Refresh codelens [LSP]")
-  set("n", "<Leader>lh", function() vim.diagnostic.open_float({ border = "rounded" }) end, "Open vim diagnostic window [LSP]")
+  set(
+    "n",
+    "<Leader>lh",
+    function() vim.diagnostic.open_float({ border = G.config.window.border }) end,
+    "Open vim diagnostic window [LSP]"
+  )
 end
 
 local config = {

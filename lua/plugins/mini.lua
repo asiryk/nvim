@@ -10,14 +10,23 @@ do -- mini files
     if not ok then files.open() end
   end
 
-  vim.keymap.set("n", "<C-n>", open_current,
+  vim.keymap.set(
+    "n",
+    "<C-n>",
+    open_current,
     { desc = "Open current file directory [Mini.files]" }
   )
-  vim.keymap.set("n", "<leader>nc", open_current,
+  vim.keymap.set(
+    "n",
+    "<leader>nc",
+    open_current,
     { desc = "Open current file directory [Mini.files]" }
   )
 
-  vim.keymap.set("n", "<leader>no", files.open,
+  vim.keymap.set(
+    "n",
+    "<leader>no",
+    files.open,
     { desc = "Open working directory in last used state [Mini.files]" }
   )
 
@@ -116,8 +125,8 @@ do
       { mode = "n", keys = "<C-w>" },
 
       -- `z` key
-      -- { mode = "n", keys = "z" },
-      -- { mode = "x", keys = "z" },
+      { mode = "n", keys = "z" },
+      { mode = "x", keys = "z" },
     },
 
     clues = {
@@ -127,7 +136,13 @@ do
       miniclue.gen_clues.marks(),
       miniclue.gen_clues.registers(),
       miniclue.gen_clues.windows(),
-      -- miniclue.gen_clues.z(),
+      miniclue.gen_clues.z(),
+    },
+
+    window = {
+      config = {
+        border = G.config.window.border,
+      },
     },
   })
 end
