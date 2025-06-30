@@ -9,7 +9,7 @@ vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
 -- I took that from ufo repo readme
 local function handler(virtText, lnum, endLnum, width, truncate)
   local newVirtText = {}
-  local suffix = (" +%d lines"):format(endLnum - lnum)
+  local suffix = (" [+%d lines]"):format(endLnum - lnum)
   local sufWidth = vim.fn.strdisplaywidth(suffix)
   local targetWidth = width - sufWidth
   local curWidth = 0
@@ -36,6 +36,7 @@ local function handler(virtText, lnum, endLnum, width, truncate)
 end
 
 require("ufo").setup({
+  open_fold_hl_timeout = 200,
   fold_virt_text_handler = handler,
   -- provider_selector = function(_bufnr, _filetype, _buftype)
   provider_selector = function()
