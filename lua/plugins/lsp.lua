@@ -2,9 +2,29 @@ local mason_cfg = { max_concurrent_installers = 10 }
 require("mason").setup(mason_cfg)
 require("mason-lspconfig").setup()
 
-vim.diagnostic.config({
-  virtual_lines = { current_line = true },
-})
+do
+  --- @type vim.diagnostic.Opts
+  local diagnostic_config = {
+    virtual_text = true,
+  }
+
+  vim.diagnostic.config(diagnostic_config)
+
+  vim.keymap.set("n", "<Leader>le", function()
+    if diagnostic_config.virtual_lines then
+      diagnostic_config = {
+        virtual_text = true,
+        virtual_lines = false,
+      }
+    else
+      diagnostic_config = {
+        virtual_text = false,
+        virtual_lines = { current_line = true },
+      }
+    end
+    vim.diagnostic.config(diagnostic_config)
+  end, { desc = "Toggle error virtual lines [LSP]" })
+end
 
 local function format()
   require("conform").format({ async = true })
