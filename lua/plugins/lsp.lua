@@ -19,7 +19,7 @@ do
     else
       diagnostic_config = {
         virtual_text = false,
-        virtual_lines = { current_line = true },
+        virtual_lines = true,
       }
     end
     vim.diagnostic.config(diagnostic_config)

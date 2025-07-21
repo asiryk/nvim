@@ -18,6 +18,7 @@ function F.toggle_diffview()
   local is_open = F.is_diffview_open()
   if is_open then
     vim.cmd("DiffviewClose")
+    vim.cmd("Gitsigns refresh")
   else
     vim.cmd("DiffviewOpen")
   end
