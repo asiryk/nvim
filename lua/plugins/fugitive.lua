@@ -41,4 +41,6 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+vim.keymap.set("n", "<leader>gC", "Git commit --amend --no-edit", { desc = "Commit with amend [Fugitive]" })
+
 return F

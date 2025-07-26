@@ -8,11 +8,11 @@ vim.keymap.set("n", "<space>", "<nop>", { desc = "Unmap space [User]" })
 vim.g.mapleader = " " -- vim.keymap.set Leader key
 vim.g.maplocalleader = ","
 
--- vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>", { desc = "Create new tab" })
--- vim.keymap.set({ "n", "i", "v" }, "<C-L>", "<cmd>tabnext<CR>", { desc = "Switch to right tab" })
--- vim.keymap.set({ "n", "i", "v" }, "<C-H>", "<cmd>tabprev<CR>", { desc = "Switch to left tab" })
--- vim.keymap.set("n", "<leader>tc", "<cmd>tabclose<CR>", { desc = "Close current tab" })
--- vim.keymap.set("n", "<leader>tac", "<cmd>tabo<CR>", { desc = "Close all tabs" })
+vim.keymap.set("n", "<leader>tc", "<cmd>tabnew<CR>", { desc = "Create new tab [User]" })
+vim.keymap.set("n", "<leader>tq", "<cmd>tabclose<CR>", { desc = "Close current tab [User]" })
+vim.keymap.set("n", "<leader>taq", "<cmd>tabo<CR>", { desc = "Close all other tabs [User]" })
+vim.keymap.set("n", "<leader>tn", "<cmd>tabnext<CR>", { desc = "Switch to the next tab [User]" })
+vim.keymap.set("n", "<leader>tp", "<cmd>tabprev<CR>", { desc = "Switch to the previous tab [User]" })
 
 -- Quickfix list
 do
