@@ -189,6 +189,9 @@ do
   end
 
   G.config = t({
+    -- Theoretically it should be replaced by this
+    -- vim.o.winborder = "rounded" -- Good option
+    -- however it messes up Telescope
     window = t({
       --- @type "none" | "single" | "double" | "rounded" | "solid" | "shadow"
       border = "rounded"
