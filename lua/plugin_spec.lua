@@ -33,6 +33,7 @@ local spec = {
         scope = { hl = "SnacksIndent1" },
         animate = { enabled = false },
       },
+      dim = {}, -- Leave it on for fun. Usage :lua Snacks.dim.enable()
     },
   },
   { -- treesitter

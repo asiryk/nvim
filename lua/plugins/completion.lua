@@ -67,7 +67,25 @@ local function make_cmp_config()
       { name = "luasnip", priority = 1 },
       { name = "nvim_lsp", priority = 100 },
       { name = "path", priority = 4 },
-      { name = "buffer", priority = 5 },
+      {
+        name = "buffer",
+        priority = 5,
+        option = {
+          get_bufnrs = function()
+            local bufs = vim.api.nvim_list_bufs()
+            local small_bufs = {}
+            for _, buf in pairs(bufs) do
+              local byte_size = vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
+              local one_mib = 1024 * 1024
+              if byte_size < one_mib then
+                table.insert(small_bufs, buf)
+              end
+            end
+
+            return small_bufs
+          end
+        },
+      },
     },
   }
 
