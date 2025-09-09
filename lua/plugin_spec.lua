@@ -18,7 +18,14 @@ local spec = {
     "nvim-lua/plenary.nvim",
     lazy = false,
   },
-  "nvim-tree/nvim-web-devicons",
+  {
+    "nvim-tree/nvim-web-devicons",
+    config = function()
+      local devicons = require("nvim-web-devicons")
+      devicons.setup({})
+      -- wait for this to resolve https://github.com/nvim-tree/nvim-web-devicons/issues/608
+    end,
+  },
   {
     "echasnovski/mini.nvim",
     config = function() require("plugins.mini") end,
