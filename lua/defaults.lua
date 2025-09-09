@@ -169,6 +169,13 @@ for _, plugin in pairs(default_plugins) do
   vim.g["loaded_" .. plugin] = 1
 end
 
+-- Not sure what is this, but :checkhealth told to turn it off
+-- looks like some remote plugins stuff (:h provider-nodejs)
+vim.g.loaded_node_provider = 0
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
+
 -------------------- Cross-plugin configuration --------------------
 
 do

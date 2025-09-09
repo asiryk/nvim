@@ -125,8 +125,9 @@ do
       { mode = "n", keys = "<C-w>" },
 
       -- `z` key
-      { mode = "n", keys = "z" },
-      { mode = "x", keys = "z" },
+      -- commented out since it breaks z<CR>
+      -- { mode = "n", keys = "z" },
+      -- { mode = "x", keys = "z" },
     },
 
     clues = {

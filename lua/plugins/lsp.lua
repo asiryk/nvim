@@ -114,11 +114,11 @@ local config = {
     on_attach = on_attach,
     settings = { Lua = {} },
   },
-  cssls = {},
-  tailwindcss = {},
+  -- cssls = {},
+  -- tailwindcss = {},
   clangd = {},
-  dockerls = {},
-  docker_compose_language_service = {},
+  -- dockerls = {},
+  -- docker_compose_language_service = {},
   zls = {},
 }
 
