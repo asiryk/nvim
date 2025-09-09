@@ -1,35 +1,34 @@
 -- Following remaps don't add new features/keybindings, but improve existing ones
 
-vim.opt.mouse = "a" -- Enable mouse support
-vim.opt.mousemodel = "popup_setpos" -- Disable mouse context menu
-vim.opt.cursorline = false -- Don't highlight current line
-vim.opt.number = true -- Show line numbers
-vim.opt.relativenumber = true -- Show line number starting at cursor position
-vim.opt.signcolumn = "yes" -- Show sign column always, even without lsp or gitsigns
-vim.opt.swapfile = false -- Disable swapfiles
-vim.opt.expandtab = true -- Use tabs instead of spaces
-vim.opt.tabstop = 4 -- Amount of spaces the tab is displayed
-vim.opt.shiftwidth = 2 -- Amount of spaces to use for each step of (auto)indent
-vim.opt.smartindent = true -- Copy indent from the previous line
-vim.opt.exrc = true -- Use .nvim.lua file for per-project configuration
-vim.opt.termguicolors = true -- Set 24 bit colors
-vim.opt.laststatus = 3 -- Set global status line
-vim.opt.ignorecase = true -- Ignore case when searching
-vim.opt.smartcase = true -- If capitals are present, do case-sensitive search
-vim.opt.pumblend = 15 -- Blend colors with compositor
-vim.opt.scrolloff = 10 -- Leave some space while scrolling
-vim.opt.list = true -- Allow listchars to display
-vim.opt.listchars = { trail = "·", tab = "  ", nbsp = "␣" } -- tab = "» ",
-vim.opt.showmode = false
-vim.opt.breakindent = true
-vim.opt.undofile = true
-vim.opt.splitright = true
-vim.opt.splitbelow = true
--- vim.opt.inccommand = "split" -- Preview supstitutions live
+vim.o.mouse = "a" -- Enable mouse support
+vim.o.mousemodel = "popup_setpos" -- Disable mouse context menu
+vim.o.cursorline = false -- Don't highlight current line
+vim.o.number = true -- Show line numbers
+vim.o.relativenumber = true -- Show line number starting at cursor position
+vim.o.signcolumn = "yes" -- Show sign column always, even without lsp or gitsigns
+vim.o.swapfile = false -- Disable swapfiles
+vim.o.expandtab = true -- Use tabs instead of spaces
+vim.o.tabstop = 4 -- Amount of spaces the tab is displayed
+vim.o.shiftwidth = 2 -- Amount of spaces to use for each step of (auto)indent
+vim.o.smartindent = true -- Copy indent from the previous line
+vim.o.exrc = true -- Use .nvim.lua file for per-project configuration
+vim.o.termguicolors = true -- Set 24 bit colors
+vim.o.laststatus = 3 -- Set global status line
+vim.o.ignorecase = true -- Ignore case when searching
+vim.o.smartcase = true -- If capitals are present, do case-sensitive search
+vim.o.pumblend = 15 -- Blend colors with compositor
+vim.o.scrolloff = 10 -- Leave some space while scrolling
+vim.o.list = true -- Allow listchars to display
+vim.o.showmode = false
+vim.o.breakindent = true
+vim.o.undofile = true
+vim.o.splitright = true
+vim.o.splitbelow = true
 vim.o.statusline = "%F %h%m%r%=%-14.(%l,%c%V%) %P" -- modify status line to include full path to the file
 
 -- Set character for vim diff (removed lines)
 vim.opt.fillchars:append({ diff = "╱" })
+vim.opt.listchars = { trail = "·", tab = "  ", nbsp = "␣" } -- tab = "» ",
 
 -- Set undo breakpoints: Every time following key ({"<CR>", "."})
 -- gets pressed, it stops current change, so the next "undo"
