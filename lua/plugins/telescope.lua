@@ -1,6 +1,7 @@
 local telescope = require("telescope")
 local builtin = require("telescope.builtin")
 local bind = require("plenary.fun").bind
+local themes = require("telescope.themes")
 
 local function find_nvim_config() builtin.find_files({ cwd = "~/.config/nvim/" }) end
 
@@ -12,8 +13,10 @@ vim.keymap.set("n", "<Leader>ff",
   bind(builtin.live_grep, { additional_args = { "--hidden" } }),
   { desc = "Find text [Telescope]" }
 )
+
+local function buffers() builtin.buffers(themes.get_ivy()) end
 vim.keymap.set("n", "<Leader>fa", builtin.builtin, { desc = "Find action [Telescope]" })
-vim.keymap.set("n", "<Leader>fb", builtin.buffers, { desc = "Find buffers [Telescope]" })
+vim.keymap.set("n", "<Leader>fb", buffers, { desc = "Find buffers [Telescope]" })
 vim.keymap.set("n", "<Leader>fc", find_nvim_config, { desc = "Find Neovim configs [Telescope]" })
 vim.keymap.set("n", "<Leader>fr", builtin.lsp_references, { desc = "Find LSP references [Telescope]" })
 vim.keymap.set("n", "<Leader>fh", builtin.help_tags, { desc = "Find Neovim help [Telescope]" })
@@ -56,7 +59,6 @@ telescope.load_extension("fzf")
 ---
 --- pickers
 ---
-local themes = require("telescope.themes")
 local actions = require("telescope.actions")
 local pickers = require("telescope.pickers")
 local finders = require("telescope.finders")
