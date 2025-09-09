@@ -18,7 +18,7 @@ local options = {
     changedelete = { text = icons.block_thin },
   },
   preview_config = {
-    border = G.config.window.border,
+    border = vim.o.winborder,
   },
 }
 

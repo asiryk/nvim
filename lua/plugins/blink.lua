@@ -1,6 +1,5 @@
 local blink = require("blink.cmp")
 
-local border = G.config.window.border
 local opts = {
   -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
   -- 'super-tab' for mappings similar to vscode (tab to accept)
@@ -22,11 +21,8 @@ local opts = {
     documentation = {
       auto_show = true,
       auto_show_delay_ms = 0,
-      window = { border = border },
     },
-    menu = { border = border },
   },
-  signature = { window = { border = border } },
 
   -- Default list of enabled providers defined so that you can extend it
   -- elsewhere in your config, without redefining it, due to `opts_extend`

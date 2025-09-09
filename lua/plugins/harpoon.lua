@@ -21,9 +21,8 @@ set_keymap("<Leader>ho", function()
   harpoon.ui:toggle_quick_menu(harpoon:list())
   local win = vim.api.nvim_get_current_win()
   vim.wo[win].winblend = vim.o.pumblend
-  vim.api.nvim_win_set_config(win, {
-    border = G.config.window.border,
-  })
+  ---@diagnostic disable-next-line
+  vim.api.nvim_win_set_config(win, { border = vim.o.winborder })
 end, "Open menu [Harpoon]")
 set_keymap("<C-h>", select_file(1), "File 1 [Harpoon]")
 set_keymap("<C-j>", select_file(2), "File 2 [Harpoon]")

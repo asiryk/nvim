@@ -31,7 +31,7 @@ local function make_cmp_config()
   }
 
   local window_cfg = {
-    border = G.config.window.border,
+    border = vim.o.winborder,
     winhighlight = "NormalFloat:Normal,FloatBorder:Normal,CursorLine:PmenuSel,Search:None",
   }
 

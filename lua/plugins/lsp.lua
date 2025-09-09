@@ -48,13 +48,13 @@ local function on_attach(_, buffer)
   set(
     "n",
     "<S-k>",
-    function() vim.lsp.buf.hover({ border = G.config.window.border }) end,
+    function() vim.lsp.buf.hover() end,
     "Hover documentation [LSP]"
   )
   set(
     "i",
     "<C-k>",
-    function() vim.lsp.buf.signature_help({ border = G.config.window.border }) end,
+    function() vim.lsp.buf.signature_help() end,
     "Hover signature help [LSP]"
   )
   set("n", "<Leader>lr", vim.lsp.buf.rename, "Rename variable [LSP]")
@@ -63,7 +63,7 @@ local function on_attach(_, buffer)
   set(
     "n",
     "<Leader>lh",
-    function() vim.diagnostic.open_float({ border = G.config.window.border }) end,
+    function() vim.diagnostic.open_float() end,
     "Open vim diagnostic window [LSP]"
   )
 end
@@ -98,7 +98,7 @@ local config = {
             "${3rd}/busted/library",
 
             -- this impacts performance, but loads stuff from plugins
-            -- unpack(vim.api.nvim_get_runtime_file("", true)),
+            unpack(vim.api.nvim_get_runtime_file("", true)),
           },
         },
         completion = {

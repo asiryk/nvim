@@ -36,10 +36,6 @@ do -- mini files
     callback = function(args)
       local win_id = args.data.win_id
       vim.wo[win_id].winblend = vim.o.pumblend
-      local border = G.config.window.border
-      -- mini requires border for file names
-      if border == "none" then border = "solid" end
-      vim.api.nvim_win_set_config(win_id, { border = border })
     end,
     desc = "Customize mini.files winblend [Mini.files]",
   })
@@ -138,12 +134,6 @@ do
       miniclue.gen_clues.registers(),
       miniclue.gen_clues.windows(),
       miniclue.gen_clues.z(),
-    },
-
-    window = {
-      config = {
-        border = G.config.window.border,
-      },
     },
   })
 end

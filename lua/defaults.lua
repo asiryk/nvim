@@ -17,6 +17,7 @@ vim.o.laststatus = 3 -- Set global status line
 vim.o.ignorecase = true -- Ignore case when searching
 vim.o.smartcase = true -- If capitals are present, do case-sensitive search
 vim.o.pumblend = 15 -- Blend colors with compositor
+vim.o.winborder = "rounded"
 vim.o.scrolloff = 10 -- Leave some space while scrolling
 vim.o.list = true -- Allow listchars to display
 vim.o.showmode = false
@@ -174,33 +175,3 @@ vim.g.loaded_node_provider = 0
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
-
--------------------- Cross-plugin configuration --------------------
-
-do
-  ---Annotate this function in order to see completions for
-  ---the actual config table.
-  ---@generic T : table
-  ---@param tbl T The input table to observe.
-  ---@param callback function The function
-  ---@return T tbl The same table, now observed.
-  local function t(tbl, callback)
-    return G.utils.observed_table(tbl, callback)
-  end
-
-  local r = function(key, value)
-    vim.api.nvim_exec_autocmds("User", {
-      pattern = "ReloadConfig", data = { key = key, value = value }
-    })
-  end
-
-  G.config = t({
-    -- Theoretically it should be replaced by this
-    -- vim.o.winborder = "rounded" -- Good option
-    -- however it messes up Telescope
-    window = t({
-      --- @type "none" | "single" | "double" | "rounded" | "solid" | "shadow"
-      border = "rounded"
-    }, r),
-  }, r)
-end
