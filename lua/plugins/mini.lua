@@ -2,7 +2,18 @@ local augroup = vim.api.nvim_create_augroup("mini", {})
 
 do -- mini files
   local files = require("mini.files")
-  files.setup()
+
+  files.setup({
+    content = {
+      prefix = function(fs_entry)
+        local devicons = require("nvim-web-devicons")
+        if fs_entry.fs_type == "directory" then return " ", "DevIconLua" end
+
+        local icon, hl = devicons.get_icon(fs_entry.name, nil, { default = false })
+        return (icon or "") .. " ", hl or "DevIconDefault"
+      end
+    }
+  })
 
   local function open_current()
     local path_str = vim.api.nvim_buf_get_name(0)

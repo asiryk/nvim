@@ -66,7 +66,7 @@ local function methods_picker()
   local make_entry = require "telescope.make_entry"
 
   pickers
-    .new({}, {
+    .new(require("telescope.themes").get_ivy(), {
       prompt_title = "File Methods",
       finder = finders.new_table({
         results = results,
