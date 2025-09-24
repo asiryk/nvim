@@ -19,11 +19,10 @@ local spec = {
     lazy = false,
   },
   {
-    "nvim-tree/nvim-web-devicons",
+    dir = "~/personal/nvim-web-devicons",
     config = function()
       local devicons = require("nvim-web-devicons")
-      devicons.setup({})
-      -- wait for this to resolve https://github.com/nvim-tree/nvim-web-devicons/issues/608
+      devicons.setup({ blend = 0 })
     end,
   },
   {
