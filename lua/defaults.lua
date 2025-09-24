@@ -25,7 +25,7 @@ vim.o.breakindent = true
 vim.o.undofile = true
 vim.o.splitright = true
 vim.o.splitbelow = true
-vim.o.statusline = "%F %h%m%r%=%-14.(%l,%c%V%) %P" -- modify status line to include full path to the file
+vim.o.statusline = "%F %h%m%r%=%-14.(%l,%c%V%) %P" -- no-plugin status line. see lua/statusline.lua for more complex one
 
 -- Set character for vim diff (removed lines)
 vim.opt.fillchars:append({ diff = "╱" })

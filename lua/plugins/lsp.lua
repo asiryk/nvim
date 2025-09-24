@@ -98,7 +98,7 @@ local config = {
             "${3rd}/busted/library",
 
             -- this impacts performance, but loads stuff from plugins
-            unpack(vim.api.nvim_get_runtime_file("", true)),
+            -- unpack(vim.api.nvim_get_runtime_file("", true)),
           },
         },
         completion = {
@@ -129,7 +129,6 @@ local default_config = {
 
 require("mason-tool-installer").setup({
   ensure_installed = vim.list_extend({
-    "eslint_d",
     "prettierd",
     "stylua",
     "luacheck",
