@@ -1,36 +1,97 @@
-local blink = require("blink.cmp")
-
-local opts = {
-  -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
-  -- 'super-tab' for mappings similar to vscode (tab to accept)
-  -- 'enter' for enter to accept
-  -- 'none' for no mappings
-  --
-  -- All presets have the following mappings:
-  -- C-space: Open menu or open docs if already open
-  -- C-n/C-p or Up/Down: Select next/previous item
-  -- C-e: Hide menu
-  -- C-k: Toggle signature help (if signature.enabled = true)
-  --
-  -- See :h blink-cmp-config-keymap for defining your own keymap
-  keymap = { preset = "default" },
+require("blink.cmp").setup({
   cmdline = { enabled = false },
-
-  appearance = { nerd_font_variant = "mono" },
+  appearance = {
+    -- Adds gap " " to icons, so blend = 0 option works
+    nerd_font_variant = "normal",
+    kind_icons = require("icons").lspkind,
+  },
   completion = {
     documentation = {
       auto_show = true,
       auto_show_delay_ms = 0,
     },
+    menu = {
+      auto_show = true,
+      max_height = 20,
+      winblend = vim.o.pumblend,
+      draw = {
+        columns = {
+          { "label", "label_description", gap = 1 },
+          { "kind_icon", "kind", "source_name", gap = 1 }
+        },
+        components = {
+          source_name = {
+            text = function(ctx)
+              return string.format(" [%s]", ctx.item.source_name)
+            end,
+          },
+        },
+      }
+    },
   },
-
-  -- Default list of enabled providers defined so that you can extend it
-  -- elsewhere in your config, without redefining it, due to `opts_extend`
+  keymap = {
+    preset = "default",
+    ["<C-l>"] = { "snippet_forward", "fallback" },
+    ["<C-h>"] = { "snippet_backward", "fallback" },
+    ["<C-k>"] = { "show_signature", "fallback" },
+  },
   sources = {
-    default = { "lsp", "path", "snippets", "buffer" },
+    providers = {
+      -- By default, the buffer source will only show when the LSP source is disabled or returns no items. Always show the buffer source via:
+      lsp = { fallbacks = {} }
+    },
   },
   fuzzy = { implementation = "prefer_rust_with_warning" },
   snippets = { preset = "luasnip" },
-}
+})
 
-blink.setup(opts)
+vim.api.nvim_set_hl(0, "BlinkCmpMenu", { link = "NormalFloat" })
+vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", { link = "FloatBorder" })
+vim.api.nvim_set_hl(0, "BlinkCmpSource", { link = "NonText" })
+
+require("theme").add_highlights(function(c)
+  local lsp_kind_icons_color = {
+    Default = c.purple,
+    Array = c.yellow,
+    Boolean = c.orange,
+    Class = c.yellow,
+    Color = c.green,
+    Constant = c.orange,
+    Constructor = c.blue,
+    Enum = c.purple,
+    EnumMember = c.yellow,
+    Event = c.yellow,
+    Field = c.purple,
+    File = c.blue,
+    Folder = c.orange,
+    Function = c.blue,
+    Interface = c.green,
+    Key = c.cyan,
+    Keyword = c.cyan,
+    Method = c.blue,
+    Module = c.orange,
+    Namespace = c.red,
+    Null = c.grey,
+    Number = c.orange,
+    Object = c.red,
+    Operator = c.red,
+    Package = c.yellow,
+    Property = c.cyan,
+    Reference = c.orange,
+    Snippet = c.red,
+    String = c.green,
+    Struct = c.purple,
+    Text = c.light_grey,
+    TypeParameter = c.red,
+    Unit = c.green,
+    Value = c.orange,
+    Variable = c.purple,
+  }
+
+  local highlights = {}
+  for kind, color in pairs(lsp_kind_icons_color) do
+    highlights["BlinkCmpKind" .. kind] = { fg = color, blend = 0 }
+  end
+
+  return "blink", highlights
+end)
