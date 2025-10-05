@@ -63,6 +63,11 @@ local function make_cmp_config()
         select = false, -- Enter only explicitly selected item
       }),
     },
+    enabled = function()
+      local buf = vim.api.nvim_get_current_buf()
+      local byte_size = vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
+      return byte_size < 1024 * 1024 / 2
+    end,
     sources = {
       { name = "luasnip", priority = 1 },
       { name = "nvim_lsp", priority = 100 },
