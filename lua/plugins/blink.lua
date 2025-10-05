@@ -6,6 +6,7 @@ require("blink.cmp").setup({
     kind_icons = require("icons").lspkind,
   },
   completion = {
+    accept = { auto_brackets = { enabled = false }, },
     documentation = {
       auto_show = true,
       auto_show_delay_ms = 0,
