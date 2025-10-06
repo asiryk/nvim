@@ -1,8 +1,7 @@
 require("blink.cmp").setup({
   cmdline = { enabled = false },
   appearance = {
-    -- Adds gap " " to icons, so blend = 0 option works
-    nerd_font_variant = "normal",
+    nerd_font_variant = "mono",
     kind_icons = require("icons").lspkind,
   },
   completion = {
@@ -18,12 +17,17 @@ require("blink.cmp").setup({
       draw = {
         columns = {
           { "label", "label_description", gap = 1 },
-          { "kind_icon", "kind", "source_name", gap = 1 }
+          { "kind_icon", "kind", "source_name", gap = 0 }
         },
         components = {
           source_name = {
             text = function(ctx)
-              return string.format(" [%s]", ctx.item.source_name)
+              return " " .. ctx.item.source_name
+            end,
+          },
+          kind_icon = {
+            text = function(ctx)
+              return ctx.kind_icon .. " "
             end,
           },
         },
@@ -48,7 +52,6 @@ require("blink.cmp").setup({
 
 vim.api.nvim_set_hl(0, "BlinkCmpMenu", { link = "NormalFloat" })
 vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", { link = "FloatBorder" })
-vim.api.nvim_set_hl(0, "BlinkCmpSource", { link = "NonText" })
 
 require("theme").add_highlights(function(c)
   local lsp_kind_icons_color = {
@@ -93,6 +96,8 @@ require("theme").add_highlights(function(c)
   for kind, color in pairs(lsp_kind_icons_color) do
     highlights["BlinkCmpKind" .. kind] = { fg = color, blend = 0 }
   end
+
+  highlights["BlinkCmpSource"] = { fg = c.bg3, italic = true }
 
   return "blink", highlights
 end)
