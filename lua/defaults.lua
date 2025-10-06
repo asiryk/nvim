@@ -34,7 +34,7 @@ vim.opt.listchars = { trail = "·", tab = "  ", nbsp = "␣" } -- tab = "» ",
 -- Set undo breakpoints: Every time following key ({"<CR>", "."})
 -- gets pressed, it stops current change, so the next "undo"
 -- will apply up to this key
-local undo_breakpoints = { "<CR>", "." }
+local undo_breakpoints = { "<CR>", ".", " " }
 for _, key in pairs(undo_breakpoints) do
   vim.keymap.set("i", key, key .. "<c-g>u")
 end
