@@ -51,9 +51,12 @@ end)
 gs.setup(options)
 
 local function nav_hunk(direction)
-  return utils.center_move(function()
-    gs.nav_hunk(direction, { navigation_message = false })
-  end)
+  return function() gs.nav_hunk(direction, {
+    navigation_message = false,
+  }, function()
+      vim.cmd("norm! zz")
+    end)
+  end
 end
 
 vim.keymap.set("n", "<leader>gr", gs.reset_hunk, { desc = "Reset hunk [Gitsigns]" })
