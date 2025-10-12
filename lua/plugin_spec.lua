@@ -41,6 +41,7 @@ local spec = {
       },
       dim = {}, -- Leave it on for fun. Usage :lua Snacks.dim.enable()
     },
+    event = "BufEnter",
   },
   { -- treesitter
     "nvim-treesitter/nvim-treesitter",
@@ -54,6 +55,7 @@ local spec = {
       require("plugins.treesitter")
       vim.cmd("TSUpdate")
     end,
+    event = "BufEnter",
   },
   { -- lsp
     "neovim/nvim-lspconfig",
@@ -71,6 +73,7 @@ local spec = {
     dependencies = { "L3MON4D3/LuaSnip" },
     version = "1.*",
     config = function() require("plugins.blink") end,
+    event = "BufEnter",
   },
   {
     "supermaven-inc/supermaven-nvim",
@@ -107,15 +110,18 @@ local spec = {
     "ThePrimeagen/harpoon",
     branch = "harpoon2",
     config = function() require("plugins.harpoon") end,
+    event = "BufEnter",
   },
   {
     "lewis6991/gitsigns.nvim",
     config = function() require("plugins.gitsigns") end,
     tag = "v1.0.2",
+    event = "BufEnter",
   },
   {
     "tpope/vim-fugitive",
     config = function() require("plugins.fugitive") end,
+    event = "BufEnter",
   },
   {
     "sindrets/diffview.nvim",
@@ -124,6 +130,7 @@ local spec = {
   {
     "jinh0/eyeliner.nvim",
     opts = { highlight_on_key = true, dim = true },
+    event = "BufEnter",
   },
   {
     "mattn/emmet-vim",
@@ -148,7 +155,8 @@ local spec = {
     },
     config = function()
       require("plugins.ufo")
-    end
+    end,
+    event = "BufEnter",
   },
   {
     "stevearc/quicker.nvim",
