@@ -16,7 +16,7 @@ _G.Statusline_git_branch = function()
   if head and head ~= "" then
     return icon_branch .. " " .. head
   else
-    return icon_branch  .. " not git repo"
+    return icon_branch  .. " no git repo"
   end
 end
 

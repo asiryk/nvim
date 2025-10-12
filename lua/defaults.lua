@@ -21,6 +21,7 @@ vim.o.winborder = "rounded"
 vim.o.scrolloff = 10 -- Leave some space while scrolling
 vim.o.list = true -- Allow listchars to display
 vim.o.showmode = false
+vim.o.linebreak = true
 vim.o.breakindent = true
 vim.o.undofile = true
 vim.o.splitright = true
