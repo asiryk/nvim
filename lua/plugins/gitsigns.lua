@@ -64,3 +64,8 @@ vim.keymap.set("n", "<leader>gR", gs.reset_buffer, { desc = "Reset buffer [Gitsi
 vim.keymap.set("n", "<leader>gk", nav_hunk("prev"), { desc = "Go to previous hunk [Gitsigns]" })
 vim.keymap.set("n", "<leader>gj", nav_hunk("next"), { desc = "Go to next hunk [Gitsigns" })
 vim.keymap.set("n", "<leader>ga", gs.stage_hunk, { desc = "Stage hunk [Gitsigns" })
+vim.keymap.set("n", "<leader>gb", function()
+  if (PopUpMenu) then
+    PopUpMenu.toggle_git_blame()
+  end
+end, { desc = "Stage hunk [Gitsigns" })

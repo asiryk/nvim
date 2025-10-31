@@ -152,3 +152,12 @@ function PopUpMenu.revert_commit_under_cursor()
   local hash = vim.fn.expand("<cword>")
   vim.cmd("Git revert " .. hash)
 end
+
+function PopUpMenu.toggle_git_blame()
+  local win = F.get_blame_win()
+  if win >= 0 then
+    PopUpMenu.close_git_blame()
+  else
+    vim.cmd("Gitsigns blame")
+  end
+end
