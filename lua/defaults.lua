@@ -27,6 +27,7 @@ vim.o.undofile = true
 vim.o.splitright = true
 vim.o.splitbelow = true
 vim.o.statusline = "%F %h%m%r%=%-14.(%l,%c%V%) %P" -- no-plugin status line. see lua/statusline.lua for more complex one
+-- vim.o.conceallevel = 2
 
 -- Set character for vim diff (removed lines)
 vim.opt.fillchars:append({ diff = "╱" })

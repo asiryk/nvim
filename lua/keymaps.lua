@@ -105,3 +105,4 @@ for uk, en in pairs(uk_to_en) do
     vim.keymap.set({ "n", "v", "o" }, "<C-"..uk..">", "<C-"..en..">")
     vim.keymap.set({ "n", "v", "o" }, vim.fn.toupper(uk), vim.fn.toupper(en))
 end
+vim.keymap.set("n", "яя", "zz")

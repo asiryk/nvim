@@ -141,7 +141,7 @@ function F.build_highlights(theme, appearance)
     ColorColumn = { bg = c.bg1 },
     CursorLineNr = { fg = c.fg },
     LineNr = { fg = c.grey },
-    Conceal = { fg = c.grey, bg = c.bg1 },
+    Conceal = { fg = c.grey },
     Added = { fg = c.green },
     Removed = { fg = c.red },
     Changed = { fg = c.blue },

@@ -42,6 +42,7 @@ local ignore_files = {
   "^.*%.woff?2$",
   "^.*%.atlas$",
   "^.*%.spine$",
+  "^.*package%-lock.json$",
 }
 
 local options = {
