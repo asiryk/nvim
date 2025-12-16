@@ -48,6 +48,7 @@ require("blink.cmp").setup({
 
 vim.api.nvim_set_hl(0, "BlinkCmpMenu", { link = "NormalFloat" })
 vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", { link = "FloatBorder" })
+vim.api.nvim_set_hl(0, "BlinkCmpDocBorder", { link = "FloatBorder" })
 
 require("theme").add_highlights(function()
   return "blink",
