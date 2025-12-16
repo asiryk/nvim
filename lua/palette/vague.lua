@@ -1,5 +1,4 @@
 -- original https://github.com/vague-theme/vague.nvim/tree/main
-local F = {}
 
 ---@class VaguePalette
 ---@field bg string
@@ -26,41 +25,46 @@ local F = {}
 ---@field plus string
 ---@field delta string
 
+local F = {}
+
+---@type VaguePalette
+F.palette = {
+  bg = "#141415",
+  inactiveBg = "#1c1c24",
+  fg = "#cdcdcd",
+  floatBorder = "#878787",
+  line = "#252530",
+  comment = "#606079",
+  builtin = "#b4d4cf",
+  func = "#c48282",
+  string = "#e8b589",
+  number = "#e0a363",
+  property = "#c3c3d5",
+  constant = "#aeaed1",
+  parameter = "#bb9dbd",
+  visual = "#333738",
+  error = "#d8647e",
+  warning = "#f3be7c",
+  hint = "#7e98e8",
+  operator = "#90a0b5",
+  keyword = "#6e94b2",
+  type = "#9bb4bc",
+  search = "#405065",
+  plus = "#7fa563",
+  delta = "#6e94b2",
+}
+
 ---@return VaguePalette
-function F.build_palette()
-  return {
-    bg = "#141415",
-    inactiveBg = "#1c1c24",
-    fg = "#cdcdcd",
-    floatBorder = "#878787",
-    line = "#252530",
-    comment = "#606079",
-    builtin = "#b4d4cf",
-    func = "#c48282",
-    string = "#e8b589",
-    number = "#e0a363",
-    property = "#c3c3d5",
-    constant = "#aeaed1",
-    parameter = "#bb9dbd",
-    visual = "#333738",
-    error = "#d8647e",
-    warning = "#f3be7c",
-    hint = "#7e98e8",
-    operator = "#90a0b5",
-    keyword = "#6e94b2",
-    type = "#9bb4bc",
-    search = "#405065",
-    plus = "#7fa563",
-    delta = "#f3be7c",
-  }
-end
+function F.get_palette() return F.palette end
 
 ---@param color string
 local function color_to_rgb(color)
   local function byte(value, offset) return bit.band(bit.rshift(value, offset), 0xFF) end
 
   local new_color = vim.api.nvim_get_color_by_name(color)
-  if new_color == -1 then new_color = vim.opt.background:get() == "dark" and 000 or 255255255 end
+  if new_color == -1 then
+    new_color = vim.opt.background:get() == "dark" and 000 or 255255255
+  end
 
   return { byte(new_color, 16), byte(new_color, 8), byte(new_color, 0) }
 end
@@ -78,12 +82,17 @@ local function blend(color, base_color, alpha)
     return math.floor(math.min(math.max(0, ret), 255) + 0.5)
   end
 
-  return string.format("#%02X%02X%02X", blend_channel(1), blend_channel(2), blend_channel(3))
+  return string.format(
+    "#%02X%02X%02X",
+    blend_channel(1),
+    blend_channel(2),
+    blend_channel(3)
+  )
 end
 
 ---@return table<string, vim.api.keyset.highlight>
 function F.build_highlights()
-  local c = F.build_palette()
+  local c = F.palette
 
   local code_style = {
     comments = { italic = true },
@@ -111,7 +120,7 @@ function F.build_highlights()
     lCursor = { reverse = true },
     CursorIM = { reverse = true },
     CursorColumn = { bg = c.line },
-    CursorLine = { bg = c.line },
+    CursorLine = { bg = "none" },
     ColorColumn = { bg = c.line },
     CursorLineNr = { fg = c.fg },
     LineNr = { fg = c.comment },
@@ -371,6 +380,6 @@ end
 function F.extend(...) return vim.tbl_extend("force", ...) end
 
 return {
-  build_palette = F.build_palette,
+  get_palette = F.get_palette,
   build_highlights = F.build_highlights,
 }

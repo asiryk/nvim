@@ -29,11 +29,22 @@ set_keymap("<C-j>", select_file(2), "File 2 [Harpoon]")
 set_keymap("<C-k>", select_file(3), "File 3 [Harpoon]")
 set_keymap("<C-l>", select_file(4), "File 4 [Harpoon]")
 
-require("theme").add_highlights(function(c)
-  local highlights = {
-    HarpoonBorder = { fg = c.cyan },
-    HarpoonWindow = { fg = c.fg },
-  }
-
-  return "harpoon", highlights
+require("theme").add_highlights(function()
+  return "harpoon",
+    {
+      ---@param c VaguePalette
+      vague = function(c)
+        return {
+          HarpoonBorder = { fg = c.error },
+          HarpoonWindow = { fg = c.fg },
+        }
+      end,
+      ---@param c OneDarkPalette
+      onedark = function(c)
+        return {
+          HarpoonBorder = { fg = c.cyan },
+          HarpoonWindow = { fg = c.fg },
+        }
+      end,
+    }
 end)

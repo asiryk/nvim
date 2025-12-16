@@ -107,13 +107,20 @@ require("treesitter-context").setup({
   },
 })
 
-do
-  require("theme").add_highlights(function(c)
-    local highlights = {
-      TreesitterContext = { bg = c.bg0 },
-      TreesitterContextBottom = { bg = c.bg0, sp = c.fg, underline = true },
+require("theme").add_highlights(function()
+  return "treesitter-context",
+    {
+      ---@param c VaguePalette
+      vague = function(c) return {
+          TreesitterContext = { bg = c.bg },
+          TreesitterContextBottom = { bg = c.bg, sp = c.fg, underline = true },
+      } end,
+      ---@param c OneDarkPalette
+      onedark = function(c)
+        return {
+          TreesitterContext = { bg = c.bg0 },
+          TreesitterContextBottom = { bg = c.bg0, sp = c.fg, underline = true },
+        }
+      end,
     }
-
-    return "treesitter-context", highlights
-  end)
-end
+end)

@@ -1,6 +1,5 @@
 local gs = require("gitsigns")
 local icons = require("icons").ui
-local utils = require("custom").utils
 
 local options = {
   signs = {
@@ -21,31 +20,58 @@ local options = {
     border = vim.o.winborder,
   },
 }
+require("theme").add_highlights(function()
+  return "gitsigns",
+    {
+      ---@param c VaguePalette
+      vague = function(c)
+        return {
+          GitSignsAdd = { link = "GitSignsAdd", bg = "none", fg = c.plus },
+          GitSignsAddLn = { link = "GitSignsAddLn" },
+          GitSignsAddNr = { link = "GitSignsAddNr" },
 
-require("theme").add_highlights(function(c)
-  local highlights = {
-    GitSignsAdd = { link = "GitSignsAdd", bg = "none", fg = c.green },
-    GitSignsAddLn = { link = "GitSignsAddLn" },
-    GitSignsAddNr = { link = "GitSignsAddNr" },
+          GitSignsChange = { link = "GitSignsChange", bg = "none", fg = c.delta },
+          GitSignsChangeLn = { link = "GitSignsChangeLn" },
+          GitSignsChangeNr = { link = "GitSignsChangeNr" },
 
-    GitSignsChange = { link = "GitSignsChange", bg = "none", fg = c.cyan },
-    GitSignsChangeLn = { link = "GitSignsChangeLn" },
-    GitSignsChangeNr = { link = "GitSignsChangeNr" },
+          GitSignsChangedelete = { link = "GitSignsChange" },
+          GitSignsChangedeleteLn = { link = "GitSignsChangeLn" },
+          GitSignsChangedeleteNr = { link = "GitSignsChangeNr" },
 
-    GitSignsChangedelete = { link = "GitSignsChange" },
-    GitSignsChangedeleteLn = { link = "GitSignsChangeLn" },
-    GitSignsChangedeleteNr = { link = "GitSignsChangeNr" },
+          GitSignsDelete = { link = "GitSignsDelete", bg = "none", fg = c.error },
+          GitSignsDeleteLn = { link = "GitSignsDeleteLn" },
+          GitSignsDeleteNr = { link = "GitSignsDeleteNr" },
 
-    GitSignsDelete = { link = "GitSignsDelete", bg = "none", fg = c.red },
-    GitSignsDeleteLn = { link = "GitSignsDeleteLn" },
-    GitSignsDeleteNr = { link = "GitSignsDeleteNr" },
+          GitSignsTopdelete = { link = "GitSignsDelete" },
+          GitSignsTopdeleteLn = { link = "GitSignsDeleteLn" },
+          GitSignsTopdeleteNr = { link = "GitSignsDeleteNr" },
+        }
+      end,
+      ---@param c OneDarkPalette
+      onedark = function(c)
+        return {
+          GitSignsAdd = { link = "GitSignsAdd", bg = "none", fg = c.green },
+          GitSignsAddLn = { link = "GitSignsAddLn" },
+          GitSignsAddNr = { link = "GitSignsAddNr" },
 
-    GitSignsTopdelete = { link = "GitSignsDelete" },
-    GitSignsTopdeleteLn = { link = "GitSignsDeleteLn" },
-    GitSignsTopdeleteNr = { link = "GitSignsDeleteNr" },
-  }
+          GitSignsChange = { link = "GitSignsChange", bg = "none", fg = c.cyan },
+          GitSignsChangeLn = { link = "GitSignsChangeLn" },
+          GitSignsChangeNr = { link = "GitSignsChangeNr" },
 
-  return "gitsigns", highlights
+          GitSignsChangedelete = { link = "GitSignsChange" },
+          GitSignsChangedeleteLn = { link = "GitSignsChangeLn" },
+          GitSignsChangedeleteNr = { link = "GitSignsChangeNr" },
+
+          GitSignsDelete = { link = "GitSignsDelete", bg = "none", fg = c.red },
+          GitSignsDeleteLn = { link = "GitSignsDeleteLn" },
+          GitSignsDeleteNr = { link = "GitSignsDeleteNr" },
+
+          GitSignsTopdelete = { link = "GitSignsDelete" },
+          GitSignsTopdeleteLn = { link = "GitSignsDeleteLn" },
+          GitSignsTopdeleteNr = { link = "GitSignsDeleteNr" },
+        }
+      end,
+    }
 end)
 
 gs.setup(options)

@@ -11,8 +11,8 @@ do -- mini files
 
         local icon, hl = devicons.get_icon(fs_entry.name, nil, { default = false })
         return (icon or "") .. " ", hl or "DevIconDefault"
-      end
-    }
+      end,
+    },
   })
 
   local function open_current()
@@ -90,14 +90,20 @@ do -- mini files
     desc = "Set buffer keymaps [Mini.files]",
   })
 
-  require("theme").add_highlights(function(c)
-    local highlights = {
-      MiniFilesBorder = { fg = c.cyan },
-      MiniFilesBorderModified = { fg = c.yellow },
-      MiniFilesNormal = { fg = c.fg },
-    }
-
-    return "mini-files", highlights
+  require("theme").add_highlights(function()
+    return "mini-files",
+      {
+        ---@param _ VaguePalette
+        vague = function(_) return {} end,
+        ---@param c OneDarkPalette
+        onedark = function(c)
+          return {
+            MiniFilesBorder = { fg = c.cyan },
+            MiniFilesBorderModified = { fg = c.yellow },
+            MiniFilesNormal = { fg = c.fg },
+          }
+        end,
+      }
   end)
 end
 
@@ -157,14 +163,26 @@ do
   vim.api.nvim_set_hl(0, "MiniCursorword", { link = "CursorColumn" })
   vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", {})
 
-  require("theme").add_highlights(function(c)
+  require("theme").add_highlights(function()
     -- Need to update the MiniCursorword when colorscheme changes
     -- because it doesn't get updated automatically for some reason
-    local highlights = {
-      MiniCursorword = { bg = c.bg_hl },
-      MiniCursorwordCurrent = {},
-    }
-    return "mini-cursorword", highlights
+    return "mini-cursorword",
+      {
+        ---@param c VaguePalette
+        vague = function(c)
+          return {
+            MiniCursorword = { bg = c.line },
+            MiniCursorwordCurrent = {},
+          }
+        end,
+        ---@param c OneDarkPalette
+        onedark = function(c)
+          return {
+            MiniCursorword = { bg = c.bg_hl },
+            MiniCursorwordCurrent = {},
+          }
+        end,
+      }
   end)
 end
 

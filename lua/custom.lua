@@ -16,10 +16,13 @@ do -- create buf logger
   end
 
   local function log(msg)
-    local lines = vim.split(vim.inspect(msg), "\n", { plain = true })
-    local buf = get_log_buffer()
-    local line_count = vim.api.nvim_buf_line_count(buf)
-    vim.api.nvim_buf_set_lines(buf, line_count, line_count, false, lines)
+    local fn = function()
+      local lines = vim.split(vim.inspect(msg), "\n", { plain = true })
+      local buf = get_log_buffer()
+      local line_count = vim.api.nvim_buf_line_count(buf)
+      vim.api.nvim_buf_set_lines(buf, line_count, line_count, false, lines)
+    end
+    pcall(fn)
   end
 
   local function open_log()
