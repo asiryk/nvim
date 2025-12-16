@@ -35,27 +35,11 @@ end
 vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode [User]" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Turn off hlsearch with Esc [User]" })
 
--- Move one or more selected lines up and down (in Visual mode)
--- TODO: don't modify undo list; TODO: probably replace with lua function
--- vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { silent = true, desc = "Move selection 1 row up [User]" })
--- vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { silent = true, desc = "Move selection 1 row down [User]" })
-
 vim.api.nvim_create_user_command(
   "WrapSelection",
   "g/./normal gq$",
   { desc = "Wrap selection by textwidth [User]" }
 )
-
--- Control window
--- vim.keymap.set("n", "<M-h>", "<C-w>h")
--- vim.keymap.set("n", "<M-j>", "<C-w>j")
--- vim.keymap.set("n", "<M-k>", "<C-w>k")
--- vim.keymap.set("n", "<M-l>", "<C-w>l")
---
--- vim.keymap.set("n", "<C-M-h>", "<C-w><")
--- vim.keymap.set("n", "<C-M-j>", "<C-w>-")
--- vim.keymap.set("n", "<C-M-k>", "<C-w>+")
--- vim.keymap.set("n", "<C-M-l>", "<C-w>>")
 
 vim.keymap.set("v", "<leader>y", '"+y', { desc = "Yank into system clipboard [User]" })
 vim.keymap.set("n", "<leader>p", '"+p', { desc = "Paste from system clipboard [User]" })
