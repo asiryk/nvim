@@ -30,7 +30,7 @@ set_keymap("<C-k>", select_file(3), "File 3 [Harpoon]")
 set_keymap("<C-l>", select_file(4), "File 4 [Harpoon]")
 
 require("theme").add_highlights(function()
-  -- TODO: currently doesn't work in v2 harpoon
+  -- It currently doesn't work in v2 harpoon
   return "harpoon",
     {
       ---@param c VaguePalette

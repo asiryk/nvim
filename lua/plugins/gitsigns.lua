@@ -20,6 +20,10 @@ local options = {
     border = vim.o.winborder,
   },
 }
+
+-- TODO: replace most of the stuff with
+-- vim.api.nvim_set_hl(0, "...", { link = "..." })
+-- or remove at all if it doesn't do anything
 require("theme").add_highlights(function()
   return "gitsigns",
     {

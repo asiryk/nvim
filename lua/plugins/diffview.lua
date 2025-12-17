@@ -96,4 +96,12 @@ vim.api.nvim_create_user_command(
   }
 )
 
+vim.api.nvim_set_hl(0, "DiffviewFilePanelRootPath", { link = "Keyword" })
+vim.api.nvim_set_hl(0, "DiffviewFilePanelCounter", { link = "Removed" })
+vim.api.nvim_set_hl(0, "DiffviewFilePanelTitle", { link = "Keyword" })
+vim.api.nvim_set_hl(0, "DiffviewFilePanelFileName", { link = "Normal" })
+vim.api.nvim_set_hl(0, "DiffviewFilePanelSelected", { link = "Question" })
+vim.api.nvim_set_hl(0, "DiffviewFilePanelPath", { link = "LineNr" })
+vim.api.nvim_set_hl(0, "DiffviewSecondary", { link = "String" })
+
 return F
