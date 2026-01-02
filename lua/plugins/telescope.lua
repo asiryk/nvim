@@ -165,14 +165,13 @@ require("theme").add_highlights(function()
       ---@param c VaguePalette
       vague = function(c)
         return {
-          TelescopeBorder = { fg = c.floatBorder },
-          -- TelescopePromptBorder = { fg = c.cyan },
-          -- TelescopeResultsBorder = { fg = c.cyan },
-          -- TelescopePreviewBorder = { fg = c.cyan },
-          -- TelescopeMatching = { fg = c.orange, bold = true },
-          -- TelescopePromptPrefix = { fg = c.green },
-          -- TelescopeSelection = { bg = c.bg2 },
-          -- TelescopeSelectionCaret = { fg = c.yellow },
+          TelescopeBorder = { link = "FloatBorder" },
+          TelescopePromptBorder = { link = "FloatBorder" },
+          TelescopeResultsBorder = { link = "FloatBorder" },
+          TelescopePreviewBorder = { link = "FloatBorder" },
+          TelescopeMatching = { fg = c.func, bold = true },
+          TelescopeSelection = { bg = c.line },
+          TelescopeSelectionCaret = { fg = c.keyword },
         }
       end,
       ---@param c OneDarkPalette
@@ -183,7 +182,6 @@ require("theme").add_highlights(function()
           TelescopeResultsBorder = { fg = c.cyan },
           TelescopePreviewBorder = { fg = c.cyan },
           TelescopeMatching = { fg = c.orange, bold = true },
-          TelescopePromptPrefix = { fg = c.green },
           TelescopeSelection = { bg = c.bg2 },
           TelescopeSelectionCaret = { fg = c.yellow },
         }
