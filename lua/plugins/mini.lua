@@ -93,8 +93,14 @@ do -- mini files
   require("theme").add_highlights(function()
     return "mini-files",
       {
-        ---@param _ VaguePalette
-        vague = function(_) return {} end,
+        ---@param c VaguePalette
+        vague = function(c)
+          return {
+            MiniFilesBorder = { fg = c.floatBorder },
+            MiniFilesBorderModified = { fg = c.warning },
+            MiniFilesNormal = { fg = c.fg },
+          }
+        end,
         ---@param c OneDarkPalette
         onedark = function(c)
           return {

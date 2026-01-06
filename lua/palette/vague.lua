@@ -295,7 +295,7 @@ function F.build_highlights()
     ["@type.declaration"] = { fg = c.constant },
     ["@type.definition"] = hl.syntax["Typedef"],
     ["@variable"] = F.extend({ fg = c.fg }, code_style.variables),
-    ["@variable.builtin"] = { fg = c.keyword },
+    ["@variable.builtin"] = { fg = c.builtin, italic = true },
     ["@variable.member"] = { fg = c.builtin },
     ["@variable.parameter"] = { fg = c.parameter },
     ["@markup.heading.1.markdown"] = { fg = c.error, bold = true },
