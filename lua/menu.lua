@@ -10,7 +10,7 @@ vim.cmd([[
   inoremenu PopUp.Select\ All             <C-Home><C-O>VG
   amenu PopUp.-1-                         <NOP>
   anoremenu PopUp.?\ No\ Git\ Repo        <cmd>lua vim.notify("Not inside Git repository", vim.log.levels.WARN)<CR>
-  anoremenu PopUp.Git\ Blame              <cmd>Gitsigns blame<CR>
+  anoremenu PopUp.Git\ Blame              <cmd>lua PopUpMenu.toggle_git_blame()<CR>
   anoremenu PopUp.Git\ Blame\ Close       <cmd>lua PopUpMenu.close_git_blame()<CR>
   anoremenu PopUp.Git\ Blame\ Line        <cmd>Gitsigns blame_line<CR>
   anoremenu PopUp.Git\ Preview\ Hunk      <cmd>Gitsigns preview_hunk<CR>
@@ -134,19 +134,9 @@ function F.is_git_hunk()
   return false
 end
 
-function F.get_blame_win()
-  for _, win in ipairs(vim.api.nvim_list_wins()) do
-    local buf = vim.api.nvim_win_get_buf(win)
-    local ft = vim.bo[buf].filetype
-    if ft == "gitsigns-blame" then return win end
-  end
-  return -1
-end
+function F.get_blame_win() return require("plugins.gitsigns").get_blame_win() end
 
-function PopUpMenu.close_git_blame()
-  local win = F.get_blame_win()
-  if win >= 0 then vim.api.nvim_win_close(win, true) end
-end
+function PopUpMenu.close_git_blame() return require("plugins.gitsigns").close_git_blame() end
 
 function PopUpMenu.revert_commit_under_cursor()
   local hash = vim.fn.expand("<cword>")
@@ -154,10 +144,5 @@ function PopUpMenu.revert_commit_under_cursor()
 end
 
 function PopUpMenu.toggle_git_blame()
-  local win = F.get_blame_win()
-  if win >= 0 then
-    PopUpMenu.close_git_blame()
-  else
-    vim.cmd("Gitsigns blame")
-  end
+  return require("plugins.gitsigns").toggle_git_blame()
 end
