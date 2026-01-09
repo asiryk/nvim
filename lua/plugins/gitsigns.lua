@@ -21,63 +21,6 @@ local options = {
   },
 }
 
--- TODO: replace most of the stuff with
--- vim.api.nvim_set_hl(0, "...", { link = "..." })
--- or remove at all if it doesn't do anything
-require("theme").add_highlights(function()
-  return "gitsigns",
-    {
-      ---@param c VaguePalette
-      vague = function(c)
-        return {
-          GitSignsAdd = { link = "GitSignsAdd", bg = "none", fg = c.plus },
-          GitSignsAddLn = { link = "GitSignsAddLn" },
-          GitSignsAddNr = { link = "GitSignsAddNr" },
-
-          GitSignsChange = { link = "GitSignsChange", bg = "none", fg = c.delta },
-          GitSignsChangeLn = { link = "GitSignsChangeLn" },
-          GitSignsChangeNr = { link = "GitSignsChangeNr" },
-
-          GitSignsChangedelete = { link = "GitSignsChange" },
-          GitSignsChangedeleteLn = { link = "GitSignsChangeLn" },
-          GitSignsChangedeleteNr = { link = "GitSignsChangeNr" },
-
-          GitSignsDelete = { link = "GitSignsDelete", bg = "none", fg = c.error },
-          GitSignsDeleteLn = { link = "GitSignsDeleteLn" },
-          GitSignsDeleteNr = { link = "GitSignsDeleteNr" },
-
-          GitSignsTopdelete = { link = "GitSignsDelete" },
-          GitSignsTopdeleteLn = { link = "GitSignsDeleteLn" },
-          GitSignsTopdeleteNr = { link = "GitSignsDeleteNr" },
-        }
-      end,
-      ---@param c OneDarkPalette
-      onedark = function(c)
-        return {
-          GitSignsAdd = { link = "GitSignsAdd", bg = "none", fg = c.green },
-          GitSignsAddLn = { link = "GitSignsAddLn" },
-          GitSignsAddNr = { link = "GitSignsAddNr" },
-
-          GitSignsChange = { link = "GitSignsChange", bg = "none", fg = c.cyan },
-          GitSignsChangeLn = { link = "GitSignsChangeLn" },
-          GitSignsChangeNr = { link = "GitSignsChangeNr" },
-
-          GitSignsChangedelete = { link = "GitSignsChange" },
-          GitSignsChangedeleteLn = { link = "GitSignsChangeLn" },
-          GitSignsChangedeleteNr = { link = "GitSignsChangeNr" },
-
-          GitSignsDelete = { link = "GitSignsDelete", bg = "none", fg = c.red },
-          GitSignsDeleteLn = { link = "GitSignsDeleteLn" },
-          GitSignsDeleteNr = { link = "GitSignsDeleteNr" },
-
-          GitSignsTopdelete = { link = "GitSignsDelete" },
-          GitSignsTopdeleteLn = { link = "GitSignsDeleteLn" },
-          GitSignsTopdeleteNr = { link = "GitSignsDeleteNr" },
-        }
-      end,
-    }
-end)
-
 gs.setup(options)
 
 local function nav_hunk(direction)
@@ -94,8 +37,9 @@ vim.keymap.set("n", "<leader>gR", gs.reset_buffer, { desc = "Reset buffer [Gitsi
 vim.keymap.set("n", "<leader>gk", nav_hunk("prev"), { desc = "Go to previous hunk [Gitsigns]" })
 vim.keymap.set("n", "<leader>gj", nav_hunk("next"), { desc = "Go to next hunk [Gitsigns" })
 vim.keymap.set("n", "<leader>ga", gs.stage_hunk, { desc = "Stage hunk [Gitsigns" })
+vim.keymap.set({"o", "x"}, "ih", gs.select_hunk, { desc = "Select hunk text object [Gitsigns]" })
 vim.keymap.set("n", "<leader>gb", function()
   if (PopUpMenu) then
     PopUpMenu.toggle_git_blame()
   end
-end, { desc = "Stage hunk [Gitsigns" })
+end, { desc = "Toggle blame [Gitsigns]" })

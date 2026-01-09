@@ -71,7 +71,8 @@ end
 local config = {
   gopls = {},
   rust_analyzer = {},
-  ts_ls = {},
+  -- ts_ls = {},
+  tsgo = {},
   lua_ls = {
     on_init = function(client)
       -- Skip configuration if there is a luarc file in the project

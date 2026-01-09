@@ -120,7 +120,7 @@ local spec = {
   {
     "lewis6991/gitsigns.nvim",
     config = function() require("plugins.gitsigns") end,
-    tag = "v1.0.2",
+    tag = "v2.0.0",
     event = "BufEnter",
   },
   {
