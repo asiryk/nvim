@@ -132,6 +132,14 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
 })
 
+vim.api.nvim_create_autocmd("VimEnter", {
+  desc = "Clear previous jumplist locations on fresh vim open",
+  group = defaults_augroup,
+  callback = function()
+    vim.cmd("clearjumps")
+  end,
+})
+
 -- Disable some default plugins
 local default_plugins = {
   -- "2html_plugin",

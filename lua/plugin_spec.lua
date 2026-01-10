@@ -1,3 +1,8 @@
+-- Don't load plugins if using neovim as manpager
+for _, arg in pairs(vim.v.argv) do
+  if arg == "+Man!" or arg == "Man!" then return end
+end
+
 do -- download lazy if not exists
   local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
   if not vim.loop.fs_stat(lazypath) then
@@ -158,9 +163,7 @@ local spec = {
     dependencies = {
       "kevinhwang91/promise-async",
     },
-    config = function()
-      require("plugins.ufo")
-    end,
+    config = function() require("plugins.ufo") end,
     event = "BufEnter",
   },
   {
