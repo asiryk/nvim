@@ -15,16 +15,25 @@ function F.is_diffview_open()
 end
 
 function F.toggle_diffview()
-  local is_open = F.is_diffview_open()
-  if is_open then
+  if F.is_diffview_open() then
     vim.cmd("DiffviewClose")
-    vim.schedule(function()
-      pcall(function() require("gitsigns").refresh() end)
-    end)
   else
     vim.cmd("DiffviewOpen")
   end
 end
+
+local group = vim.api.nvim_create_augroup("diffview", {})
+
+vim.api.nvim_create_autocmd("User", {
+  group = group,
+  pattern = "DiffviewViewClosed",
+  callback = function()
+    -- Wait 100ms since it may be still not updated in git
+    vim.defer_fn(function()
+      pcall(require("gitsigns").refresh)
+    end, 100)
+  end,
+})
 
 function F.current_file_history_with_author()
   local M = {}

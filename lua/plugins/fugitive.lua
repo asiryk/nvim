@@ -52,10 +52,10 @@ vim.keymap.set(
   { desc = "Commit with amend [Fugitive]" }
 )
 
-local grp = vim.api.nvim_create_augroup("GitLgSyntax", { clear = true })
+local group = vim.api.nvim_create_augroup("GitLgSyntax", { clear = true })
 
 vim.api.nvim_create_autocmd("FileType", {
-  group = grp,
+  group = group,
   pattern = "git",
   callback = function(ev)
     vim.api.nvim_buf_call(
