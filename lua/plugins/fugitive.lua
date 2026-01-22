@@ -10,13 +10,9 @@ vim.keymap.set(
 
 function F.open_commit_diff_under_cursor()
   pcall(function()
-    local hash = vim.fn.expand("<cword>")
-    if hash:match("^%x+$") then
-      vim.cmd("DiffviewOpen " .. hash .. "^!")
-    else
-      local msg = string.format('Not a valid commit hash: "%s"', hash)
-      vim.notify(msg, vim.log.levels.WARN)
-    end
+    local line = vim.api.nvim_get_current_line()
+    local hash = line:match("([0-9a-f]+)")
+    if hash then vim.cmd("DiffviewOpen " .. hash .. "^!") end
   end)
 end
 
