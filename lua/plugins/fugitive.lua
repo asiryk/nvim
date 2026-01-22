@@ -1,17 +1,11 @@
 local F = {}
+local L = {}
 
-vim.api.nvim_create_user_command(
-  "Gitl",
-  "Git log --graph --pretty=format:'%h%d %s <%ad | %an>' --abbrev-commit --date=local"
-    .. " --invert-grep --grep='Auto version update' --grep='Auto update assets' --grep='Merge branch' --grep='Merge remote-tracking branch'"
-    .. " <args>",
-  { desc = "Git log graph excluding generated commits [User]" }
-)
-vim.api.nvim_create_user_command(
-  "Gitlo",
-  "Git log --graph --pretty=format:'%h%d %s <%ad | %an>' --abbrev-commit --date=local"
-    .. " <args>",
-  { desc = "Git log graph [User]" }
+vim.keymap.set(
+  "n",
+  "<leader>gC",
+  "Git commit --amend --no-edit",
+  { desc = "Commit with amend [Fugitive]" }
 )
 
 function F.open_commit_diff_under_cursor()
@@ -27,7 +21,7 @@ function F.open_commit_diff_under_cursor()
 end
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "git",
+  pattern = { "git", "git-graph" },
   callback = function(args)
     local buf = args.buf
     vim.keymap.set(
@@ -42,83 +36,89 @@ vim.api.nvim_create_autocmd("FileType", {
       function() F.open_commit_diff_under_cursor() end,
       { buffer = buf, desc = "Diffview on commit under cursor [User]" }
     )
+
+    vim.keymap.set("n", "q", "<cmd>q<cr>", { buffer = buf, silent = true })
   end,
 })
-
-vim.keymap.set(
-  "n",
-  "<leader>gC",
-  "Git commit --amend --no-edit",
-  { desc = "Commit with amend [Fugitive]" }
-)
-
-local group = vim.api.nvim_create_augroup("GitLgSyntax", { clear = true })
 
 vim.api.nvim_create_autocmd("FileType", {
-  group = group,
-  pattern = "git",
-  callback = function(ev)
-    vim.api.nvim_buf_call(
-      ev.buf,
-      function()
-        vim.cmd([[
-        syntax clear
+  pattern = "git-graph",
+  callback = function(args)
+    local buf = args.buf
 
-        " 1. Graph (Start of line)
-        syn match gitLgGraph /^[|/\\_* ]\+/ nextgroup=gitLgHash skipwhite
-
-        " 2. Commit Hash
-        syn match gitLgHash /[a-f0-9]\{4,40\}/ contained nextgroup=gitLgDecoration,gitLgMessage skipwhite
-
-        " 3. Decorations (The parens)
-        " We define the region, containing our 3 groups
-        syn region gitLgDecoration start="(" end=")" contained contains=gitLgHead,gitLgTag,gitLgBranch nextgroup=gitLgMessage skipwhite
-
-        " --- Inner Decoration Matches ---
-
-        " HEAD -> ...
-        " Matches the whole arrow sequence
-        syn match gitLgHead /HEAD -> [a-zA-Z0-9_\.\-/]\+/ contained
-
-        " tag: ...
-        " Matches the tag prefix and the version
-        syn match gitLgTag /tag: [a-zA-Z0-9_\.\-/]\+/ contained
-
-        " Branch (Catch-all)
-        " \<\(HEAD\|tag\)\@! : Negative Lookahead.
-        " If the word starts with "HEAD" or "tag", this match FAILS immediately.
-        " This forces Vim to use gitLgHead or gitLgTag instead.
-        syn match gitLgBranch /\<\(HEAD\|tag\)\@![a-zA-Z0-9_\.\-/]\+\>/ contained
-
-        " 4. Commit Message
-        " Safety: Don't match if we see an opening parenthesis
-        syn match gitLgMessage /\(\s*(\)\@!.\{-}\ze\s*<[a-zA-Z]/ contained
-
-        " 5. Meta Block <Date | Author>
-        syn match gitLgMeta /<[^>]*>$/ contains=gitLgAuthor
-
-        " 6. Author Name
-        syn match gitLgAuthor /| \zs[^>]\+/ contained
-
-        " --- Linking ---
-        hi def link gitLgGraph    Comment
-        hi def link gitLgHash     Number
-        hi def link gitLgDecoration Comment
-
-        hi def link gitLgHead     Keyword
-        hi def link gitLgTag      Constant
-        hi def link gitLgBranch   Type
-
-        hi def link gitLgMessage  Normal
-        hi def link gitLgMeta     Comment
-        hi def link gitLgAuthor   Identifier
-      ]])
-      end
-    )
-
-    -- override local listchars not to show trailing spaces
-    vim.opt_local.listchars = { trail = " ", tab = "  ", nbsp = "␣" }
+    vim.keymap.set("n", "<CR>", function()
+      local line = vim.api.nvim_get_current_line()
+      -- Extract commit hash (7 hex characters)
+      local hash = line:match("([0-9a-f]+)")
+      if hash then vim.cmd("Gtabedit " .. hash) end
+    end, { buffer = buf, silent = true })
   end,
 })
+
+vim.api.nvim_create_user_command("Gitl", function()
+  local output = L.run_git_log()
+  if output == nil then return end
+  L.create_git_graph_buf(output)
+end, { desc = "Git log graph excluding generated commits [User]" })
+
+vim.api.nvim_create_user_command("Gitlo", function()
+  local output = L.run_git_log_full()
+  if output == nil then return end
+  L.create_git_graph_buf(output)
+end, { desc = "Git log graph [User]" })
+
+function L.run_git_log()
+  local git_cmd = "git log --graph --pretty=format:'%h%d %s <%ad | %an>' --abbrev-commit --date=local"
+    .. " --invert-grep --grep='Auto version update' --grep='Auto update assets' --grep='Merge branch' --grep='Merge remote-tracking branch'"
+
+  local output = vim.fn.systemlist(git_cmd)
+
+  -- Check for errors
+  if vim.v.shell_error ~= 0 then
+    vim.notify("Git command failed", vim.log.levels.ERROR)
+    return nil
+  end
+
+  return output
+end
+
+function L.run_git_log_full()
+  local git_cmd =
+    "Git log --graph --pretty=format:'%h%d %s <%ad | %an>' --abbrev-commit --date=local"
+
+  local output = vim.fn.systemlist(git_cmd)
+
+  -- Check for errors
+  if vim.v.shell_error ~= 0 then
+    vim.notify("Git command failed", vim.log.levels.ERROR)
+    return nil
+  end
+
+  return output
+end
+
+function L.create_git_graph_buf(content)
+  -- Create new buffer
+  local bufnr = vim.api.nvim_create_buf(false, true)
+
+  -- Set buffer options
+  vim.bo[bufnr].buftype = "nofile"
+  vim.bo[bufnr].bufhidden = "wipe"
+  vim.bo[bufnr].swapfile = false
+  vim.bo[bufnr].filetype = "git-graph"
+
+  -- Set buffer content
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, content)
+  vim.bo[bufnr].modifiable = false
+
+  -- Open horizontal split and set buffer
+  vim.cmd.split()
+  vim.api.nvim_set_current_buf(bufnr)
+
+  -- Set buffer name
+  vim.api.nvim_buf_set_name(bufnr, "git-graph://" .. vim.fn.getcwd())
+
+  vim.opt_local.listchars = { trail = " ", tab = "  ", nbsp = "␣" }
+end
 
 return F
