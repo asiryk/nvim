@@ -59,17 +59,17 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-vim.api.nvim_create_user_command("Gitl", function()
-  local output = L.run_git_log()
+vim.api.nvim_create_user_command("Gitl", function(opts)
+  local output = L.run_git_log(opts.args)
   if output == nil then return end
   L.create_git_graph_buf(output)
-end, { desc = "Git log graph excluding generated commits [User]" })
+end, { desc = "Git log graph excluding generated commits [User]", nargs = "*" })
 
-vim.api.nvim_create_user_command("Gitlo", function()
-  local output = L.run_git_log_full()
+vim.api.nvim_create_user_command("Gitlo", function(opts)
+  local output = L.run_git_log_full(opts.args)
   if output == nil then return end
   L.create_git_graph_buf(output)
-end, { desc = "Git log graph [User]" })
+end, { desc = "Git log graph [User]", nargs = "*" })
 
 --- Returns a URL to create a new PR/MR for the current branch.
 --- Supports GitHub and GitLab remotes (both SSH and HTTPS formats).
@@ -121,9 +121,16 @@ function L.get_pr_url()
   return url
 end
 
-function L.run_git_log()
+function L.run_git_log(args)
+  if args ~= nil then
+    args = " " .. args
+  else
+    args = ""
+  end
   local git_cmd = "git log --graph --pretty=format:'%h%d %s <%ad | %an>' --abbrev-commit --date=local"
     .. " --invert-grep --grep='Auto version update' --grep='Auto update assets' --grep='Merge branch' --grep='Merge remote-tracking branch'"
+    .. " "
+    .. args
 
   local output = vim.fn.systemlist(git_cmd)
 
@@ -136,9 +143,15 @@ function L.run_git_log()
   return output
 end
 
-function L.run_git_log_full()
-  local git_cmd =
-    "Git log --graph --pretty=format:'%h%d %s <%ad | %an>' --abbrev-commit --date=local"
+function L.run_git_log_full(args)
+  if args ~= nil then
+    args = " " .. args
+  else
+    args = ""
+  end
+
+  local git_cmd = "Git log --graph --pretty=format:'%h%d %s <%ad | %an>' --abbrev-commit --date=local"
+    .. args
 
   local output = vim.fn.systemlist(git_cmd)
 
