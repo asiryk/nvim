@@ -5,6 +5,7 @@ require("menu")
 vim.cmd.colorscheme("custom")
 require("plugin_spec")
 require("statusline")
+require("tabline")
 
 local function create_scratch_buf()
   local buf = vim.api.nvim_create_buf(true, true)
