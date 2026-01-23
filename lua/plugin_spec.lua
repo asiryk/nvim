@@ -99,11 +99,11 @@ local spec = {
     end,
     cmd = "AIStart",
   },
-  -- {
-  --   "sourcegraph/amp.nvim",
-  --   branch = "main",
-  --   opts = { auto_start = false, log_level = "info" },
-  -- },
+  {
+    "sourcegraph/amp.nvim",
+    branch = "main",
+    opts = { auto_start = false, log_level = "info" },
+  },
   { -- telescope
     "nvim-telescope/telescope.nvim",
     config = function() require("plugins.telescope") end,
