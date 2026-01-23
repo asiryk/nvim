@@ -2,14 +2,11 @@
 
 ![preview](https://user-images.githubusercontent.com/61456651/202856540-ddb5478d-4de7-483c-b859-1b6ddc771a70.png)
 
+read help for `editing.txt`
+
 ## TODO
 
 - [ ] Add syntax correction and underline for comments or identifier names (either builtin or plugin)
-
-## Requirements
-
-- Neovim
-- A C compiler in your path and libstdc++ installed (gcc, g++) for TreeSitter
 
 ## Removing
 
