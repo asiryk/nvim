@@ -121,6 +121,10 @@ local config = {
   -- dockerls = {},
   -- docker_compose_language_service = {},
   zls = {},
+  jsonls = {
+    filetypes = { "json", "jsonc" },
+    single_file_support = true,
+  },
 }
 
 local default_config = {
