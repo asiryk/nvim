@@ -22,6 +22,7 @@ vim.keymap.set("n", "<Leader>fr", builtin.lsp_references, { desc = "Find LSP ref
 vim.keymap.set("n", "<Leader>fh", builtin.help_tags, { desc = "Find Neovim help [Telescope]" })
 vim.keymap.set("n", "<Leader>fk", builtin.keymaps, { desc = "Find keymaps [Telescope]" })
 vim.keymap.set("n", "<Leader>fm", builtin.marks, { desc = "Find marks [Telescope]" })
+vim.keymap.set("n", "<Leader>fs", builtin.spell_suggest, { desc = "Suggest spell fixes under cursor [Telescope]" })
 
 local ignore_files = {
   -- folders
