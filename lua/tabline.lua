@@ -1,5 +1,4 @@
-local max_tab_width = 30
-local min_tab_width = 15
+local padding = 1
 
 local function is_real_buffer(bufnr)
   local buftype = vim.bo[bufnr].buftype
@@ -55,40 +54,25 @@ local function get_tab_label(tabnr)
 
   local name = vim.fn.bufname(bufnr)
   local filename = vim.fn.fnamemodify(name, ":t")
-  if #filename > max_tab_width - 4 then
-    filename = filename:sub(1, max_tab_width - 7) .. "…"
-  end
-
   return filename
-end
-
-local function pad_label(label, width)
-  local padding = width - vim.fn.strwidth(label)
-  local left = math.floor(padding / 2)
-  local right = padding - left
-  return string.rep(" ", left) .. label .. string.rep(" ", right)
 end
 
 _G.Tabline = function()
   local s = ""
   local tabcount = vim.fn.tabpagenr("$")
 
-  local available_width = vim.o.columns
-  local tab_width = math.floor(available_width / tabcount)
-  tab_width = math.max(min_tab_width, math.min(max_tab_width, tab_width))
+  local pad = string.rep(" ", padding)
 
   for tabnr = 1, tabcount do
     local is_current = tabnr == vim.fn.tabpagenr()
     local hl = is_current and "%#TabLineSel#" or "%#TabLine#"
 
     local label = get_tab_label(tabnr)
-    local close_btn = " ✕ "
-    local content_width = tab_width - #close_btn - 1
-    local padded_label = pad_label(label, content_width)
+    local close_btn = "✕ "
 
     s = s .. hl
     s = s .. "%" .. tabnr .. "T"
-    s = s .. " " .. padded_label
+    s = s .. pad .. label .. pad
     s = s .. "%" .. tabnr .. "X" .. close_btn .. "%X"
   end
 
