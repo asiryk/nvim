@@ -138,11 +138,6 @@ local spec = {
     config = function() require("plugins.diffview") end,
   },
   {
-    "jinh0/eyeliner.nvim",
-    opts = { highlight_on_key = true, dim = true },
-    event = "BufEnter",
-  },
-  {
     "mattn/emmet-vim",
     ft = { "html", "svelte", "astro", "handlebars" },
     build = ":EmmetInstall",
@@ -172,7 +167,23 @@ local spec = {
     opts = {},
   },
   "mbbill/undotree",
-  require("plugins.obsidian"),
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    ---@type Flash.Config
+    opts = {
+      modes = {
+        char = {
+          keys = {},
+        },
+      },
+    },
+    keys = {
+      { "S", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+      { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+    },
+  }
 }
 
 require("lazy").setup(spec)

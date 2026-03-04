@@ -32,6 +32,26 @@ vim.api.nvim_create_autocmd("User", {
     vim.defer_fn(function()
       pcall(require("gitsigns").refresh)
     end, 100)
+
+    -- TODO: Not sure below helps, probably need to remove
+    -- the whole vim.schedule if that doesn't help
+
+    -- Diffview leaves windows with foldmethod=diff / foldenable=false,
+    -- which makes UFO's applyFoldRanges silently bail out.
+    -- Reset fold state and re-enable UFO for all affected windows.
+    vim.schedule(function()
+      for _, win in ipairs(vim.api.nvim_list_wins()) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        if vim.bo[buf].buflisted then
+          vim.wo[win].foldmethod = "manual"
+          vim.wo[win].foldenable = true
+          vim.api.nvim_win_call(win, function()
+            vim.cmd("silent! %foldopen!")
+          end)
+          require("ufo").disableFold(buf)
+        end
+      end
+    end)
   end,
 })
 

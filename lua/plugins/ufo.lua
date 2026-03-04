@@ -46,5 +46,5 @@ require("ufo").setup({
 vim.api.nvim_set_hl(0, "UfoFoldedBg", { link = "CursorColumn" })
 vim.api.nvim_set_hl(0, "UfoFoldedFg", { link = "CursorLineNr" })
 
-require("harpoon"):extend(require("harpoon.extensions").builtins.command_on_nav("UfoEnableFold"))
+-- require("harpoon"):extend(require("harpoon.extensions").builtins.command_on_nav("UfoEnableFold"))
 

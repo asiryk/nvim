@@ -78,8 +78,22 @@ function F.toggle_git_blame()
           )
         end
 
+
+        -- TODO: need to unify the git stuff
+        -- maybe merge gitsigns, fugitive, diffview configs
+        -- into 1 git.lua file.
+        -- Because things are getting really messy. Lines below are copy-pasted
+        -- from fugitive
+        vim.keymap.set("n", "<CR>", function()
+          local line = vim.api.nvim_get_current_line()
+          -- Extract commit hash (7 hex characters)
+          local hash = line:match("([0-9a-f]+)")
+          if hash then vim.cmd("Gtabedit " .. hash) end
+        end, { buffer = bufnr, silent = true })
+
         vim.keymap.set("n", "K", fn, { buffer = bufnr })
         vim.keymap.set("n", "<2-LeftMouse>", fn, { buffer = bufnr })
+        vim.keymap.set("n", "q", F.close_git_blame, { buffer = bufnr })
       end)
     end)
   end

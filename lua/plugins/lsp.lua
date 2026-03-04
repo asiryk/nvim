@@ -76,8 +76,9 @@ local config = {
   lua_ls = {
     on_init = function(client)
       -- Skip configuration if there is a luarc file in the project
+      local path
       if client.workspace_folders then
-        local path = client.workspace_folders[1].name
+        path = client.workspace_folders[1].name
         if
           path ~= vim.fn.stdpath("config")
           and (
@@ -89,18 +90,21 @@ local config = {
         end
       end
 
+      local library = {
+        vim.env.VIMRUNTIME,
+        "${3rd}/luv/library",
+        "${3rd}/busted/library",
+      }
+      -- Add plugins as library only if it's opened in neovim config dir.
+      if path == vim.fn.stdpath("config") then
+        vim.list_extend(library, vim.api.nvim_get_runtime_file("", true))
+      end
+
       local nvim_config = {
         runtime = { version = "LuaJIT" },
         workspace = {
           checkThirdParty = false,
-          library = {
-            vim.env.VIMRUNTIME,
-            "${3rd}/luv/library",
-            "${3rd}/busted/library",
-
-            -- this impacts performance, but loads stuff from plugins
-            -- unpack(vim.api.nvim_get_runtime_file("", true)),
-          },
+          library = library,
         },
         completion = {
           keywordSnippet = "Disable",
@@ -118,6 +122,7 @@ local config = {
   -- cssls = {},
   -- tailwindcss = {},
   clangd = {},
+  bashls = {},
   -- dockerls = {},
   -- docker_compose_language_service = {},
   zls = {},
