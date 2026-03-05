@@ -62,13 +62,15 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_user_command("Gitl", function(opts)
   local output = L.run_git_log(opts.args)
   if output == nil then return end
-  L.create_git_graph_buf(output)
+  local bufname = "git-graph://" .. vim.fn.getcwd() .. " Gitl"
+  L.create_git_graph_buf(output, bufname)
 end, { desc = "Git log graph excluding generated commits [User]", nargs = "*" })
 
 vim.api.nvim_create_user_command("Gitlo", function(opts)
   local output = L.run_git_log_full(opts.args)
   if output == nil then return end
-  L.create_git_graph_buf(output)
+  local bufname = "git-graph://" .. vim.fn.getcwd() .. " Gitlo"
+  L.create_git_graph_buf(output, bufname)
 end, { desc = "Git log graph [User]", nargs = "*" })
 
 --- Returns a URL to create a new PR/MR for the current branch.
@@ -164,7 +166,17 @@ function L.run_git_log_full(args)
   return output
 end
 
-function L.create_git_graph_buf(content)
+function L.create_git_graph_buf(content, bufname)
+  -- Check if buffer with this name already exists
+  local existing = vim.fn.bufnr(bufname)
+  if existing ~= -1 then
+    local win = vim.fn.bufwinid(existing)
+    if win ~= -1 then
+      vim.api.nvim_set_current_win(win)
+      return
+    end
+  end
+
   -- Create new buffer
   local bufnr = vim.api.nvim_create_buf(false, true)
 
@@ -183,7 +195,7 @@ function L.create_git_graph_buf(content)
   vim.api.nvim_set_current_buf(bufnr)
 
   -- Set buffer name
-  vim.api.nvim_buf_set_name(bufnr, "git-graph://" .. vim.fn.getcwd())
+  vim.api.nvim_buf_set_name(bufnr, bufname)
 
   vim.opt_local.listchars = { trail = " ", tab = "  ", nbsp = "␣" }
 end
