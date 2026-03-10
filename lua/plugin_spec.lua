@@ -24,7 +24,7 @@ local spec = {
     lazy = false,
   },
   {
-    dir = "~/personal/nvim-web-devicons",
+    "nvim-tree/nvim-web-devicons",
     config = function()
       local devicons = require("nvim-web-devicons")
       devicons.setup({ blend = 0 })
@@ -46,7 +46,7 @@ local spec = {
       },
       dim = {}, -- Leave it on for fun. Usage :lua Snacks.dim.enable()
     },
-    event = "BufEnter",
+    -- event = "BufEnter",
   },
   { -- treesitter
     "nvim-treesitter/nvim-treesitter",
