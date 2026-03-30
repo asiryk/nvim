@@ -31,7 +31,7 @@ function F.init_autocmds()
       -- Only highlight in normal mode, not in visual
       local mode = vim.api.nvim_get_mode()["mode"]
       if mode == "no" then
-        vim.highlight.on_yank({
+        vim.hl.on_yank({
           higroup = "Visual",
           timeout = 75,
         })

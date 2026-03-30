@@ -50,16 +50,13 @@ local spec = {
   },
   { -- treesitter
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
     dependencies = {
       "nvim-treesitter/nvim-treesitter-context",
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
     config = function() require("plugins.treesitter") end,
-    build = function()
-      require("nvim-treesitter").setup()
-      require("plugins.treesitter")
-      vim.cmd("TSUpdate")
-    end,
+    build = ":TSUpdate",
     event = "BufEnter",
   },
   { -- lsp
@@ -125,7 +122,7 @@ local spec = {
   {
     "lewis6991/gitsigns.nvim",
     config = function() require("plugins.gitsigns") end,
-    tag = "v2.0.0",
+    tag = "v2.1.0",
     event = "BufEnter",
   },
   {

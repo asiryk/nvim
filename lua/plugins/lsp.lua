@@ -26,6 +26,14 @@ do
   end, { desc = "Toggle error virtual lines [LSP]" })
 end
 
+local function toggle_codelens_fn()
+  local open = false
+  return function ()
+    vim.lsp.codelens.enable(not open)
+    open = not open
+  end
+end
+
 local function format()
   require("conform").format({ async = true })
 end
@@ -59,7 +67,7 @@ local function on_attach(_, buffer)
   )
   set("n", "<Leader>lr", vim.lsp.buf.rename, "Rename variable [LSP]")
   set("n", "<Leader>la", vim.lsp.buf.code_action, "Show actions [LSP]")
-  set("n", "<Leader>lcr", vim.lsp.codelens.refresh, "Refresh codelens [LSP]")
+  set("n", "<Leader>lcr", toggle_codelens_fn(), "Refresh codelens [LSP]")
   set(
     "n",
     "<Leader>lh",
@@ -145,7 +153,7 @@ require("mason-tool-installer").setup({
   }, vim.tbl_keys(config)),
 })
 
-vim.lsp.set_log_level("off")
+vim.lsp.log.set_level("off")
 vim.lsp.enable(vim.tbl_keys(config))
 for server_name, server_config in pairs(config) do
   vim.lsp.config(server_name, vim.tbl_extend("force", default_config, server_config))
