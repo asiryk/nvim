@@ -4,6 +4,7 @@ require("keymaps")
 require("menu")
 vim.cmd.colorscheme("custom")
 require("plugin_spec")
+require("qfpersist")
 require("statusline")
 require("tabline")
 

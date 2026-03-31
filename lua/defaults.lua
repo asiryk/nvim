@@ -139,6 +139,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
   group = defaults_augroup,
   callback = function()
     vim.cmd("clearjumps")
+    vim.cmd("packadd nvim.undotree")
   end,
 })
 

@@ -163,7 +163,6 @@ local spec = {
     event = "FileType qf",
     opts = {},
   },
-  "mbbill/undotree",
   {
     "folke/flash.nvim",
     event = "VeryLazy",

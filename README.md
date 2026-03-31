@@ -40,3 +40,7 @@ fit into specified width
 - `zg` - add custom word to dictionary
 - `zug` - remove custom word from dictionary
 - `<C-^>` - Toggle between 2 recent buffers
+
+### Pasting in insert mode
+
+https://neovim.io/doc/user/insert/#i_CTRL-R

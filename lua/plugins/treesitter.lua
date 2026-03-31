@@ -33,6 +33,8 @@ require("nvim-treesitter").setup({
   },
 })
 
+-- require('nvim-treesitter').install { "css", "html", "java", "javascript", "jsdoc", "lua", "markdown", "markdown_inline", "regex", "rust", "tsx", "typescript", "vim", "vimdoc", "c", "go", "gomod", "gosum", "gotmpl", "gowork", "yaml", "toml", "json", "dockerfile", "bash", "sql", "scheme", "zig" }
+
 require("nvim-treesitter-textobjects").setup({
   select = { lookahead = true },
 })
