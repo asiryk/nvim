@@ -149,7 +149,7 @@ require("mason-tool-installer").setup({
   ensure_installed = vim.list_extend({
     "prettierd",
     "stylua",
-    "luacheck",
+    -- "luacheck",
   }, vim.tbl_keys(config)),
 })
 
@@ -159,14 +159,23 @@ for server_name, server_config in pairs(config) do
   vim.lsp.config(server_name, vim.tbl_extend("force", default_config, server_config))
 end
 
+local function biome_or_prettier(bufnr)
+  local found = vim.fs.find({ "biome.json", "biome.jsonc" }, {
+    upward = true,
+    path = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)),
+    stop = vim.uv.os_homedir(),
+  })
+  return #found > 0 and { "biome" } or { "prettierd" }
+end
+
 require("conform").setup({
   formatters_by_ft = {
     lua = { "stylua" },
-    javascript = { "prettierd" },
-    typescript = { "prettierd" },
-    typescriptreact = { "prettierd" },
-    javascriptreact = { "prettierd" },
-    json = { "prettierd" },
+    javascript = biome_or_prettier,
+    typescript = biome_or_prettier,
+    typescriptreact = biome_or_prettier,
+    javascriptreact = biome_or_prettier,
+    json = biome_or_prettier,
     xml = { "xmllint" },
   },
 })
