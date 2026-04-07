@@ -1,39 +1,18 @@
----@diagnostic disable: missing-fields
+local parsers = {
+  "css", "html", "java", "javascript", "jsdoc", "lua",
+  "markdown", "markdown_inline", "regex", "rust", "tsx", "typescript",
+  "vim", "vimdoc", "c", "go", "gomod", "gosum", "gotmpl", "gowork",
+  "yaml", "toml", "json", "dockerfile", "bash", "sql", "scheme", "zig",
+}
 
-require("nvim-treesitter").setup({
-  ensure_installed = {
-    "css",
-    "html",
-    "java",
-    "javascript",
-    "jsdoc",
-    "lua",
-    "markdown",
-    "markdown_inline",
-    "regex",
-    "rust",
-    "tsx",
-    "typescript",
-    "vim",
-    "vimdoc",
-    "c",
-    "go",
-    "gomod",
-    "gosum",
-    "gotmpl",
-    "gowork",
-    "yaml",
-    "toml",
-    "json",
-    "dockerfile",
-    "bash",
-    "sql",
-    "scheme",
-    "zig",
-  },
+require("nvim-treesitter").setup({ auto_install = true })
+require("nvim-treesitter").install(parsers)
+
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function(args)
+    pcall(vim.treesitter.start, args.buf)
+  end,
 })
-
--- require('nvim-treesitter').install { "css", "html", "java", "javascript", "jsdoc", "lua", "markdown", "markdown_inline", "regex", "rust", "tsx", "typescript", "vim", "vimdoc", "c", "go", "gomod", "gosum", "gotmpl", "gowork", "yaml", "toml", "json", "dockerfile", "bash", "sql", "scheme", "zig" }
 
 require("nvim-treesitter-textobjects").setup({
   select = { lookahead = true },
