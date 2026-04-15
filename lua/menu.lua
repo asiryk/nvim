@@ -17,7 +17,7 @@ vim.cmd([[
   anoremenu PopUp.Git\ Diff\ Open         <cmd>DiffviewOpen<CR>
   anoremenu PopUp.Git\ Diff\ Close        <cmd>DiffviewClose<CR>
   anoremenu PopUp.Git\ Diff\ Preset       <cmd>DiffPreset<CR>
-  anoremenu PopUp.Git\ Diff\ Hash         <cmd>lua require("plugins.fugitive").open_commit_diff_under_cursor()<CR>
+  anoremenu PopUp.Git\ Diff\ Hash         <cmd>lua require("plugins.git").open_commit_diff_under_cursor()<CR>
   anoremenu PopUp.Git\ Revert\ Commit     <cmd>lua PopUpMenu.revert_commit_under_cursor()<CR>
   anoremenu PopUp.Git\ Copy\ Hash         "+yiw
   amenu PopUp.-2-                         <NOP>
@@ -70,7 +70,7 @@ vim.api.nvim_create_autocmd("MenuPopup", {
       vim.cmd([[amenu disable PopUp.Git\ Diff\ Preset]])
 
       if is_git_buf then
-        if require("plugins.diffview").is_diffview_open() then
+        if require("plugins.git").is_diffview_open() then
           vim.cmd([[amenu enable PopUp.Git\ Diff\ Close]])
           any_git_menu = true
         else

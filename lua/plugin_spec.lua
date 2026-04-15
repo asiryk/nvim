@@ -127,12 +127,15 @@ local spec = {
   },
   {
     "tpope/vim-fugitive",
-    config = function() require("plugins.fugitive") end,
+    config = function() require("plugins.git").setup_shared() end,
     event = "BufEnter",
   },
   {
     "sindrets/diffview.nvim",
-    config = function() require("plugins.diffview") end,
+    config = function()
+      require("diffview").setup({ file_panel = { listing_style = "list" } })
+      require("plugins.git").setup_shared()
+    end,
   },
   { "j-hui/fidget.nvim", opts = {} },
   {
