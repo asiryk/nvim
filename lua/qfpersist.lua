@@ -74,7 +74,7 @@ local function delete(name)
   vim.notify("Deleted quickfix list: " .. name)
 end
 
-local function complete_saved(_, cmdline, _)
+local function complete_saved()
   return list_saved()
 end
 
