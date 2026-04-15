@@ -2,7 +2,6 @@
 
 vim.o.mouse = "a" -- Enable mouse support
 vim.o.mousemodel = "popup_setpos" -- Disable mouse context menu
-vim.o.cursorline = false -- Don't highlight current line
 vim.o.number = true -- Show line numbers
 vim.o.relativenumber = true -- Show line number starting at cursor position
 vim.o.signcolumn = "yes" -- Show sign column always, even without lsp or gitsigns
@@ -65,8 +64,7 @@ end
 
 
 vim.keymap.set("n", "'", function() -- center after mark
-  local c = vim.fn.getchar()
-  c = vim.fn.nr2char(c)
+  local c = vim.fn.getcharstr()
   if not is_mark_set(c) then
     vim.notify("E20: Mark not set", vim.log.levels.ERROR)
     return
@@ -76,8 +74,7 @@ vim.keymap.set("n", "'", function() -- center after mark
 end, { noremap = true, silent = true })
 
 vim.keymap.set("n", "`", function() -- center after mark
-  local c = vim.fn.getchar()
-  c = vim.fn.nr2char(c)
+  local c = vim.fn.getcharstr()
   if not is_mark_set(c) then
     vim.notify("E20: Mark not set", vim.log.levels.ERROR)
     return
@@ -154,11 +151,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 
 -- Disable some default plugins
 local default_plugins = {
-  -- "2html_plugin",
-  "getscript",
-  "getscriptPlugin",
   "gzip",
-  "logipat",
   "netrw",
   "netrwPlugin",
   "netrwSettings",
@@ -166,10 +159,7 @@ local default_plugins = {
   "matchit",
   "tar",
   "tarPlugin",
-  "rrhelper",
   "spellfile_plugin",
-  "vimball",
-  "vimballPlugin",
   "zip",
   "zipPlugin",
   "python3_provider",
@@ -179,12 +169,6 @@ local default_plugins = {
   "perl_provider",
   "tutor",
   "rplugin",
-  "syntax",
-  "synmenu",
-  "optwin",
-  "compiler",
-  "bugreport",
-  -- "ftplugin",
 }
 
 for _, plugin in pairs(default_plugins) do
