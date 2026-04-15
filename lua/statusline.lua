@@ -1,3 +1,21 @@
+local mode_labels = {
+  n = "NORMAL", no = "PENDING", nov = "PENDING", noV = "PENDING", ["no\22"] = "PENDING",
+  niI = "NORMAL", niR = "NORMAL", niV = "NORMAL", nt = "NORMAL", ntT = "NORMAL",
+  v = "VISUAL", vs = "VISUAL", V = "V-LINE", Vs = "V-LINE",
+  ["\22"] = "V-BLOCK", ["\22s"] = "V-BLOCK",
+  s = "SELECT", S = "SELECT", ["\19"] = "SELECT",
+  i = "INSERT", ic = "INSERT", ix = "INSERT",
+  R = "REPLACE", Rc = "REPLACE", Rx = "REPLACE", Rv = "REPLACE", Rvc = "REPLACE", Rvx = "REPLACE",
+  c = "COMMAND", cv = "COMMAND",
+  r = "PROMPT", rm = "MORE", ["r?"] = "CONFIRM",
+  ["!"] = "SHELL", t = "TERMINAL",
+}
+
+_G.Statusline_mode = function()
+  local label = mode_labels[vim.fn.mode(1)] or "?"
+  return string.format(" %8s ", label)
+end
+
 _G.Statusline_git_branch = function()
   -- Prefer Gitsigns (fast, buffer-scoped), fall back to Fugitive
   local head
@@ -37,9 +55,12 @@ local function redraw_status()
 end
 
 vim.o.statusline = table.concat({
+  "%{v:lua.Statusline_mode()}",
   "%F%{v:lua.Statusline_flags()}%{v:lua.Statusline_git_branch()}  %=",
   "%-14.(%l,%c%V%) %P"
 })
+
+vim.api.nvim_create_autocmd("ModeChanged", { callback = redraw_status })
 
 -- Gitsigns fires this whenever its status_dict (incl. branch) changes
 vim.api.nvim_create_autocmd("User", {
