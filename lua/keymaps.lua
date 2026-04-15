@@ -40,7 +40,9 @@ vim.api.nvim_create_user_command(
 )
 
 vim.keymap.set("v", "<leader>y", '"+y', { desc = "Yank into system clipboard [User]" })
+vim.keymap.set("v", "<leader>н", '"+y', { desc = "Yank into system clipboard uk [User]" })
 vim.keymap.set("n", "<leader>p", '"+p', { desc = "Paste from system clipboard [User]" })
+vim.keymap.set("n", "<leader>з", '"+p', { desc = "Paste from system clipboard uk [User]" })
 
 vim.keymap.set("n", "<leader>xf", "<cmd>source %<CR>", { desc = "Execute lua file [User]" })
 vim.keymap.set("n", "<leader>xx", ":.lua<CR>", { desc = "Execute current lua line [User]" })
