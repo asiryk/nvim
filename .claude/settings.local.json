@@ -8,7 +8,8 @@
       "Bash(jq -r .[].name)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(curl:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(nvim:*)"
     ]
   }
 }
