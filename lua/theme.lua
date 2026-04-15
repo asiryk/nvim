@@ -12,6 +12,14 @@ local palettes = {
   vague = require("palette.vague"),
 }
 
+--- Which palette *shape* a highlight spec uses in highlights.lua.
+--- onelight uses onedark's spec shape but onelight's color values.
+local spec_shape = {
+  vague = "vague",
+  onedark = "onedark",
+  onelight = "onedark",
+}
+
 local F = {}
 local S = (function()
   if not G.theme then G.theme = {
@@ -42,6 +50,36 @@ function F.init_autocmds()
   S.autocmds_loaded = true
 end
 
+--- Resolve a spec against a palette: string values matching a palette key
+--- become the palette color; everything else ("none", "#aabbcc", booleans,
+--- links, numbers) passes through unchanged.
+---@param spec table
+---@param palette table
+---@return table
+local function resolve(spec, palette)
+  local out = {}
+  for k, v in pairs(spec) do
+    if type(v) == "string" and palette[v] then
+      out[k] = palette[v]
+    else
+      out[k] = v
+    end
+  end
+  return out
+end
+
+--- Fail loudly if any group in highlights.lua has only one palette half.
+---@param highlights table
+local function assert_no_drift(highlights)
+  for group, spec in pairs(highlights) do
+    if spec.vague or spec.onedark then
+      assert(spec.vague and spec.onedark,
+        ("highlights.lua: %s is missing a palette variant (have %s)"):format(
+          group, spec.vague and "vague" or "onedark"))
+    end
+  end
+end
+
 function F.apply_highlight(highlight)
   for group, hl in pairs(highlight) do
     vim.api.nvim_set_hl(0, group, hl)
@@ -49,15 +87,27 @@ function F.apply_highlight(highlight)
 end
 
 function F.apply_theme()
-  local name = colorscheme[vim.o.background]
-  local highlights = palettes[name].build_highlights()
+  vim.cmd("hi clear")
 
-  for _, highlight in pairs(highlights) do
-    F.apply_highlight(highlight)
+  local name = colorscheme[vim.o.background]
+  local shape = spec_shape[name]
+  local palette = palettes[name].get_palette()
+
+  -- Invalidate require cache so edits to highlights.lua land on next
+  -- apply without needing an nvim restart.
+  package.loaded["highlights"] = nil
+  local highlights = require("highlights")
+
+  assert_no_drift(highlights)
+
+  for group, spec in pairs(highlights) do
+    ---@type any
+    local variant = spec
+    if spec.vague or spec.onedark then variant = spec[shape] end
+    vim.api.nvim_set_hl(0, group, resolve(variant, palette))
   end
 
   for _, added_palettes in pairs(S.added_highlights) do
-    local palette = palettes[name].get_palette()
     local added_hl = added_palettes[name](palette)
     F.apply_highlight(added_hl)
   end

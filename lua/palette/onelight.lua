@@ -1,7 +1,5 @@
-local F = {}
-
 ---@type OneDarkPalette
-F.palette = {
+local palette = {
   black = "#101012",
   bg0 = "#fafafa",
   bg1 = "#f0f0f0",
@@ -31,14 +29,7 @@ F.palette = {
   diff_text = "#cad3e0",
 }
 
-function F.get_palette() return F.palette end
-
----@return table<string, vim.api.keyset.highlight>
-function F.build_highlights()
-  return require("palette.onedark").build_themed_highlights(F.palette)
-end
-
 return {
-  get_palette = F.get_palette,
-  build_highlights = F.build_highlights,
+  ---@return OneDarkPalette
+  get_palette = function() return palette end,
 }
