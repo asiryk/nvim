@@ -7,6 +7,7 @@ require("plugin_spec")
 require("qfpersist")
 require("statusline")
 require("tabline")
+require("claudecode")
 
 local function create_scratch_buf()
   local buf = vim.api.nvim_create_buf(true, true)

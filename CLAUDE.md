@@ -10,7 +10,7 @@ Personal Neovim configuration targeting Neovim 0.12+. All configuration is in Lu
 
 ## Architecture
 
-**Entry point:** `init.lua` loads modules in this order: `custom` (globals/utils) -> `defaults` (vim options/autocmds) -> `keymaps` -> `menu` (right-click popup) -> colorscheme -> `plugin_spec` (lazy.nvim) -> `qfpersist` -> `statusline` -> `tabline`.
+**Entry point:** `init.lua` loads modules in this order: `custom` (globals/utils) -> `defaults` (vim options/autocmds) -> `keymaps` -> `menu` (right-click popup) -> colorscheme -> `plugin_spec` (lazy.nvim) -> `qfpersist` -> `statusline` -> `tabline` -> `claudecode`.
 
 **Global state:** `G` (global table with `utils` and `log`), `L` (language-specific storage), `PopUpMenu` (right-click menu functions). These are set in `lua/custom.lua` and available everywhere.
 
@@ -34,6 +34,7 @@ Personal Neovim configuration targeting Neovim 0.12+. All configuration is in Lu
 
 **Custom features:**
 - `qfpersist` (`lua/qfpersist.lua`): Save/load/delete quickfix lists to disk as JSON. Commands: `QFSave`, `QFLoad`, `QFDelete`.
+- `claudecode` (`lua/claudecode.lua`): Claude Code terminal integration. Commands `ClaudeCode` (runs `claude`) and `ClaudeCodeResume` (runs `claude --resume`). A single session is identified by the buffer-local flag `b:claude_code = true`. Behavior: if the buffer exists with a live job, focus its tab (creating a new leftmost tab if it's hidden); if the buffer exists but the job has died, wipe it and spawn fresh; `ClaudeCodeResume` falls back to focusing the existing session with a warning. New tabs are moved leftmost via `tabmove 0`; the terminal buffer is renamed to `claude code` so the existing tabline (`lua/tabline.lua`) renders `[claude code]` via its non-file-buffer fallback — no tabline special case.
 - Autosave on `TextChanged`/`InsertLeave` for real files.
 - Trailing whitespace auto-removal on save (except markdown).
 - Right-click context menu with git operations (blame, diff, hunk preview, revert).
