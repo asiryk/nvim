@@ -19,6 +19,7 @@ end
 local function exec_ts_query(bufnr, query_str, lang)
   local ts = vim.treesitter
   local parser = ts.get_parser(bufnr, lang)
+  ---@cast parser -nil
   local tree = parser:parse()[1]
   local query = ts.query.parse(lang, query_str)
 

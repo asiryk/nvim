@@ -1,5 +1,5 @@
 {
   "runtime": { "version": "LuaJIT" },
-  "diagnostics": { "globals": ["vim"] },
+  "diagnostics": { "globals": ["vim", "G", "L", "PopUpMenu"] },
   "workspace": { "checkThirdParty": false }
 }
