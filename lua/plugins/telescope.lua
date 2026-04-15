@@ -53,10 +53,16 @@ local options = {
     selection_caret = "  ",
     file_ignore_patterns = ignore_files,
   },
+  extensions = {
+    ["ui-select"] = {
+      themes.get_dropdown({ winblend = vim.o.pumblend }),
+    },
+  },
 }
 
 telescope.setup(options)
 telescope.load_extension("fzf")
+telescope.load_extension("ui-select")
 
 ---
 --- pickers

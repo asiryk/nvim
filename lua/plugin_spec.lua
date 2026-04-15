@@ -45,6 +45,10 @@ local spec = {
         animate = { enabled = false },
       },
       dim = {}, -- Leave it on for fun. Usage :lua Snacks.dim.enable()
+      input = {
+        enabled = true,
+        win = { wo = { winblend = vim.o.pumblend } },
+      },
     },
     -- event = "BufEnter",
   },
@@ -104,12 +108,13 @@ local spec = {
   { -- telescope
     "nvim-telescope/telescope.nvim",
     config = function() require("plugins.telescope") end,
-    keys = { "<Leader>f" },
+    event = "VeryLazy",
     dependencies = {
       {
         "nvim-telescope/telescope-fzf-native.nvim",
         build = "make",
       },
+      "nvim-telescope/telescope-ui-select.nvim",
     },
   },
   -- misc
@@ -140,16 +145,6 @@ local spec = {
     build = ":EmmetInstall",
   },
   { "j-hui/fidget.nvim", opts = {} },
-  {
-    "stevearc/dressing.nvim",
-    opts = {
-      input = {
-        win_options = {
-          winblend = vim.o.pumblend,
-        },
-      },
-    },
-  },
   {
     "kevinhwang91/nvim-ufo",
     dependencies = {
