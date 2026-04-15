@@ -347,6 +347,7 @@ function F.build_highlights()
     LspReferenceText = { bg = c.comment },
     LspReferenceWrite = { bg = c.comment },
     LspReferenceRead = { bg = c.comment },
+    LspReferenceTarget = { bg = c.search },
 
     LspCodeLens = F.extend({ fg = c.comment }, code_style.comments),
     LspCodeLensSeparator = { fg = c.comment },

@@ -305,6 +305,7 @@ function F.build_themed_highlights(theme)
     LspReferenceText = { bg = c.bg2 },
     LspReferenceWrite = { bg = c.bg2 },
     LspReferenceRead = { bg = c.bg2 },
+    LspReferenceTarget = { bg = c.diff_text },
 
     LspCodeLens = F.extend({ fg = c.grey }, code_style.comments),
     LspCodeLensSeparator = { fg = c.grey },
