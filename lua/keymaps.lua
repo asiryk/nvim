@@ -13,8 +13,6 @@ vim.keymap.set("i", "<M-BS>", "<Esc>ciw", { desc = "Delete whole word [User]" })
 vim.keymap.set("n", "<leader>tc", "<cmd>tabnew<CR>", { desc = "Create new tab [User]" })
 vim.keymap.set("n", "<leader>tq", "<cmd>tabclose<CR>", { desc = "Close current tab [User]" })
 vim.keymap.set("n", "<leader>taq", "<cmd>tabo<CR>", { desc = "Close all other tabs [User]" })
-vim.keymap.set("n", "<leader>tn", "<cmd>tabnext<CR>", { desc = "Switch to the next tab [User]" })
-vim.keymap.set("n", "<leader>tp", "<cmd>tabprev<CR>", { desc = "Switch to the previous tab [User]" })
 
 -- Quickfix list
 do
@@ -22,8 +20,6 @@ do
   vim.keymap.set("n", "<M-q>", "<cmd>cclose<CR>", { desc = "Quickfix list close [User]" })
   vim.keymap.set("n", "<M-j>", "<cmd>cnext<CR>zz", { desc = "Quickfix list next item [User]" })
   vim.keymap.set("n", "<M-k>", "<cmd>cprev<CR>zz", { desc = "Quickfix list prev item [User]" })
-  -- vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz", { desc = "Open quickfix list [User]" })
-  -- vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz", { desc = "Open quickfix list [User]" })
   vim.api.nvim_create_autocmd("FileType", {
     pattern = "qf",
     group = keymaps_augroup,
