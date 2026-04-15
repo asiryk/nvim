@@ -118,6 +118,15 @@ vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
   end,
 })
 
+vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGained" }, {
+  desc = "Reload buffers changed on disk (e.g. by Claude Code)",
+  group = defaults_augroup,
+  pattern = "*",
+  callback = function()
+    if vim.fn.mode() ~= "c" then vim.cmd("silent! checktime") end
+  end,
+})
+
 vim.api.nvim_create_autocmd("BufWritePre", {
   desc = "Remove trailing whitespace on pressing :w",
   group = defaults_augroup,
