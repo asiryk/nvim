@@ -24,6 +24,10 @@
 ---@field search string
 ---@field plus string
 ---@field delta string
+---@field diff_add string
+---@field diff_change string
+---@field diff_delete string
+---@field diff_text string
 
 ---@type VaguePalette
 local palette = {
@@ -50,6 +54,12 @@ local palette = {
   search = "#405065",
   plus = "#7fa563",
   delta = "#6e94b2",
+  -- Diff* backgrounds pre-blended with `bg` so the syntax fg stays
+  -- readable. See the blend() reference at the bottom of the file.
+  diff_add    = "#293125",  -- blend(plus,  bg, 0.2)
+  diff_change = "#262E34",  -- blend(delta, bg, 0.2)
+  diff_delete = "#3B242A",  -- blend(error, bg, 0.2)
+  diff_text   = "#384754",  -- blend(delta, bg, 0.4)
 }
 
 return {

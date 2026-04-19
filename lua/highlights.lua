@@ -19,6 +19,7 @@
 ---| "builtin" | "func" | "string" | "number" | "property" | "constant"
 ---| "parameter" | "visual" | "error" | "warning" | "hint" | "operator"
 ---| "keyword" | "type" | "search" | "plus" | "delta"
+---| "diff_add" | "diff_change" | "diff_delete" | "diff_text"
 --
 --@alias OneDarkColor
 ---| "black" | "bg0" | "bg1" | "bg2" | "bg3" | "bg_d" | "bg_hl"
@@ -231,11 +232,6 @@ return {
   },
 
   -- ───────────────────────── Diff / VCS ──────────────────────────
-  -- vague Diff* backgrounds are pre-blended:
-  --   DiffAdd    = blend(plus,  bg, 0.2) = #293125
-  --   DiffChange = blend(delta, bg, 0.2) = #262E34
-  --   DiffDelete = blend(error, bg, 0.2) = #3B242A
-  --   DiffText   = blend(delta, bg, 0.4) = #384754
 
   Added = {
     vague   = { fg = "plus" },   sonokai_shusia = { fg = "green" },
@@ -246,7 +242,7 @@ return {
     onedark = { fg = "blue" },   grey           = { fg = "blue" },
   },
   DiffAdd = {
-    vague   = { bg = "#293125" },                   sonokai_shusia = { fg = "none", bg = "bg_green" },
+    vague   = { bg = "diff_add" },                  sonokai_shusia = { fg = "none", bg = "bg_green" },
     onedark = { fg = "none", bg = "diff_add" },     grey           = { bg = "light_green" },
   },
   DiffAdded = {
@@ -254,7 +250,7 @@ return {
     onedark = { fg = "green" },  grey           = { fg = "green" },
   },
   DiffChange = {
-    vague   = { bg = "#262E34" },                    sonokai_shusia = { fg = "none", bg = "bg_blue" },
+    vague   = { bg = "diff_change" },                sonokai_shusia = { fg = "none", bg = "bg_blue" },
     onedark = { fg = "none", bg = "diff_change" },   grey           = { bg = "light_blue" },
   },
   DiffChanged = {
@@ -262,7 +258,7 @@ return {
     onedark = { fg = "blue" },   grey           = { fg = "blue" },
   },
   DiffDelete = {
-    vague   = { bg = "#3B242A" },                    sonokai_shusia = { fg = "none", bg = "bg_red" },
+    vague   = { bg = "diff_delete" },                sonokai_shusia = { fg = "none", bg = "bg_red" },
     onedark = { fg = "none", bg = "diff_delete" },   grey           = { fg = "red" },
   },
   DiffDeleted = {
@@ -282,7 +278,7 @@ return {
     onedark = { fg = "red" },    grey           = { fg = "red" },
   },
   DiffText = {
-    vague   = { bg = "#384754" },                  sonokai_shusia = { fg = "none", bg = "diff_text" },
+    vague   = { bg = "diff_text" },                sonokai_shusia = { fg = "none", bg = "diff_text" },
     onedark = { fg = "none", bg = "diff_text" },   grey           = { bg = "diff_text" },
   },
   Removed = {
