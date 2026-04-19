@@ -28,38 +28,3 @@ set_keymap("<C-h>", select_file(1), "File 1 [Harpoon]")
 set_keymap("<C-j>", select_file(2), "File 2 [Harpoon]")
 set_keymap("<C-k>", select_file(3), "File 3 [Harpoon]")
 set_keymap("<C-l>", select_file(4), "File 4 [Harpoon]")
-
-require("theme").add_highlights(function()
-  -- It currently doesn't work in v2 harpoon
-  return "harpoon",
-    {
-      ---@param c VaguePalette
-      vague = function(c)
-        return {
-          HarpoonBorder = { fg = c.error },
-          HarpoonWindow = { fg = c.fg },
-        }
-      end,
-      ---@param c OneDarkPalette
-      onedark = function(c)
-        return {
-          HarpoonBorder = { fg = c.cyan },
-          HarpoonWindow = { fg = c.fg },
-        }
-      end,
-      ---@param c SonokaiShusiaPalette
-      sonokai_shusia = function(c)
-        return {
-          HarpoonBorder = { fg = c.red },
-          HarpoonWindow = { fg = c.fg },
-        }
-      end,
-      ---@param c GreyPalette
-      grey = function(c)
-        return {
-          HarpoonBorder = { fg = c.border },
-          HarpoonWindow = { fg = c.black },
-        }
-      end,
-    }
-end)

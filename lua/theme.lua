@@ -4,7 +4,7 @@
 ---@see GreyPalette
 
 local colorscheme = {
-  light = "onelight",
+  light = "grey",
   dark = "vague",
 }
 
@@ -28,9 +28,7 @@ local spec_shape = {
 
 local F = {}
 local S = (function()
-  if not G.theme then G.theme = {
-    added_highlights = {},
-  } end
+  if not G.theme then G.theme = {} end
   return G.theme
 end)()
 
@@ -74,27 +72,34 @@ local function resolve(spec, palette)
   return out
 end
 
---- Fail loudly if any group in highlights.lua is missing a palette variant.
----@param highlights table
-local function assert_no_drift(highlights)
-  local required = { "vague", "onedark", "sonokai_shusia", "grey" }
-  for group, spec in pairs(highlights) do
+local required_palettes = { "vague", "onedark", "sonokai_shusia", "grey" }
+
+--- Fail loudly if any group has some but not all required palette variants.
+---@param tbl table
+---@param source string
+local function assert_no_drift(tbl, source)
+  for group, spec in pairs(tbl) do
     local has_any = false
-    for _, key in ipairs(required) do
+    for _, key in ipairs(required_palettes) do
       if spec[key] then has_any = true; break end
     end
     if has_any then
-      for _, key in ipairs(required) do
+      for _, key in ipairs(required_palettes) do
         assert(spec[key],
-          ("highlights.lua: %s is missing palette variant %q"):format(group, key))
+          ("%s: %s is missing palette variant %q"):format(source, group, key))
       end
     end
   end
 end
 
-function F.apply_highlight(highlight)
-  for group, hl in pairs(highlight) do
-    vim.api.nvim_set_hl(0, group, hl)
+local function apply_table(tbl, shape, palette)
+  for group, spec in pairs(tbl) do
+    ---@type any
+    local variant = spec
+    if spec.vague or spec.onedark or spec.sonokai_shusia or spec.grey then
+      variant = spec[shape]
+    end
+    vim.api.nvim_set_hl(0, group, resolve(variant, palette))
   end
 end
 
@@ -105,48 +110,19 @@ function F.apply_theme()
   local shape = spec_shape[name]
   local palette = palettes[name].get_palette()
 
-  -- Invalidate require cache so edits to highlights.lua land on next
-  -- apply without needing an nvim restart.
+  -- Invalidate require caches so edits land without an nvim restart.
   package.loaded["highlights"] = nil
+  package.loaded["plugin_highlights"] = nil
   local highlights = require("highlights")
+  local plugin_highlights = require("plugin_highlights")
 
-  assert_no_drift(highlights)
+  assert_no_drift(highlights, "highlights.lua")
+  assert_no_drift(plugin_highlights, "plugin_highlights.lua")
 
-  for group, spec in pairs(highlights) do
-    ---@type any
-    local variant = spec
-    if spec.vague or spec.onedark or spec.sonokai_shusia or spec.grey then variant = spec[shape] end
-    vim.api.nvim_set_hl(0, group, resolve(variant, palette))
-  end
+  apply_table(highlights, shape, palette)
+  apply_table(plugin_highlights, shape, palette)
 
-  for _, added_palettes in pairs(S.added_highlights) do
-    local added_hl = added_palettes[name](palette)
-    F.apply_highlight(added_hl)
-  end
   vim.g.colors_name = "custom"
-end
-
----@class AddedHighlights
----@field vague fun(palette: VaguePalette): table<string, vim.api.keyset.highlight>
----@field onedark fun(palette: OneDarkPalette): table<string, vim.api.keyset.highlight>
----@field sonokai_shusia fun(palette: SonokaiShusiaPalette): table<string, vim.api.keyset.highlight>
----@field grey fun(palette: GreyPalette): table<string, vim.api.keyset.highlight>
-
---- Add custom highlights and apply them immediately
----@param fn fun(): (string, AddedHighlights)
-function F.add_highlights(fn)
-  local scope, highlights = fn()
-
-  --- onelight uses onedark palette, no need to define them both on user side
-  ---@diagnostic disable-next-line
-  highlights.onelight = highlights.onedark
-
-  S.added_highlights[scope] = highlights
-
-  local name = colorscheme[vim.o.background]
-  local palette = palettes[name].get_palette()
-  local hl_groups = highlights[name](palette)
-  F.apply_highlight(hl_groups)
 end
 
 function F.setup()
@@ -168,5 +144,4 @@ end
 return {
   setup = F.once(F.setup),
   apply_theme = F.apply_theme,
-  add_highlights = F.add_highlights,
 }

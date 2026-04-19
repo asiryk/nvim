@@ -310,27 +310,6 @@ function F.setup_shared()
     end,
   })
 
-  -- Diffview highlights — registered via theme.add_highlights so they
-  -- survive theme switches (apply_theme clears highlights first, then
-  -- re-applies registered ones).
-  local dv_hl = {
-    DiffviewFilePanelRootPath = { link = "Keyword" },
-    DiffviewFilePanelCounter  = { link = "Removed" },
-    DiffviewFilePanelTitle    = { link = "Keyword" },
-    DiffviewFilePanelFileName = { link = "Normal" },
-    DiffviewFilePanelSelected = { link = "Question" },
-    DiffviewFilePanelPath     = { link = "LineNr" },
-    DiffviewSecondary         = { link = "String" },
-  }
-
-  require("theme").add_highlights(function()
-    return "diffview", {
-      vague = function() return dv_hl end,
-      onedark = function() return dv_hl end,
-      sonokai_shusia = function() return dv_hl end,
-      grey = function() return dv_hl end,
-    }
-  end)
 end
 
 return F

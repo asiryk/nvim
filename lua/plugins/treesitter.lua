@@ -43,35 +43,3 @@ vim.api.nvim_create_autocmd("FileType", {
 require("treesitter-context").setup({
   max_lines = 10,
 })
-
-require("theme").add_highlights(function()
-  return "treesitter-context",
-    {
-      ---@param c VaguePalette
-      vague = function(c) return {
-          TreesitterContext = { bg = c.bg },
-          TreesitterContextBottom = { bg = c.bg, sp = c.fg, underline = true },
-      } end,
-      ---@param c OneDarkPalette
-      onedark = function(c)
-        return {
-          TreesitterContext = { bg = c.bg0 },
-          TreesitterContextBottom = { bg = c.bg0, sp = c.fg, underline = true },
-        }
-      end,
-      ---@param c SonokaiShusiaPalette
-      sonokai_shusia = function(c)
-        return {
-          TreesitterContext = { bg = c.bg_dim },
-          TreesitterContextBottom = { bg = c.bg_dim, sp = c.fg, underline = true },
-        }
-      end,
-      ---@param c GreyPalette
-      grey = function(c)
-        return {
-          TreesitterContext = { bg = c.grey_bg_light },
-          TreesitterContextBottom = { bg = c.grey_bg_light, sp = c.black, underline = true },
-        }
-      end,
-    }
-end)

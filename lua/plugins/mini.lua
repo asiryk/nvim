@@ -89,44 +89,6 @@ do -- mini files
     end,
     desc = "Set buffer keymaps [Mini.files]",
   })
-
-  require("theme").add_highlights(function()
-    return "mini-files",
-      {
-        ---@param c VaguePalette
-        vague = function(c)
-          return {
-            MiniFilesBorder = { fg = c.floatBorder },
-            MiniFilesBorderModified = { fg = c.warning },
-            MiniFilesNormal = { fg = c.fg },
-          }
-        end,
-        ---@param c OneDarkPalette
-        onedark = function(c)
-          return {
-            MiniFilesBorder = { fg = c.cyan },
-            MiniFilesBorderModified = { fg = c.yellow },
-            MiniFilesNormal = { fg = c.fg },
-          }
-        end,
-        ---@param c SonokaiShusiaPalette
-        sonokai_shusia = function(c)
-          return {
-            MiniFilesBorder = { fg = c.blue },
-            MiniFilesBorderModified = { fg = c.yellow },
-            MiniFilesNormal = { fg = c.fg },
-          }
-        end,
-        ---@param c GreyPalette
-        grey = function(c)
-          return {
-            MiniFilesBorder = { fg = c.border },
-            MiniFilesBorderModified = { fg = c.dark_yellow },
-            MiniFilesNormal = { fg = c.black },
-          }
-        end,
-      }
-  end)
 end
 
 do
@@ -184,42 +146,6 @@ do
 
   vim.api.nvim_set_hl(0, "MiniCursorword", { link = "CursorColumn" })
   vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", {})
-
-  require("theme").add_highlights(function()
-    -- Need to update the MiniCursorword when colorscheme changes
-    -- because it doesn't get updated automatically for some reason
-    return "mini-cursorword",
-      {
-        ---@param c VaguePalette
-        vague = function(c)
-          return {
-            MiniCursorword = { bg = c.line },
-            MiniCursorwordCurrent = {},
-          }
-        end,
-        ---@param c OneDarkPalette
-        onedark = function(c)
-          return {
-            MiniCursorword = { bg = c.bg_hl },
-            MiniCursorwordCurrent = {},
-          }
-        end,
-        ---@param c SonokaiShusiaPalette
-        sonokai_shusia = function(c)
-          return {
-            MiniCursorword = { bg = c.bg1 },
-            MiniCursorwordCurrent = {},
-          }
-        end,
-        ---@param c GreyPalette
-        grey = function(c)
-          return {
-            MiniCursorword = { bg = c.highlight },
-            MiniCursorwordCurrent = {},
-          }
-        end,
-      }
-  end)
 end
 
 do
