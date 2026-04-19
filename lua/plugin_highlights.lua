@@ -59,15 +59,9 @@ local M = {
     grey           = { fg = "black" },
   },
 
-  -- ────────────────────── Mini.cursorword ────────────────────
-
-  MiniCursorword = {
-    vague          = { bg = "line" },
-    onedark        = { bg = "bg_hl" },
-    sonokai_shusia = { bg = "bg1" },
-    grey           = { bg = "highlight" },
-  },
-  MiniCursorwordCurrent = {},
+  -- Mini.cursorword highlights live in lua/plugins/mini.lua — mini's setup
+  -- uses `default = true` to re-link MiniCursorwordCurrent on every
+  -- ColorScheme, so the overrides must run post-setup to stick.
 
   -- ───────────────────────── Telescope ───────────────────────
 
@@ -131,6 +125,24 @@ local M = {
     onedark        = { link = "PmenuSel" },
     sonokai_shusia = { fg = "fg", bg = "bg_blue" },
     grey           = { link = "PmenuSel" },
+  },
+
+  -- ──────────────────────── Snacks.indent ────────────────────
+  -- Grey-only overrides; other palettes mirror Snacks' own defaults so the
+  -- drift assert stays happy (snacks links SnacksIndent → NonText and
+  -- SnacksIndent1 → DiagnosticInfo via `default = true`).
+
+  SnacksIndent = {
+    vague          = { link = "NonText" },
+    onedark        = { link = "NonText" },
+    sonokai_shusia = { link = "NonText" },
+    grey           = { fg = "border" },
+  },
+  SnacksIndent1 = {
+    vague          = { link = "DiagnosticInfo" },
+    onedark        = { link = "DiagnosticInfo" },
+    sonokai_shusia = { link = "DiagnosticInfo" },
+    grey           = { fg = "black" },
   },
 
   -- ────────────────────────── Diffview ───────────────────────

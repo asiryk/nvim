@@ -144,8 +144,22 @@ do
     delay = 25,
   })
 
-  vim.api.nvim_set_hl(0, "MiniCursorword", { link = "CursorColumn" })
-  vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", {})
+  -- mini.cursorword's setup links MiniCursorwordCurrent → MiniCursorword via
+  -- `default = true`, which applies at startup (and on every ColorScheme
+  -- autocmd) unless an explicit definition already exists. The base
+  -- definitions in plugin_highlights.lua run before mini.setup, so mini
+  -- still wins. Re-apply here and on each theme switch so the current word
+  -- stays unhighlighted (fg/bg transparent — diff backgrounds show through).
+  local function apply_mini_cursorword_overrides()
+    vim.api.nvim_set_hl(0, "MiniCursorword", { link = "CursorColumn" })
+    vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", {})
+  end
+  apply_mini_cursorword_overrides()
+  vim.api.nvim_create_autocmd("ColorScheme", {
+    group = vim.api.nvim_create_augroup("mini-cursorword-overrides", {}),
+    callback = apply_mini_cursorword_overrides,
+    desc = "Re-apply MiniCursorword overrides after mini's defaults",
+  })
 end
 
 do

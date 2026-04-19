@@ -36,7 +36,7 @@
 --
 --@alias GreyColor
 ---| "background" | "grey_bg_light" | "black" | "blue" | "light_blue" | "green"
----| "light_green" | "light_red" | "red" | "grey" | "light_grey" | "visual" | "diff_text"
+---| "light_green" | "light_red" | "red" | "grey" | "light_grey" | "diff_text"
 ---| "border" | "highlight" | "dark_yellow" | "yellow" | "light_yellow"
 ---| "orange" | "purple" | "white" | "cyan"
 
@@ -55,7 +55,7 @@ return {
   EndOfBuffer      = { vague = { fg = "comment", bg = "bg" },          onedark = { fg = "bg0", bg = "bg0" },                                 sonokai_shusia = { fg = "bg0", bg = "bg0" },                                 grey = { fg = "background", bg = "background" } },
   ErrorMsg         = { vague = { fg = "error", bold = true },          onedark = { fg = "red", bold = true },                                sonokai_shusia = { fg = "red", bold = true },                                grey = { fg = "red", bold = true } },
   FoldColumn       = { vague = { fg = "comment", bg = "bg" },          onedark = { fg = "fg", bg = "bg1" },                                  sonokai_shusia = { fg = "fg", bg = "bg1" },                                  grey = { fg = "grey" } },
-  Folded           = { vague = { fg = "comment", bg = "line" },        onedark = { fg = "fg", bg = "bg1" },                                  sonokai_shusia = { fg = "fg", bg = "bg1" },                                  grey = { fg = "grey" } },
+  Folded           = { vague = { fg = "comment", bg = "line" },        onedark = { fg = "fg", bg = "bg1" },                                  sonokai_shusia = { fg = "fg", bg = "bg1" },                                  grey = { fg = "grey", bg = "light_grey" } },
   LineNr           = { vague = { fg = "comment" },                     onedark = { fg = "grey" },                                            sonokai_shusia = { fg = "grey" },                                            grey = { fg = "grey" } },
   MoreMsg          = { vague = { fg = "func", bold = true },           onedark = { fg = "blue", bold = true },                               sonokai_shusia = { fg = "blue", bold = true },                               grey = { fg = "black" } },
   NonText          = { vague = { fg = "comment" },                     onedark = { fg = "grey" },                                            sonokai_shusia = { fg = "grey" },                                            grey = { fg = "grey" } },
@@ -67,8 +67,8 @@ return {
   Terminal         = { vague = { fg = "fg", bg = "bg" },               onedark = { fg = "fg", bg = "bg0" },                                  sonokai_shusia = { fg = "fg", bg = "bg0" },                                  grey = { fg = "black", bg = "background" } },
   ToolbarButton    = { vague = { fg = "bg", bg = "visual" },           onedark = { fg = "bg0", bg = "bg_blue" },                             sonokai_shusia = { fg = "bg0", bg = "bg_blue" },                             grey = { fg = "white", bg = "blue" } },
   ToolbarLine      = { vague = { fg = "fg" },                          onedark = { fg = "fg" },                                              sonokai_shusia = { fg = "fg" },                                              grey = { fg = "black" } },
-  Visual           = { vague = { bg = "visual" },                      onedark = { bg = "bg3" },                                             sonokai_shusia = { bg = "bg3" },                                             grey = { bg = "visual" } },
-  VisualNOS        = { vague = { bg = "comment", underline = true },   onedark = { fg = "none", bg = "bg2", underline = true },              sonokai_shusia = { fg = "none", bg = "bg2", underline = true },              grey = { bg = "visual", underline = true } },
+  Visual           = { vague = { bg = "visual" },                      onedark = { bg = "bg3" },                                             sonokai_shusia = { bg = "bg3" },                                             grey = { bg = "light_blue" } },
+  VisualNOS        = { vague = { bg = "comment", underline = true },   onedark = { fg = "none", bg = "bg2", underline = true },              sonokai_shusia = { fg = "none", bg = "bg2", underline = true },              grey = { bg = "light_blue", underline = true } },
   WarningMsg       = { vague = { fg = "warning", bold = true },        onedark = { fg = "yellow", bold = true },                             sonokai_shusia = { fg = "yellow", bold = true },                             grey = { fg = "dark_yellow", bold = true } },
   Whitespace       = { vague = { fg = "line" },                        onedark = { fg = "grey" },                                            sonokai_shusia = { fg = "grey" },                                            grey = { fg = "border" } },
   WinSeparator     = { vague = { fg = "floatBorder" },                 onedark = { fg = "bg3" },                                             sonokai_shusia = { fg = "bg3" },                                             grey = { fg = "border" } },
@@ -134,7 +134,10 @@ return {
   LspCodeLens          = { vague = { fg = "comment", italic = true },   onedark = { fg = "grey", italic = true },         sonokai_shusia = { fg = "grey", italic = true },         grey = { fg = "grey", italic = true } },
   LspCodeLensSeparator = { vague = { fg = "comment" },                  onedark = { fg = "grey" },                        sonokai_shusia = { fg = "grey" },                        grey = { fg = "grey" } },
   LspReferenceRead     = { vague = { bg = "comment" },                  onedark = { bg = "bg2" },                         sonokai_shusia = { bg = "bg2" },                         grey = { bg = "light_grey" } },
-  LspReferenceTarget   = { vague = { bg = "search" },                   onedark = { bg = "diff_text" },                   sonokai_shusia = { bg = "bg_purple" },                   grey = { bg = "visual" } },
+  -- Visible on the current symbol only. mini.cursorword's matchadd still
+  -- renders over LSP extmarks on *other* occurrences, so those keep the
+  -- cursorword color instead of LspReferenceTarget.
+  LspReferenceTarget   = { vague = { bg = "search" },                   onedark = { bg = "diff_text" },                   sonokai_shusia = { bg = "bg_purple" },                   grey = { bg = "highlight" } },
   LspReferenceText     = { vague = { bg = "comment" },                  onedark = { bg = "bg2" },                         sonokai_shusia = { bg = "bg2" },                         grey = { bg = "light_grey" } },
   LspReferenceWrite    = { vague = { bg = "comment" },                  onedark = { bg = "bg2" },                         sonokai_shusia = { bg = "bg2" },                         grey = { bg = "light_grey" } },
 

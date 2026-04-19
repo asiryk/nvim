@@ -13,7 +13,6 @@
 ---@field red string
 ---@field grey string
 ---@field light_grey string
----@field visual string
 ---@field border string
 ---@field highlight string
 ---@field dark_yellow string
@@ -38,9 +37,8 @@ local palette = {
   red = "#c4331d",
   grey = "#5e5e5e",
   light_grey = "#e6e6e6",
-  visual = "#d6d6d6",
   border = "#cccccc",
-  highlight = "#eeeeee",
+  highlight = "#dde7f5",
   dark_yellow = "#b37f02",
   yellow = "#f9db70",
   light_yellow = "#f9eab3",
