@@ -1,97 +1,290 @@
+-- stylua: ignore start
 -- original https://github.com/vague-theme/vague.nvim/tree/main
+--
+-- Palette role specs. Each role is a full highlight spec; highlights.lua
+-- references roles by name (e.g. `Keyword = "keyword"`) and theme.lua
+-- resolves them against this table.
 
----@class VaguePalette
----@field bg string
----@field inactiveBg string
----@field fg string
----@field floatBorder string
----@field line string
----@field comment string
----@field builtin string
----@field func string
----@field string string
----@field number string
----@field property string
----@field constant string
----@field parameter string
----@field visual string
----@field error string
----@field warning string
----@field hint string
----@field operator string
----@field keyword string
----@field type string
----@field search string
----@field plus string
----@field delta string
----@field diff_add string
----@field diff_change string
----@field diff_delete string
----@field diff_text string
-
----@type VaguePalette
-local palette = {
-  bg = "#141415",
-  inactiveBg = "#1c1c24",
-  fg = "#cdcdcd",
+local c = {
+  bg          = "#141415",
+  inactiveBg  = "#1c1c24",
+  fg          = "#cdcdcd",
   floatBorder = "#878787",
-  line = "#252530",
-  comment = "#606079",
-  builtin = "#b4d4cf",
-  func = "#c48282",
-  string = "#e8b589",
-  number = "#e0a363",
-  property = "#c3c3d5",
-  constant = "#aeaed1",
-  parameter = "#bb9dbd",
-  visual = "#333738",
-  error = "#d8647e",
-  warning = "#f3be7c",
-  hint = "#7e98e8",
-  operator = "#90a0b5",
-  keyword = "#6e94b2",
-  type = "#9bb4bc",
-  search = "#405065",
-  plus = "#7fa563",
-  delta = "#6e94b2",
-  -- Diff* backgrounds pre-blended with `bg` so the syntax fg stays
-  -- readable. See the blend() reference at the bottom of the file.
-  diff_add    = "#293125",  -- blend(plus,  bg, 0.2)
-  diff_change = "#262E34",  -- blend(delta, bg, 0.2)
-  diff_delete = "#3B242A",  -- blend(error, bg, 0.2)
-  diff_text   = "#384754",  -- blend(delta, bg, 0.4)
+  line        = "#252530",
+  comment     = "#606079",
+  builtin     = "#b4d4cf",
+  func        = "#c48282",
+  string_     = "#e8b589",
+  number      = "#e0a363",
+  property    = "#c3c3d5",
+  constant    = "#aeaed1",
+  parameter   = "#bb9dbd",
+  visual      = "#333738",
+  error_      = "#d8647e",
+  warning     = "#f3be7c",
+  hint        = "#7e98e8",
+  operator    = "#90a0b5",
+  keyword     = "#6e94b2",
+  type_       = "#9bb4bc",
+  search      = "#405065",
+  plus        = "#7fa563",
+  delta       = "#6e94b2",
+  -- Pre-blended with bg so the syntax fg stays readable (see blend() in git log).
+  diff_add_bg    = "#293125",  -- blend(plus,  bg, 0.2)
+  diff_change_bg = "#262E34",  -- blend(delta, bg, 0.2)
+  diff_delete_bg = "#3B242A",  -- blend(error, bg, 0.2)
+  diff_text_bg   = "#384754",  -- blend(delta, bg, 0.4)
 }
 
 return {
-  ---@return VaguePalette
-  get_palette = function() return palette end,
-}
+  -- ─── Base UI ───
+  color_column     = { bg = c.line },
+  conceal          = { fg = c.func },
+  cursor_line_nr   = { fg = c.fg },
+  debug            = { fg = c.constant },
+  directory        = { fg = c.hint },
+  end_of_buffer    = { fg = c.comment, bg = c.bg },
+  error_msg        = { fg = c.error_, bold = true },
+  fold_column      = { fg = c.comment, bg = c.bg },
+  folded           = { fg = c.comment, bg = c.line },
+  line_nr          = { fg = c.comment },
+  more_msg         = { fg = c.func, bold = true },
+  non_text         = { fg = c.comment },
+  normal           = { fg = c.fg, bg = c.bg },
+  question         = { fg = c.constant },
+  quickfix_line    = { fg = c.func, underline = true },
+  sign_column      = { fg = c.fg, bg = c.bg },
+  special_key      = { fg = c.comment },
+  toolbar_button   = { fg = c.bg, bg = c.visual },
+  toolbar_line     = { fg = c.fg },
+  visual           = { bg = c.visual },
+  visual_nos       = { bg = c.comment, underline = true },
+  warning_msg      = { fg = c.warning, bold = true },
+  whitespace       = { fg = c.line },
+  win_separator    = { fg = c.floatBorder },
+  debug_breakpoint = { fg = c.bg, bg = c.operator },
+  debug_pc         = { fg = c.bg, bg = c.fg },
 
--- Reference: the original blend() used to compute DiffAdd/Change/Delete/Text
--- backgrounds in highlights.lua. Kept commented so the formulas stay
--- rediscoverable if those literals ever need retuning.
---
--- local function color_to_rgb(color)
---   local function byte(value, offset) return bit.band(bit.rshift(value, offset), 0xFF) end
---
---   local new_color = vim.api.nvim_get_color_by_name(color)
---   if new_color == -1 then
---     new_color = vim.opt.background:get() == "dark" and 000 or 255255255
---   end
---
---   return { byte(new_color, 16), byte(new_color, 8), byte(new_color, 0) }
--- end
---
--- ---@param color string       Color to blend
--- ---@param base_color string  Base color to blend on
--- ---@param alpha number       Between 0 (base) and 1 (color)
--- ---@return string hex
--- local function blend(color, base_color, alpha)
---   local fg_rgb = color_to_rgb(color)
---   local bg_rgb = color_to_rgb(base_color)
---   local function blend_channel(i)
---     local ret = (alpha * fg_rgb[i] + ((1 - alpha) * bg_rgb[i]))
---     return math.floor(math.min(math.max(0, ret), 255) + 0.5)
---   end
---   return string.format("#%02X%02X%02X", blend_channel(1), blend_channel(2), blend_channel(3))
--- end
+  -- ─── Diagnostic ───
+  diag_error     = { fg = c.error_, bold = true },
+  diag_hint      = { fg = c.hint },
+  diag_info      = { fg = c.constant, italic = true },
+  diag_ok        = { fg = c.plus },
+  diag_warn      = { fg = c.warning, bold = true },
+  diag_ul_error  = { sp = c.error_, undercurl = true },
+  diag_ul_hint   = { sp = c.hint, undercurl = true },
+  diag_ul_info   = { sp = c.constant, undercurl = true },
+  diag_ul_ok     = { sp = c.plus, undercurl = true },
+  diag_ul_warn   = { sp = c.delta, undercurl = true },
+  diag_vt_error  = { fg = c.error_, bold = true },
+  diag_vt_hint   = { fg = c.hint },
+  diag_vt_info   = { fg = c.constant, italic = true },
+  diag_vt_ok     = { fg = c.plus },
+  diag_vt_warn   = { fg = c.warning, bold = true },
+
+  -- ─── Diff / VCS ───
+  added           = { fg = c.plus },
+  changed         = { fg = c.delta },
+  removed         = { fg = c.error_ },
+  diff_add        = { bg = c.diff_add_bg },
+  diff_change     = { bg = c.diff_change_bg },
+  diff_delete     = { bg = c.diff_delete_bg },
+  diff_text       = { bg = c.diff_text_bg },
+  diff_file       = { fg = c.keyword },
+  diff_index_line = { fg = c.comment },
+
+  -- ─── Float / Popup ───
+  float_border = { fg = c.floatBorder, bg = "none" },
+  normal_float = { fg = c.fg, bg = c.bg },
+  pmenu        = { fg = c.fg },
+  pmenu_sbar   = { bg = c.line },
+  pmenu_sel    = { fg = c.constant, bg = c.line },
+  pmenu_thumb  = { bg = c.comment },
+  wild_menu    = { fg = c.bg, bg = c.func },
+
+  -- ─── LSP ───
+  lsp_code_lens      = { fg = c.comment, italic = true },
+  lsp_code_lens_sep  = { fg = c.comment },
+  lsp_ref            = { bg = c.comment },
+  lsp_ref_target     = { bg = c.search },
+  lsp_builtin_type   = { fg = c.builtin, bold = true },
+  lsp_comment_type   = { fg = c.comment, italic = true },
+  lsp_enum           = { fg = c.constant },
+  lsp_enum_member    = { fg = c.builtin },
+  lsp_generic        = { fg = c.builtin },
+  lsp_interface      = { fg = c.constant },
+  lsp_keyword        = { fg = c.keyword },
+  lsp_macro_type     = { fg = c.constant },
+  lsp_method         = { fg = c.func },
+  lsp_namespace      = { fg = c.constant },
+  lsp_number         = { fg = c.number },
+  lsp_parameter      = { fg = c.parameter },
+  lsp_property       = { fg = c.builtin },
+  lsp_type_parameter = { fg = c.constant },
+  lsp_variable       = { fg = c.fg },
+  lsp_tm_fn_default  = { fg = c.func },
+  lsp_tm_mth_default = { fg = c.func },
+  lsp_tm_op_inj      = { fg = c.operator },
+  lsp_tm_str_inj     = { fg = c.string_, italic = true },
+  lsp_tm_var_default = { fg = c.number, bold = true },
+  lsp_tm_var_inj     = { fg = c.fg },
+  lsp_tm_var_static  = { fg = c.constant },
+
+  -- ─── Search / Match ───
+  cur_search  = { fg = c.fg, bg = c.search },
+  inc_search  = { fg = c.bg, bg = c.search },
+  match_paren = { fg = c.fg, bg = c.visual },
+  search      = { fg = c.fg, bg = c.search },
+  substitute  = { fg = c.type_, bg = c.visual },
+
+  -- ─── Spell ───
+  spell_bad   = { undercurl = true },
+  spell_cap   = { undercurl = true },
+  spell_local = { undercurl = true },
+  spell_rare  = { undercurl = true },
+
+  -- ─── Statusline / Tabline ───
+  status_line         = { fg = c.fg, bg = c.inactiveBg },
+  status_line_nc      = { fg = c.comment },
+  status_line_term    = { fg = c.fg, bg = c.inactiveBg },
+  status_line_term_nc = { fg = c.comment },
+  tab_line            = { fg = c.fg, bg = c.line },
+  tab_line_fill       = { fg = c.comment, bg = c.line },
+  tab_line_sel        = { fg = c.bg, bg = c.fg },
+
+  -- ─── Syntax (vim-native) ───
+  boolean         = { fg = c.number, bold = true },
+  character       = { fg = c.string_ },
+  comment         = { fg = c.comment, italic = true },
+  conditional     = { fg = c.keyword },
+  constant        = { fg = c.constant },
+  define          = { fg = c.comment },
+  delimiter       = { fg = c.fg },
+  error_syn       = { fg = c.error_, bold = true },
+  exception       = { fg = c.keyword },
+  float           = { fg = c.number },
+  function_       = { fg = c.func },
+  identifier      = { fg = c.constant },
+  include         = { fg = c.keyword },
+  keyword         = { fg = c.keyword },
+  label           = { fg = c.keyword },
+  macro           = { fg = c.constant },
+  number          = { fg = c.number },
+  operator        = { fg = c.operator },
+  pre_condit      = { fg = c.comment },
+  pre_proc        = { fg = c.constant },
+  repeat_         = { fg = c.keyword },
+  special         = { fg = c.builtin },
+  special_char    = { fg = c.keyword },
+  special_comment = { fg = c.keyword },
+  statement       = { fg = c.keyword },
+  storage_class   = { fg = c.constant },
+  string_         = { fg = c.string_, italic = true },
+  structure       = { fg = c.constant },
+  tag             = { fg = c.builtin },
+  title           = { fg = c.property },
+  todo            = { fg = c.func, italic = true },
+  type_           = { fg = c.type_ },
+  typedef         = { fg = c.constant },
+
+  -- ─── Treesitter ───
+  ts_annotation          = { fg = c.fg },
+  ts_attribute           = { fg = c.constant },
+  ts_attribute_ts        = { fg = c.hint },
+  ts_boolean             = { fg = c.number, bold = true },
+  ts_character           = { fg = c.string_, italic = true },
+  ts_character_special   = { fg = c.keyword },
+  ts_comment             = { fg = c.comment, italic = true },
+  ts_comment_todo        = { fg = c.func, italic = true },
+  ts_comment_checked     = { fg = c.plus, italic = true },
+  ts_comment_unchecked   = { fg = c.func, italic = true },
+  ts_constant            = { fg = c.constant },
+  ts_constant_builtin    = { fg = c.number, bold = true },
+  ts_constant_macro      = { fg = c.number },
+  ts_constructor         = { fg = c.constant },
+  ts_constructor_lua     = { fg = c.type_ },
+  ts_danger              = { fg = c.fg },
+  ts_diff_add            = { fg = c.plus },
+  ts_diff_delete         = { fg = c.error_ },
+  ts_diff_delta          = { fg = c.delta },
+  ts_error               = { fg = c.fg },
+  ts_function            = { fg = c.func },
+  ts_function_builtin    = { fg = c.func },
+  ts_function_call       = { fg = c.parameter },
+  ts_function_macro      = { fg = c.constant },
+  ts_function_method     = { fg = c.func },
+  ts_keyword             = { fg = c.keyword },
+  ts_keyword_import      = { fg = c.constant },
+  ts_keyword_return      = { fg = c.keyword, italic = true },
+  ts_label               = { fg = c.keyword },
+  ts_markup              = { fg = c.fg },
+  ts_markup_emphasis     = { fg = c.fg, italic = true },
+  ts_markup_heading      = { fg = c.keyword, bold = true },
+  ts_markup_heading_red  = { fg = c.error_, bold = true },
+  ts_markup_heading_kw   = { fg = c.keyword, bold = true },
+  ts_markup_heading_num  = { fg = c.number, bold = true },
+  ts_markup_link         = { fg = c.string_ },
+  ts_markup_link_url     = { fg = c.string_, underline = true },
+  ts_markup_list         = { fg = c.func },
+  ts_markup_math         = { fg = c.string_ },
+  ts_markup_quote        = { fg = c.comment },
+  ts_markup_raw          = { fg = c.constant },
+  ts_markup_strike       = { fg = c.comment, strikethrough = true },
+  ts_markup_strong       = { fg = c.fg, bold = true },
+  ts_markup_underline    = { fg = c.fg, underline = true },
+  ts_module              = { fg = c.constant },
+  ts_number              = { fg = c.number },
+  ts_operator            = { fg = c.operator },
+  ts_parameter_ref       = { fg = c.fg },
+  ts_property            = { fg = c.property },
+  ts_punct               = { fg = c.fg },
+  ts_punct_special       = { fg = c.keyword },
+  ts_string              = { fg = c.string_, italic = true },
+  ts_string_escape       = { fg = c.keyword },
+  ts_string_regexp       = { fg = c.keyword },
+  ts_string_symbol       = { fg = c.constant },
+  ts_string_url          = { fg = c.func },
+  ts_tag                 = { fg = c.keyword },
+  ts_tag_attribute       = { fg = c.constant },
+  ts_tag_delimiter       = { fg = c.fg },
+  ts_type                = { fg = c.builtin },
+  ts_type_builtin        = { fg = c.builtin, bold = true },
+  ts_variable            = { fg = c.fg },
+  ts_variable_builtin    = { fg = c.builtin, italic = true },
+  ts_variable_member     = { fg = c.builtin },
+  ts_variable_parameter  = { fg = c.parameter },
+  ts_warning             = { fg = c.fg },
+
+  -- ─── Plugin highlights ───
+  harpoon_border       = { fg = c.error_ },
+  harpoon_window       = { fg = c.fg },
+  ts_context           = { bg = c.bg },
+  ts_context_bottom    = { bg = c.bg, sp = c.fg, underline = true },
+  mini_files_border    = { fg = c.floatBorder },
+  mini_files_modified  = { fg = c.warning },
+  mini_files_normal    = { fg = c.fg },
+  telescope_border        = { link = "FloatBorder" },
+  telescope_prompt_border = { link = "FloatBorder" },
+  telescope_matching   = { fg = c.func, bold = true },
+  telescope_selection  = { bg = c.line },
+  telescope_caret      = { fg = c.keyword },
+  blink_source         = { fg = c.floatBorder, italic = true },
+  blink_menu_selection = { link = "PmenuSel" },
+  snacks_indent        = { link = "NonText" },
+  snacks_indent1       = { link = "DiagnosticInfo" },
+  -- blink kind icon colors (by kind name)
+  blink_kind = {
+    Default = c.property, Array = c.constant, Boolean = c.number,
+    Class = c.constant, Color = c.constant, Constant = c.number,
+    Constructor = c.constant, Enum = c.property, EnumMember = c.string_,
+    Event = c.string_, Field = c.property, File = c.constant,
+    Folder = c.number, Function = c.func, Interface = c.constant,
+    Key = c.keyword, Keyword = c.keyword, Method = c.func,
+    Module = c.number, Namespace = c.operator, Null = c.fg,
+    Number = c.number, Object = c.operator, Operator = c.operator,
+    Package = c.constant, Property = c.property, Reference = c.number,
+    Snippet = c.operator, String = c.constant, Struct = c.property,
+    Text = c.floatBorder, TypeParameter = c.operator, Unit = c.constant,
+    Value = c.number, Variable = c.property,
+  },
+}

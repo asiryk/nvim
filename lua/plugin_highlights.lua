@@ -1,153 +1,49 @@
 -- stylua: ignore start
 
 -- Plugin-specific highlights. Same shape as lua/highlights.lua — theme.lua
--- applies both tables on every theme switch, and the drift assert enforces
--- that any group with a palette variant has all of them.
---
--- When adding a new palette, edit this file in one place instead of every
--- lua/plugins/* file.
+-- applies both tables on every theme switch. Each entry is either a role
+-- name (string, resolved against the current palette) or a palette-agnostic
+-- spec (table).
 
 local M = {
-  -- ───────────────────────── Harpoon ─────────────────────────
+  -- ─── Harpoon ───
+  HarpoonBorder = "harpoon_border",
+  HarpoonWindow = "harpoon_window",
 
-  HarpoonBorder = {
-    vague          = { fg = "error" },
-    onedark        = { fg = "cyan" },
-    sonokai_shusia = { fg = "red" },
-    grey           = { fg = "border" },
-  },
-  HarpoonWindow = {
-    vague          = { fg = "fg" },
-    onedark        = { fg = "fg" },
-    sonokai_shusia = { fg = "fg" },
-    grey           = { fg = "black" },
-  },
+  -- ─── Treesitter context ───
+  TreesitterContext       = "ts_context",
+  TreesitterContextBottom = "ts_context_bottom",
 
-  -- ─────────────────── Treesitter context ────────────────────
+  -- ─── Mini.files ───
+  MiniFilesBorder         = "mini_files_border",
+  MiniFilesBorderModified = "mini_files_modified",
+  MiniFilesNormal         = "mini_files_normal",
 
-  TreesitterContext = {
-    vague          = { bg = "bg" },
-    onedark        = { bg = "bg0" },
-    sonokai_shusia = { bg = "bg_dim" },
-    grey           = { bg = "grey_bg_light" },
-  },
-  TreesitterContextBottom = {
-    vague          = { bg = "bg",            sp = "fg",    underline = true },
-    onedark        = { bg = "bg0",           sp = "fg",    underline = true },
-    sonokai_shusia = { bg = "bg_dim",        sp = "fg",    underline = true },
-    grey           = { bg = "grey_bg_light", sp = "black", underline = true },
-  },
+  -- MiniCursorword / MiniCursorwordCurrent are set in the late-apply block
+  -- at the bottom of this file — mini's `default = true` re-link means
+  -- overrides must run after its ColorScheme autocmd.
 
-  -- ──────────────────────── Mini.files ───────────────────────
+  -- ─── Telescope ───
+  TelescopeBorder         = "telescope_border",
+  TelescopePromptBorder   = "telescope_prompt_border",
+  TelescopeResultsBorder  = "telescope_prompt_border",
+  TelescopePreviewBorder  = "telescope_prompt_border",
+  TelescopeMatching       = "telescope_matching",
+  TelescopeSelection      = "telescope_selection",
+  TelescopeSelectionCaret = "telescope_caret",
 
-  MiniFilesBorder = {
-    vague          = { fg = "floatBorder" },
-    onedark        = { fg = "cyan" },
-    sonokai_shusia = { fg = "blue" },
-    grey           = { fg = "border" },
-  },
-  MiniFilesBorderModified = {
-    vague          = { fg = "warning" },
-    onedark        = { fg = "yellow" },
-    sonokai_shusia = { fg = "yellow" },
-    grey           = { fg = "dark_yellow" },
-  },
-  MiniFilesNormal = {
-    vague          = { fg = "fg" },
-    onedark        = { fg = "fg" },
-    sonokai_shusia = { fg = "fg" },
-    grey           = { fg = "black" },
-  },
+  -- ─── Blink ───
+  BlinkCmpMenu          = { link = "NormalFloat" },
+  BlinkCmpMenuBorder    = { link = "FloatBorder" },
+  BlinkCmpDocBorder     = { link = "FloatBorder" },
+  BlinkCmpSource        = "blink_source",
+  BlinkCmpMenuSelection = "blink_menu_selection",
 
-  -- MiniCursorword / MiniCursorwordCurrent are set in the late-apply
-  -- block at the bottom of this file — mini's `default = true` re-link
-  -- means overrides must run after its ColorScheme autocmd.
+  -- ─── Snacks.indent ───
+  SnacksIndent  = "snacks_indent",
+  SnacksIndent1 = "snacks_indent1",
 
-  -- ───────────────────────── Telescope ───────────────────────
-
-  TelescopeBorder = {
-    vague          = { link = "FloatBorder" },
-    onedark        = { fg = "red" },
-    sonokai_shusia = { fg = "red" },
-    grey           = { fg = "border" },
-  },
-  TelescopePromptBorder = {
-    vague          = { link = "FloatBorder" },
-    onedark        = { fg = "cyan" },
-    sonokai_shusia = { fg = "blue" },
-    grey           = { fg = "border" },
-  },
-  TelescopeResultsBorder = {
-    vague          = { link = "FloatBorder" },
-    onedark        = { fg = "cyan" },
-    sonokai_shusia = { fg = "blue" },
-    grey           = { fg = "border" },
-  },
-  TelescopePreviewBorder = {
-    vague          = { link = "FloatBorder" },
-    onedark        = { fg = "cyan" },
-    sonokai_shusia = { fg = "blue" },
-    grey           = { fg = "border" },
-  },
-  TelescopeMatching = {
-    vague          = { fg = "func",        bold = true },
-    onedark        = { fg = "orange",      bold = true },
-    sonokai_shusia = { fg = "orange",      bold = true },
-    grey           = { fg = "dark_yellow", bold = true },
-  },
-  TelescopeSelection = {
-    vague          = { bg = "line" },
-    onedark        = { bg = "bg2" },
-    sonokai_shusia = { bg = "bg2" },
-    grey           = { bg = "light_grey", bold = true },
-  },
-  TelescopeSelectionCaret = {
-    vague          = { fg = "keyword" },
-    onedark        = { fg = "yellow" },
-    sonokai_shusia = { fg = "yellow" },
-    grey           = { fg = "black", bold = true },
-  },
-
-  -- ─────────────────────────── Blink ─────────────────────────
-  -- Static link entries; per-kind fg colors are looped in below.
-
-  BlinkCmpMenu       = { link = "NormalFloat" },
-  BlinkCmpMenuBorder = { link = "FloatBorder" },
-  BlinkCmpDocBorder  = { link = "FloatBorder" },
-  BlinkCmpSource = {
-    vague          = { fg = "floatBorder", italic = true },
-    onedark        = { fg = "bg3",         italic = true },
-    sonokai_shusia = { fg = "bg3",         italic = true },
-    grey           = { fg = "border",      italic = true },
-  },
-  BlinkCmpMenuSelection = {
-    vague          = { link = "PmenuSel" },
-    onedark        = { link = "PmenuSel" },
-    sonokai_shusia = { fg = "fg", bg = "bg_blue" },
-    grey           = { link = "PmenuSel" },
-  },
-
-  -- ──────────────────────── Snacks.indent ────────────────────
-  -- Grey-only overrides; other palettes mirror Snacks' own defaults so the
-  -- drift assert stays happy (snacks links SnacksIndent → NonText and
-  -- SnacksIndent1 → DiagnosticInfo via `default = true`).
-
-  SnacksIndent = {
-    vague          = { link = "NonText" },
-    onedark        = { link = "NonText" },
-    sonokai_shusia = { link = "NonText" },
-    grey           = { fg = "border" },
-  },
-  SnacksIndent1 = {
-    vague          = { link = "DiagnosticInfo" },
-    onedark        = { link = "DiagnosticInfo" },
-    sonokai_shusia = { link = "DiagnosticInfo" },
-    grey           = { fg = "black" },
-  },
-
-  -- ────────────────────────── Diffview ───────────────────────
-  -- Palette-agnostic — all palettes share the same links.
-
+  -- ─── Diffview (palette-agnostic links) ───
   DiffviewFilePanelRootPath = { link = "Keyword" },
   DiffviewFilePanelCounter  = { link = "Removed" },
   DiffviewFilePanelTitle    = { link = "Keyword" },
@@ -157,95 +53,31 @@ local M = {
   DiffviewSecondary         = { link = "String" },
 }
 
--- ─────────────────────── Blink kind icons ──────────────────────
--- Each palette maps every LSP kind to one of its palette colors. The
--- loop below expands this into BlinkCmpKind<Kind> entries with all four
--- palette variants present (so the drift assert stays happy).
-
-local kind_colors = {
-  vague = {
-    Default       = "property", Array         = "constant", Boolean       = "number",
-    Class         = "constant", Color         = "constant", Constant      = "number",
-    Constructor   = "constant", Enum          = "property", EnumMember    = "string",
-    Event         = "string",   Field         = "property", File          = "constant",
-    Folder        = "number",   Function      = "func",     Interface     = "constant",
-    Key           = "keyword",  Keyword       = "keyword",  Method        = "func",
-    Module        = "number",   Namespace     = "operator", Null          = "fg",
-    Number        = "number",   Object        = "operator", Operator      = "operator",
-    Package       = "constant", Property      = "property", Reference     = "number",
-    Snippet       = "operator", String        = "constant", Struct        = "property",
-    Text          = "floatBorder", TypeParameter = "operator", Unit        = "constant",
-    Value         = "number",   Variable      = "property",
-  },
-  onedark = {
-    Default       = "purple", Array         = "yellow", Boolean       = "orange",
-    Class         = "yellow", Color         = "green",  Constant      = "orange",
-    Constructor   = "blue",   Enum          = "purple", EnumMember    = "yellow",
-    Event         = "yellow", Field         = "purple", File          = "blue",
-    Folder        = "orange", Function      = "blue",   Interface     = "green",
-    Key           = "cyan",   Keyword       = "cyan",   Method        = "blue",
-    Module        = "orange", Namespace     = "red",    Null          = "grey",
-    Number        = "orange", Object        = "red",    Operator      = "red",
-    Package       = "yellow", Property      = "cyan",   Reference     = "orange",
-    Snippet       = "red",    String        = "green",  Struct        = "purple",
-    Text          = "light_grey", TypeParameter = "red", Unit         = "green",
-    Value         = "orange", Variable      = "purple",
-  },
-  sonokai_shusia = {
-    Default       = "purple", Array         = "yellow", Boolean       = "orange",
-    Class         = "yellow", Color         = "green",  Constant      = "orange",
-    Constructor   = "blue",   Enum          = "purple", EnumMember    = "yellow",
-    Event         = "yellow", Field         = "purple", File          = "blue",
-    Folder        = "orange", Function      = "blue",   Interface     = "green",
-    Key           = "blue",   Keyword       = "blue",   Method        = "blue",
-    Module        = "orange", Namespace     = "red",    Null          = "grey",
-    Number        = "orange", Object        = "red",    Operator      = "red",
-    Package       = "yellow", Property      = "blue",   Reference     = "orange",
-    Snippet       = "red",    String        = "green",  Struct        = "purple",
-    Text          = "grey_dim", TypeParameter = "red",  Unit          = "green",
-    Value         = "orange", Variable      = "purple",
-  },
-  grey = {
-    Default       = "black",  Array         = "black",  Boolean       = "black",
-    Class         = "black",  Color         = "green",  Constant      = "black",
-    Constructor   = "black",  Enum          = "black",  EnumMember    = "purple",
-    Event         = "orange", Field         = "black",  File          = "blue",
-    Folder        = "purple", Function      = "black",  Interface     = "black",
-    Key           = "black",  Keyword       = "black",  Method        = "black",
-    Module        = "black",  Namespace     = "black",  Null          = "grey",
-    Number        = "blue",   Object        = "black",  Operator      = "black",
-    Package       = "black",  Property      = "black",  Reference     = "orange",
-    Snippet       = "orange", String        = "green",  Struct        = "black",
-    Text          = "grey",   TypeParameter = "black",  Unit          = "green",
-    Value         = "blue",   Variable      = "black",
-  },
+-- ─── Blink kind icons ───
+-- Each palette exports a `blink_kind` table mapping kind name → color.
+-- We expand it here into BlinkCmpKind<Kind> entries; theme.lua's resolver
+-- handles the palette-dispatch at apply time.
+local kind_names = {
+  "Default", "Array", "Boolean", "Class", "Color", "Constant", "Constructor",
+  "Enum", "EnumMember", "Event", "Field", "File", "Folder", "Function",
+  "Interface", "Key", "Keyword", "Method", "Module", "Namespace", "Null",
+  "Number", "Object", "Operator", "Package", "Property", "Reference",
+  "Snippet", "String", "Struct", "Text", "TypeParameter", "Unit", "Value",
+  "Variable",
 }
-
-for kind in pairs(kind_colors.vague) do
-  M["BlinkCmpKind" .. kind] = {
-    vague          = { fg = kind_colors.vague[kind],          blend = 0 },
-    onedark        = { fg = kind_colors.onedark[kind],        blend = 0 },
-    sonokai_shusia = { fg = kind_colors.sonokai_shusia[kind], blend = 0 },
-    grey           = { fg = kind_colors.grey[kind],           blend = 0 },
-  }
+for _, kind in ipairs(kind_names) do
+  -- A role token that theme.lua's resolver turns into { fg = palette.blink_kind[kind], blend = 0 }.
+  M["BlinkCmpKind" .. kind] = { _blink_kind = kind }
 end
 
--- ───────────────────── Late-apply overrides ──────────────────
+-- ─── Late-apply overrides ───
 -- Some plugins re-register highlight defaults via `default = true` after
 -- our apply_theme runs (mini.cursorword links MiniCursorwordCurrent back
--- to MiniCursorword on setup and on every ColorScheme event). Our base
--- `apply_table` writes can't win that race because they fire before the
--- plugin's autocmd. This block re-asserts those groups *after* the
--- plugin's default-linking, so the final state is ours.
---
---   * `User VeryLazy` fires once after plugins load → covers startup.
---   * `ColorScheme` fires on every subsequent theme switch; registered
---     here (after `mini.setup` runs), so it fires after mini's autocmd.
+-- to MiniCursorword on setup and on every ColorScheme event). Our normal
+-- apply can't win that race because it fires before the plugin's autocmd.
+-- This block re-asserts those groups *after* the plugin's default-linking.
 
 local function late_overrides()
-  -- mini.cursorword: keep the current word unhighlighted so only other
-  -- occurrences show MiniCursorword's bg (and LspReferenceTarget can
-  -- show through on the current symbol when LSP is attached).
   vim.api.nvim_set_hl(0, "MiniCursorword", { link = "CursorColumn" })
   vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", {})
 end
