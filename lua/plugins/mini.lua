@@ -157,8 +157,41 @@ do
       todo = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
       note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
 
-      -- Highlight hex color strings (`#rrggbb`) using that color
-      hex_color = hipatterns.gen_highlighter.hex_color(),
+      -- Show a colored square next to `#rrggbb` strings instead of
+      -- recoloring the text itself. `group` stays a real (empty) hl group
+      -- so mini.hipatterns still calls `extmark_opts` for the match.
+      -- Per-color hl groups are cached so we don't hit nvim_set_hl on every
+      -- redraw.
+      hex_color = (function()
+        local NO_HL = "MiniHipatternsHexVirt"
+        local opts_cache = {}
+        local function apply_groups()
+          vim.api.nvim_set_hl(0, NO_HL, {})
+          for match, _ in pairs(opts_cache) do
+            vim.api.nvim_set_hl(0, "MiniHipatternsHex_" .. match:sub(2), { fg = match })
+          end
+        end
+        apply_groups()
+        -- theme.apply_theme's `hi clear` wipes our per-color groups; re-apply.
+        vim.api.nvim_create_autocmd("ColorScheme", {
+          group = vim.api.nvim_create_augroup("mini-hipatterns-hex-recolor", {}),
+          callback = apply_groups,
+        })
+        return {
+          pattern = "#%x%x%x%x%x%x",
+          group = NO_HL,
+          extmark_opts = function(_, match, _)
+            local cached = opts_cache[match]
+            if cached == nil then
+              local hl = "MiniHipatternsHex_" .. match:sub(2)
+              vim.api.nvim_set_hl(0, hl, { fg = match })
+              cached = { virt_text = { { " ■ ", hl } }, virt_text_pos = "inline" }
+              opts_cache[match] = cached
+            end
+            return cached
+          end,
+        }
+      end)(),
     },
   })
 end

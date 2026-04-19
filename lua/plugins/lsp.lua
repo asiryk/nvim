@@ -39,7 +39,12 @@ local function format()
 end
 vim.keymap.set({ "n", "v" }, "<Leader>lf", format, { desc = "Format [LSP], [Conform]" })
 
-local function on_attach(_, buffer)
+local function on_attach(client, buffer)
+  -- Stop nvim from requesting document colors from this server — it paints
+  -- hex strings with LspDocumentColor_* highlights; mini.hipatterns handles
+  -- them instead.
+  client.server_capabilities.colorProvider = nil
+
   local function set(mode, lhs, rhs, desc)
     vim.keymap.set(mode, lhs, rhs, { buffer = buffer, desc = desc })
   end
