@@ -98,7 +98,6 @@ return {
   lsp_interface      = { fg = c.black },
   lsp_macro_type     = { fg = c.orange },
   lsp_namespace      = { fg = c.black },
-  lsp_property       = { fg = c.black },
   lsp_type_parameter = { fg = c.black },
   lsp_tm_var_default = { fg = c.black, bold = true },
   lsp_tm_var_static  = { fg = c.black },
@@ -199,7 +198,7 @@ return {
   ts_type_decl          = { fg = c.black },
   ts_variable           = { fg = c.black },
   ts_variable_builtin   = { fg = c.black, bold = true },
-  ts_variable_member    = { fg = c.purple },
+  ts_variable_member    = { fg = c.black },
   ts_variable_parameter = { fg = c.orange },
   ts_warning            = { fg = c.dark_yellow },
 

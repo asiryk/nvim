@@ -110,7 +110,7 @@ return {
   ["@lsp.type.namespace"]      = "lsp_namespace",
   ["@lsp.type.number"]         = "number",
   ["@lsp.type.parameter"]      = "ts_variable_parameter",
-  ["@lsp.type.property"]       = "lsp_property",
+  ["@lsp.type.property"]       = "ts_variable_member",
   ["@lsp.type.typeParameter"]  = "lsp_type_parameter",
   ["@lsp.type.variable"]       = "ts_markup",
 

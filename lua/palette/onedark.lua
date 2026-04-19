@@ -108,7 +108,6 @@ return {
   lsp_interface      = { fg = c.yellow },
   lsp_macro_type     = { fg = c.cyan },
   lsp_namespace      = { fg = c.yellow },
-  lsp_property       = { fg = c.cyan },
   lsp_type_parameter = { fg = c.yellow },
   lsp_tm_var_default = { fg = c.red },
   lsp_tm_var_static  = { fg = c.orange },
