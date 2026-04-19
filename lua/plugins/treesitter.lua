@@ -59,5 +59,19 @@ require("theme").add_highlights(function()
           TreesitterContextBottom = { bg = c.bg0, sp = c.fg, underline = true },
         }
       end,
+      ---@param c SonokaiShusiaPalette
+      sonokai_shusia = function(c)
+        return {
+          TreesitterContext = { bg = c.bg_dim },
+          TreesitterContextBottom = { bg = c.bg_dim, sp = c.fg, underline = true },
+        }
+      end,
+      ---@param c GreyPalette
+      grey = function(c)
+        return {
+          TreesitterContext = { bg = c.grey_bg_light },
+          TreesitterContextBottom = { bg = c.grey_bg_light, sp = c.black, underline = true },
+        }
+      end,
     }
 end)

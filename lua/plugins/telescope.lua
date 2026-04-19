@@ -193,5 +193,29 @@ require("theme").add_highlights(function()
           TelescopeSelectionCaret = { fg = c.yellow },
         }
       end,
+      ---@param c SonokaiShusiaPalette
+      sonokai_shusia = function(c)
+        return {
+          TelescopeBorder = { fg = c.red },
+          TelescopePromptBorder = { fg = c.blue },
+          TelescopeResultsBorder = { fg = c.blue },
+          TelescopePreviewBorder = { fg = c.blue },
+          TelescopeMatching = { fg = c.orange, bold = true },
+          TelescopeSelection = { bg = c.bg2 },
+          TelescopeSelectionCaret = { fg = c.yellow },
+        }
+      end,
+      ---@param c GreyPalette
+      grey = function(c)
+        return {
+          TelescopeBorder = { fg = c.border },
+          TelescopePromptBorder = { fg = c.border },
+          TelescopeResultsBorder = { fg = c.border },
+          TelescopePreviewBorder = { fg = c.border },
+          TelescopeMatching = { fg = c.dark_yellow, bold = true },
+          TelescopeSelection = { bg = c.light_grey, bold = true },
+          TelescopeSelectionCaret = { fg = c.black, bold = true },
+        }
+      end,
     }
 end)

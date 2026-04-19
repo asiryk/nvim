@@ -109,6 +109,22 @@ do -- mini files
             MiniFilesNormal = { fg = c.fg },
           }
         end,
+        ---@param c SonokaiShusiaPalette
+        sonokai_shusia = function(c)
+          return {
+            MiniFilesBorder = { fg = c.blue },
+            MiniFilesBorderModified = { fg = c.yellow },
+            MiniFilesNormal = { fg = c.fg },
+          }
+        end,
+        ---@param c GreyPalette
+        grey = function(c)
+          return {
+            MiniFilesBorder = { fg = c.border },
+            MiniFilesBorderModified = { fg = c.dark_yellow },
+            MiniFilesNormal = { fg = c.black },
+          }
+        end,
       }
   end)
 end
@@ -185,6 +201,20 @@ do
         onedark = function(c)
           return {
             MiniCursorword = { bg = c.bg_hl },
+            MiniCursorwordCurrent = {},
+          }
+        end,
+        ---@param c SonokaiShusiaPalette
+        sonokai_shusia = function(c)
+          return {
+            MiniCursorword = { bg = c.bg1 },
+            MiniCursorwordCurrent = {},
+          }
+        end,
+        ---@param c GreyPalette
+        grey = function(c)
+          return {
+            MiniCursorword = { bg = c.highlight },
             MiniCursorwordCurrent = {},
           }
         end,

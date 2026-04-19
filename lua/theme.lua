@@ -1,5 +1,7 @@
 ---@see VaguePalette
 ---@see OneDarkPalette
+---@see SonokaiShusiaPalette
+---@see GreyPalette
 
 local colorscheme = {
   light = "onelight",
@@ -10,6 +12,8 @@ local palettes = {
   onedark = require("palette.onedark"),
   onelight = require("palette.onelight"),
   vague = require("palette.vague"),
+  sonokai_shusia = require("palette.sonokai_shusia"),
+  grey = require("palette.grey"),
 }
 
 --- Which palette *shape* a highlight spec uses in highlights.lua.
@@ -18,6 +22,8 @@ local spec_shape = {
   vague = "vague",
   onedark = "onedark",
   onelight = "onedark",
+  sonokai_shusia = "sonokai_shusia",
+  grey = "grey",
 }
 
 local F = {}
@@ -68,14 +74,20 @@ local function resolve(spec, palette)
   return out
 end
 
---- Fail loudly if any group in highlights.lua has only one palette half.
+--- Fail loudly if any group in highlights.lua is missing a palette variant.
 ---@param highlights table
 local function assert_no_drift(highlights)
+  local required = { "vague", "onedark", "sonokai_shusia", "grey" }
   for group, spec in pairs(highlights) do
-    if spec.vague or spec.onedark then
-      assert(spec.vague and spec.onedark,
-        ("highlights.lua: %s is missing a palette variant (have %s)"):format(
-          group, spec.vague and "vague" or "onedark"))
+    local has_any = false
+    for _, key in ipairs(required) do
+      if spec[key] then has_any = true; break end
+    end
+    if has_any then
+      for _, key in ipairs(required) do
+        assert(spec[key],
+          ("highlights.lua: %s is missing palette variant %q"):format(group, key))
+      end
     end
   end
 end
@@ -103,7 +115,7 @@ function F.apply_theme()
   for group, spec in pairs(highlights) do
     ---@type any
     local variant = spec
-    if spec.vague or spec.onedark then variant = spec[shape] end
+    if spec.vague or spec.onedark or spec.sonokai_shusia or spec.grey then variant = spec[shape] end
     vim.api.nvim_set_hl(0, group, resolve(variant, palette))
   end
 
@@ -117,6 +129,8 @@ end
 ---@class AddedHighlights
 ---@field vague fun(palette: VaguePalette): table<string, vim.api.keyset.highlight>
 ---@field onedark fun(palette: OneDarkPalette): table<string, vim.api.keyset.highlight>
+---@field sonokai_shusia fun(palette: SonokaiShusiaPalette): table<string, vim.api.keyset.highlight>
+---@field grey fun(palette: GreyPalette): table<string, vim.api.keyset.highlight>
 
 --- Add custom highlights and apply them immediately
 ---@param fn fun(): (string, AddedHighlights)

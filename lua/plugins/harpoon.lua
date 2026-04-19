@@ -47,5 +47,19 @@ require("theme").add_highlights(function()
           HarpoonWindow = { fg = c.fg },
         }
       end,
+      ---@param c SonokaiShusiaPalette
+      sonokai_shusia = function(c)
+        return {
+          HarpoonBorder = { fg = c.red },
+          HarpoonWindow = { fg = c.fg },
+        }
+      end,
+      ---@param c GreyPalette
+      grey = function(c)
+        return {
+          HarpoonBorder = { fg = c.border },
+          HarpoonWindow = { fg = c.black },
+        }
+      end,
     }
 end)

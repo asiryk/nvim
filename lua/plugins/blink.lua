@@ -149,5 +149,102 @@ require("theme").add_highlights(function()
         highlights["BlinkCmpSource"] = { fg = c.bg3, italic = true }
         return highlights
       end,
+      ---@param c SonokaiShusiaPalette
+      sonokai_shusia = function(c)
+        local lsp_kind_icons_color = {
+          Default = c.purple,
+          Array = c.yellow,
+          Boolean = c.orange,
+          Class = c.yellow,
+          Color = c.green,
+          Constant = c.orange,
+          Constructor = c.blue,
+          Enum = c.purple,
+          EnumMember = c.yellow,
+          Event = c.yellow,
+          Field = c.purple,
+          File = c.blue,
+          Folder = c.orange,
+          Function = c.blue,
+          Interface = c.green,
+          Key = c.blue,
+          Keyword = c.blue,
+          Method = c.blue,
+          Module = c.orange,
+          Namespace = c.red,
+          Null = c.grey,
+          Number = c.orange,
+          Object = c.red,
+          Operator = c.red,
+          Package = c.yellow,
+          Property = c.blue,
+          Reference = c.orange,
+          Snippet = c.red,
+          String = c.green,
+          Struct = c.purple,
+          Text = c.grey_dim,
+          TypeParameter = c.red,
+          Unit = c.green,
+          Value = c.orange,
+          Variable = c.purple,
+        }
+
+        local highlights = {}
+        for kind, color in pairs(lsp_kind_icons_color) do
+          highlights["BlinkCmpKind" .. kind] = { fg = color, blend = 0 }
+        end
+
+        highlights["BlinkCmpSource"] = { fg = c.bg3, italic = true }
+        highlights["BlinkCmpMenuSelection"] = { fg = c.fg, bg = c.bg_blue }
+        return highlights
+      end,
+      ---@param c GreyPalette
+      grey = function(c)
+        local lsp_kind_icons_color = {
+          Default = c.black,
+          Array = c.black,
+          Boolean = c.black,
+          Class = c.black,
+          Color = c.green,
+          Constant = c.black,
+          Constructor = c.black,
+          Enum = c.black,
+          EnumMember = c.purple,
+          Event = c.orange,
+          Field = c.black,
+          File = c.blue,
+          Folder = c.purple,
+          Function = c.black,
+          Interface = c.black,
+          Key = c.black,
+          Keyword = c.black,
+          Method = c.black,
+          Module = c.black,
+          Namespace = c.black,
+          Null = c.grey,
+          Number = c.blue,
+          Object = c.black,
+          Operator = c.black,
+          Package = c.black,
+          Property = c.black,
+          Reference = c.orange,
+          Snippet = c.orange,
+          String = c.green,
+          Struct = c.black,
+          Text = c.grey,
+          TypeParameter = c.black,
+          Unit = c.green,
+          Value = c.blue,
+          Variable = c.black,
+        }
+
+        local highlights = {}
+        for kind, color in pairs(lsp_kind_icons_color) do
+          highlights["BlinkCmpKind" .. kind] = { fg = color, blend = 0 }
+        end
+
+        highlights["BlinkCmpSource"] = { fg = c.border, italic = true }
+        return highlights
+      end,
     }
 end)

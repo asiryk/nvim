@@ -327,6 +327,8 @@ function F.setup_shared()
     return "diffview", {
       vague = function() return dv_hl end,
       onedark = function() return dv_hl end,
+      sonokai_shusia = function() return dv_hl end,
+      grey = function() return dv_hl end,
     }
   end)
 end
