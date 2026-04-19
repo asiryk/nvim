@@ -59,9 +59,9 @@ local M = {
     grey           = { fg = "black" },
   },
 
-  -- Mini.cursorword highlights live in lua/plugins/mini.lua — mini's setup
-  -- uses `default = true` to re-link MiniCursorwordCurrent on every
-  -- ColorScheme, so the overrides must run post-setup to stick.
+  -- MiniCursorword / MiniCursorwordCurrent are set in the late-apply
+  -- block at the bottom of this file — mini's `default = true` re-link
+  -- means overrides must run after its ColorScheme autocmd.
 
   -- ───────────────────────── Telescope ───────────────────────
 
@@ -229,5 +229,35 @@ for kind in pairs(kind_colors.vague) do
     grey           = { fg = kind_colors.grey[kind],           blend = 0 },
   }
 end
+
+-- ───────────────────── Late-apply overrides ──────────────────
+-- Some plugins re-register highlight defaults via `default = true` after
+-- our apply_theme runs (mini.cursorword links MiniCursorwordCurrent back
+-- to MiniCursorword on setup and on every ColorScheme event). Our base
+-- `apply_table` writes can't win that race because they fire before the
+-- plugin's autocmd. This block re-asserts those groups *after* the
+-- plugin's default-linking, so the final state is ours.
+--
+--   * `User VeryLazy` fires once after plugins load → covers startup.
+--   * `ColorScheme` fires on every subsequent theme switch; registered
+--     here (after `mini.setup` runs), so it fires after mini's autocmd.
+
+local function late_overrides()
+  -- mini.cursorword: keep the current word unhighlighted so only other
+  -- occurrences show MiniCursorword's bg (and LspReferenceTarget can
+  -- show through on the current symbol when LSP is attached).
+  vim.api.nvim_set_hl(0, "MiniCursorword", { link = "CursorColumn" })
+  vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", {})
+end
+
+local group = vim.api.nvim_create_augroup("plugin-highlights-late", { clear = true })
+vim.api.nvim_create_autocmd("User", {
+  pattern = "VeryLazy", group = group, once = true, callback = late_overrides,
+  desc = "Apply late plugin-highlight overrides once plugins have loaded",
+})
+vim.api.nvim_create_autocmd("ColorScheme", {
+  group = group, callback = late_overrides,
+  desc = "Re-apply late plugin-highlight overrides on theme switches",
+})
 
 return M
