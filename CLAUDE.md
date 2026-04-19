@@ -40,3 +40,11 @@ Personal Neovim configuration targeting Neovim 0.12+. All configuration is in Lu
 - Right-click context menu with git operations (blame, diff, hunk preview, revert).
 - Custom statusline showing file path, flags, and git branch.
 - Custom tabline showing buffer filenames per tab.
+
+**Color-rendering choices:**
+- mini.hipatterns' `hex_color` highlighter is customized to render a colored square (virt_text) next to each `#rrggbb` literal instead of recoloring the hex text itself. Per-color hl groups and `extmark_opts` tables are cached, and a ColorScheme autocmd re-registers them after `theme.apply_theme`'s `hi clear`.
+- LSP document color is disabled via `client.server_capabilities.colorProvider = nil` in `on_attach` — servers (e.g. lua_ls) paint `LspDocumentColor_<hex>_*` highlights that conflict with the hipatterns approach.
+
+**Known quirks:**
+- `LspReferenceTarget` (`highlights.lua`) is only visible on the current symbol; mini.cursorword's matchadd renders on top of LSP extmarks on other occurrences, so those keep the cursorword color. Comment left in-file.
+- fidget.nvim caches resolved `Normal`/`FloatBorder` colors in its `fidget-window` namespace and doesn't invalidate on ColorScheme. Notifications show stale colors after a theme switch until nvim restart — investigated and left as-is.
