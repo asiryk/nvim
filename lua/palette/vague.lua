@@ -238,6 +238,7 @@ return {
   blink_menu_selection    = { link = "PmenuSel" },
   snacks_indent           = { link = "NonText" },
   snacks_indent1          = { link = "DiagnosticInfo" },
+  xml_tag_name            = { link = "Function" },
   blink_kind = {
     Default = c.property, Array = c.constant, Boolean = c.number,
     Class = c.constant, Color = c.constant, Constant = c.number,

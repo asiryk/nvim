@@ -219,6 +219,7 @@ return {
   blink_menu_selection    = { link = "PmenuSel" },
   snacks_indent           = { fg = c.border },
   snacks_indent1          = { fg = c.black },
+  xml_tag_name            = { fg = c.dark_yellow },
   blink_kind = {
     Default = c.black, Array = c.black, Boolean = c.black,
     Class = c.black, Color = c.green, Constant = c.black,

@@ -43,6 +43,9 @@ local M = {
   SnacksIndent  = "snacks_indent",
   SnacksIndent1 = "snacks_indent1",
 
+  -- ─── Language-specific overrides ───
+  xmlTagName = "xml_tag_name",
+
   -- ─── Diffview (palette-agnostic links) ───
   DiffviewFilePanelRootPath = { link = "Keyword" },
   DiffviewFilePanelCounter  = { link = "Removed" },
