@@ -146,6 +146,16 @@ do
   -- MiniCursorword / MiniCursorwordCurrent overrides live in
   -- lua/plugin_highlights.lua (late-apply block) — mini uses
   -- `default = true` to re-link, so overrides must run post-setup.
+
+  -- Enable cursorword only for real file buffers (empty &buftype).
+  vim.api.nvim_create_autocmd({ "BufEnter", "BufNew", "TermOpen" }, {
+    group = vim.api.nvim_create_augroup("custom_cursorword_filebuf_only", { clear = true }),
+    callback = function(args)
+      if vim.bo[args.buf].buftype ~= "" then
+        vim.b[args.buf].minicursorword_disable = true
+      end
+    end,
+  })
 end
 
 do
