@@ -54,7 +54,33 @@ local function on_attach(client, buffer)
       callback = function() require("custom").utils.center_move()() end,
       desc = "Center move after async lsp definition jump",
     })
-    vim.lsp.buf.definition()
+    -- ts_ls returns both the class declaration and its constructor for a
+    -- class; dedupe by filename (earliest line wins) so we jump straight
+    -- to the class instead of getting a quickfix list.
+    vim.lsp.buf.definition({
+      on_list = function(list)
+        local seen = {}
+        local items = {}
+        for _, item in ipairs(list.items) do
+          local prev = seen[item.filename]
+          if not prev then
+            seen[item.filename] = #items + 1
+            table.insert(items, item)
+          elseif item.lnum < items[prev].lnum then
+            items[prev] = item
+          end
+        end
+        if #items == 1 then
+          vim.cmd.normal({ "m'", bang = true })
+          local item = items[1]
+          vim.cmd.edit(vim.fn.fnameescape(item.filename))
+          vim.api.nvim_win_set_cursor(0, { item.lnum, item.col - 1 })
+        else
+          vim.fn.setqflist({}, " ", { title = list.title, items = items })
+          vim.cmd("botright copen")
+        end
+      end,
+    })
   end
 
   set("n", "gd", definition, "Go to definition [LSP]")
