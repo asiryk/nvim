@@ -51,7 +51,7 @@ local M = {
   DiffviewFilePanelCounter  = { link = "Removed" },
   DiffviewFilePanelTitle    = { link = "Keyword" },
   DiffviewFilePanelFileName = { link = "Normal" },
-  DiffviewFilePanelSelected = { link = "Question" },
+  DiffviewFilePanelSelected = { link = "CursorColumn" },
   DiffviewFilePanelPath     = { link = "LineNr" },
   DiffviewSecondary         = { link = "String" },
 }
