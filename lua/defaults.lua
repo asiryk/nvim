@@ -34,6 +34,8 @@ vim.o.spelllang = "uk,en"
 vim.opt.fillchars:append({ diff = "╱" })
 vim.opt.listchars = { trail = "·", tab = "  ", nbsp = "␣" } -- tab = "» ",
 
+vim.filetype.add({ extension = { log = "log" } })
+
 -- Set undo breakpoints: Every time following key ({"<CR>", "."})
 -- gets pressed, it stops current change, so the next "undo"
 -- will apply up to this key
