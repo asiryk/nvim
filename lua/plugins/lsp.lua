@@ -160,7 +160,7 @@ local config = {
   },
   -- cssls = {},
   -- tailwindcss = {},
-  clangd = {},
+  -- clangd = {},
   bashls = {},
   -- dockerls = {},
   -- docker_compose_language_service = {},
