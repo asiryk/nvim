@@ -14,6 +14,7 @@ do -- download lazy if not exists
       "--branch=stable", -- latest stable release
       lazypath,
     })
+    vim.o.cmdheight = 10 -- avoid "Press ENTER" prompt while Mason/Treesitter install on first launch
   end
   vim.opt.rtp:prepend(lazypath)
 end
