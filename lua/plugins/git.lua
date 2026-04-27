@@ -93,18 +93,36 @@ function F.get_pr_url()
   return url
 end
 
-function F.run_git_log(args)
-  if args ~= nil then
-    args = " " .. args
-  else
-    args = ""
-  end
-  local git_cmd = "git log --graph --pretty=format:'%h%d %s <%ad | %an>' --abbrev-commit --date=local"
-    .. " --invert-grep --grep='Auto version update' --grep='Auto update assets' --grep='Merge branch' --grep='Merge remote-tracking branch'"
-    .. " "
-    .. args
+-- Passes a list to systemlist() so git is exec'd directly without a shell.
+-- Going through fish would fire fnm's use-on-cd hook in projects with a
+-- .node-version/.nvmrc and pollute the buffer with "Using Node vX.Y.Z".
+local function git_log_base()
+  return {
+    "git", "log", "--graph",
+    "--pretty=format:%h%d %s <%ad | %an>",
+    "--abbrev-commit", "--date=local",
+  }
+end
 
-  local output = vim.fn.systemlist(git_cmd)
+local function append_user_args(cmd, args)
+  if not args or args == "" then return end
+  for arg in args:gmatch("%S+") do
+    table.insert(cmd, arg)
+  end
+end
+
+function F.run_git_log(args)
+  local cmd = git_log_base()
+  vim.list_extend(cmd, {
+    "--invert-grep",
+    "--grep=Auto version update",
+    "--grep=Auto update assets",
+    "--grep=Merge branch",
+    "--grep=Merge remote-tracking branch",
+  })
+  append_user_args(cmd, args)
+
+  local output = vim.fn.systemlist(cmd)
 
   if vim.v.shell_error ~= 0 then
     vim.notify("Git command failed", vim.log.levels.ERROR)
@@ -115,16 +133,10 @@ function F.run_git_log(args)
 end
 
 function F.run_git_log_full(args)
-  if args ~= nil then
-    args = " " .. args
-  else
-    args = ""
-  end
+  local cmd = git_log_base()
+  append_user_args(cmd, args)
 
-  local git_cmd = "Git log --graph --pretty=format:'%h%d %s <%ad | %an>' --abbrev-commit --date=local"
-    .. args
-
-  local output = vim.fn.systemlist(git_cmd)
+  local output = vim.fn.systemlist(cmd)
 
   if vim.v.shell_error ~= 0 then
     vim.notify("Git command failed", vim.log.levels.ERROR)
