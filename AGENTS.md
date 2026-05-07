@@ -10,7 +10,7 @@ Personal Neovim configuration targeting Neovim 0.12+. All configuration is in Lu
 
 ## Architecture
 
-**Entry point:** `init.lua` loads modules in this order: `custom` (globals/utils) -> `defaults` (vim options/autocmds) -> `keymaps` -> `menu` (right-click popup) -> colorscheme -> `plugin_spec` (lazy.nvim) -> `qfpersist` -> `statusline` -> `tabline` -> `claudecode`.
+**Entry point:** `init.lua` loads modules in this order: `custom` (globals/utils) -> `defaults` (vim options/autocmds) -> `keymaps` -> `menu` (right-click popup) -> colorscheme -> `plugin_spec` (lazy.nvim) -> `qfpersist` -> `statusline` -> `winbar` -> `tabline` -> `claudecode`.
 
 **Global state:** `G` (global table with `utils` and `log`), `L` (language-specific storage), `PopUpMenu` (right-click menu functions). These are set in `lua/custom.lua` and available everywhere.
 
@@ -39,6 +39,7 @@ Personal Neovim configuration targeting Neovim 0.12+. All configuration is in Lu
 - Trailing whitespace auto-removal on save (except markdown).
 - Right-click context menu with git operations (blame, diff, hunk preview, revert).
 - Custom statusline showing file path, flags, and git branch.
+- Custom winbar (`lua/winbar.lua`) showing the buffer's relative path with modified/readonly flags; skips terminals and special filetypes.
 - Custom tabline showing buffer filenames per tab.
 
 **Color-rendering choices:**

@@ -6,6 +6,7 @@ vim.cmd.colorscheme("custom")
 require("plugin_spec")
 require("qfpersist")
 require("statusline")
+require("winbar")
 require("tabline")
 require("claudecode")
 
