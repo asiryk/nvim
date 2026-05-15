@@ -134,7 +134,24 @@ local spec = {
   {
     "sindrets/diffview.nvim",
     config = function()
-      require("diffview").setup({ file_panel = { listing_style = "list" } })
+      local actions = require("diffview.actions")
+      require("diffview").setup({
+        file_panel = { listing_style = "list" },
+        keymaps = {
+          view = {
+            { "n", "<M-j>", actions.select_next_entry, { desc = "Next file entry [User]" } },
+            { "n", "<M-k>", actions.select_prev_entry, { desc = "Prev file entry [User]" } },
+          },
+          file_panel = {
+            { "n", "<M-j>", actions.select_next_entry, { desc = "Next file entry [User]" } },
+            { "n", "<M-k>", actions.select_prev_entry, { desc = "Prev file entry [User]" } },
+          },
+          file_history_panel = {
+            { "n", "<M-j>", actions.select_next_entry, { desc = "Next file entry [User]" } },
+            { "n", "<M-k>", actions.select_prev_entry, { desc = "Prev file entry [User]" } },
+          },
+        },
+      })
       require("plugins.git").setup_shared()
     end,
   },
