@@ -305,25 +305,17 @@ function F.setup_shared()
       -- Wait 100ms since gitsigns may still be updating
       vim.defer_fn(function() pcall(require("gitsigns").refresh) end, 100)
 
-      -- Diffview leaves windows with foldmethod=diff and seeds manual fold
-      -- ranges in the underlying buffers. Without cleanup, those ranges
-      -- linger (visible as [+N lines] markers when re-folded), and UFO's
-      -- provider never reruns. Target only windows diffview actually
-      -- touched: wipe folds and bounce UFO to force a clean re-attach.
+      -- Diffview leaves windows with foldmethod=diff. Restore treesitter
+      -- folding on real-file windows so stale diff fold ranges don't linger.
       vim.schedule(function()
-        local ufo = require("ufo")
         for _, win in ipairs(vim.api.nvim_list_wins()) do
           if vim.wo[win].foldmethod == "diff" then
-            local buf = vim.api.nvim_win_get_buf(win)
             vim.api.nvim_win_call(win, function()
-              vim.wo[win].foldmethod = "manual"
-              vim.wo[win].foldenable = true
               vim.cmd("silent! normal! zE")
+              vim.wo[win].foldmethod = "expr"
+              vim.wo[win].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+              vim.wo[win].foldenable = true
             end)
-            if vim.bo[buf].buflisted and vim.bo[buf].buftype == "" then
-              pcall(ufo.disableFold, buf)
-              pcall(ufo.enableFold, buf)
-            end
           end
         end
       end)

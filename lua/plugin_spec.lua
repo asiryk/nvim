@@ -140,14 +140,6 @@ local spec = {
   },
   { "j-hui/fidget.nvim", opts = {} },
   {
-    "kevinhwang91/nvim-ufo",
-    dependencies = {
-      "kevinhwang91/promise-async",
-    },
-    config = function() require("plugins.ufo") end,
-    event = "BufEnter",
-  },
-  {
     "stevearc/quicker.nvim",
     event = "FileType qf",
     opts = {},
