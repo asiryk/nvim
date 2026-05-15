@@ -38,6 +38,10 @@ _G.Statusline_git_branch = function()
   end
 end
 
+_G.Statusline_project = function()
+  return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
+end
+
 _G.Statusline_flags = function()
   -- Use Neovim's own expander so texts match %h%m%r exactly
   local ok, res = pcall(vim.api.nvim_eval_statusline, "%h%m%r", { winid = 0 })
@@ -56,7 +60,7 @@ end
 
 vim.o.statusline = table.concat({
   "%{v:lua.Statusline_mode()}",
-  "%F%{v:lua.Statusline_flags()}%{v:lua.Statusline_git_branch()}  %=",
+  "%{v:lua.Statusline_project()}%{v:lua.Statusline_flags()}%{v:lua.Statusline_git_branch()}  %=",
   "%-14.(%l,%c%V%) %P"
 })
 
