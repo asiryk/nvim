@@ -10,6 +10,9 @@ vim.g.maplocalleader = ","
 
 vim.keymap.set("i", "<M-BS>", "<Esc>ciw", { desc = "Delete whole word [User]" })
 
+vim.keymap.set("i", "<M-->", "–", { desc = "Insert en dash [User]" })
+vim.keymap.set("i", "<M-_>", "—", { desc = "Insert em dash [User]" })
+
 vim.keymap.set("n", "<leader>tc", "<cmd>tabnew<CR>", { desc = "Create new tab [User]" })
 vim.keymap.set("n", "<leader>tq", "<cmd>tabclose<CR>", { desc = "Close current tab [User]" })
 vim.keymap.set("n", "<leader>taq", "<cmd>tabo<CR>", { desc = "Close all other tabs [User]" })

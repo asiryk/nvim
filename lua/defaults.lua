@@ -1,17 +1,15 @@
 -- Following remaps don't add new features/keybindings, but improve existing ones
 
-vim.o.mouse = "a" -- Enable mouse support
 vim.o.mousemodel = "popup_setpos" -- Disable mouse context menu
 vim.o.number = true -- Show line numbers
 vim.o.relativenumber = true -- Show line number starting at cursor position
 vim.o.signcolumn = "yes" -- Show sign column always, even without lsp or gitsigns
 vim.o.swapfile = false -- Disable swapfiles
-vim.o.expandtab = true -- Use tabs instead of spaces
+vim.o.expandtab = true -- Use spaces instead of tabs
 vim.o.tabstop = 4 -- Amount of spaces the tab is displayed
 vim.o.shiftwidth = 2 -- Amount of spaces to use for each step of (auto)indent
 vim.o.smartindent = true -- Copy indent from the previous line
 vim.o.exrc = true -- Use .nvim.lua file for per-project configuration
-vim.o.termguicolors = true -- Set 24 bit colors
 vim.o.laststatus = 3 -- Set global status line
 vim.o.ignorecase = true -- Ignore case when searching
 vim.o.smartcase = true -- If capitals are present, do case-sensitive search
@@ -108,7 +106,7 @@ vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
 
     local buf = vim.api.nvim_get_current_buf()
     local file = vim.api.nvim_buf_get_name(buf)
-    local exists = vim.loop.fs_stat(file) ~= nil
+    local exists = vim.uv.fs_stat(file) ~= nil
     local attached = file ~= ""
 
     if exists and modifiable and no_buftype and attached then
@@ -164,11 +162,6 @@ local default_plugins = {
   "spellfile_plugin",
   "zip",
   "zipPlugin",
-  "python3_provider",
-  "python_provider",
-  "node_provider",
-  "ruby_provider",
-  "perl_provider",
   "tutor",
   "rplugin",
 }

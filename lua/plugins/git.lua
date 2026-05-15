@@ -241,10 +241,10 @@ function F.setup_shared()
   set("n", "<leader>gP", function()
     local url = F.get_pr_url()
     if url then
-      -- make that multiline, so it opens :mes history
-      vim.print("\n" .. url)
+      vim.fn.setreg("+", url)
+      vim.notify("PR URL copied to clipboard")
     end
-  end, { desc = "Print PR URL (GitHub, GitLab) [Fugitive]" })
+  end, { desc = "Copy PR URL to clipboard (GitHub, GitLab) [Fugitive]" })
   set("n", "<leader>gd", F.toggle_diffview,
     { desc = "Toggle Git Diff [Diffview]" })
 
