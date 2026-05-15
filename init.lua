@@ -1,5 +1,6 @@
 require("custom")
 require("defaults")
+require("fold")
 require("keymaps")
 require("menu")
 vim.cmd.colorscheme("custom")

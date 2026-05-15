@@ -296,7 +296,7 @@ function F.setup_shared()
     callback = function(args) F.setup_commit_buffer_keymaps(args.buf) end,
   })
 
-  -- Post-Diffview-close cleanup: refresh gitsigns, reset UFO fold state
+  -- Post-Diffview-close cleanup: refresh gitsigns, reset diff fold state
   local dv_group = vim.api.nvim_create_augroup("git_shared_diffview", { clear = true })
   vim.api.nvim_create_autocmd("User", {
     group = dv_group,

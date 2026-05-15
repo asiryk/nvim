@@ -24,12 +24,6 @@ vim.o.undofile = true
 vim.o.splitright = true
 vim.o.splitbelow = true
 vim.o.statusline = "%F %h%m%r%=%-14.(%l,%c%V%) %P" -- no-plugin status line. see lua/statusline.lua for more complex one
-vim.o.foldcolumn = "0"
-vim.o.foldlevel = 99
-vim.o.foldlevelstart = 99
-vim.o.foldenable = true
-vim.o.foldmethod = "expr"
-vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 -- vim.o.spell = true
 vim.o.spelllang = "uk,en"
 -- vim.o.conceallevel = 2

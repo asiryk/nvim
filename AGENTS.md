@@ -10,7 +10,7 @@ Personal Neovim configuration targeting Neovim 0.12+. All configuration is in Lu
 
 ## Architecture
 
-**Entry point:** `init.lua` loads modules in this order: `custom` (globals/utils) -> `defaults` (vim options/autocmds) -> `keymaps` -> `menu` (right-click popup) -> colorscheme -> `plugin_spec` (lazy.nvim) -> `qfpersist` -> `statusline` -> `winbar` -> `tabline` -> `claudecode`.
+**Entry point:** `init.lua` loads modules in this order: `custom` (globals/utils) -> `defaults` (vim options/autocmds) -> `fold` (treesitter folds + `[+N lines]` virt_text) -> `keymaps` -> `menu` (right-click popup) -> colorscheme -> `plugin_spec` (lazy.nvim) -> `qfpersist` -> `statusline` -> `winbar` -> `tabline` -> `claudecode`.
 
 **Global state:** `G` (global table with `utils` and `log`), `L` (language-specific storage), `PopUpMenu` (right-click menu functions). These are set in `lua/custom.lua` and available everywhere.
 
