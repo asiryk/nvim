@@ -26,6 +26,33 @@ function F.goto_commit_tab()
   if hash then vim.cmd("Gtabedit " .. hash) end
 end
 
+function F.open_stash_diff_under_cursor()
+  pcall(function()
+    local line = vim.api.nvim_get_current_line()
+    local stash = line:match("(stash@{%d+})")
+    if stash then vim.cmd("DiffviewOpen " .. stash .. "^!") end
+  end)
+end
+
+function F.goto_stash_tab()
+  local line = vim.api.nvim_get_current_line()
+  local stash = line:match("(stash@{%d+})")
+  if stash then vim.cmd("Gtabedit " .. stash) end
+end
+
+--- Keymap block for the Gits stash-list buffer.
+---@param buf integer
+function F.setup_stash_buffer_keymaps(buf)
+  local set = vim.keymap.set
+  set("n", "K", F.open_stash_diff_under_cursor,
+    { buffer = buf, desc = "Diffview on stash under cursor [Git]" })
+  set("", "<2-LeftMouse>", F.open_stash_diff_under_cursor,
+    { buffer = buf, desc = "Diffview on stash under cursor [Git]" })
+  set("n", "<CR>", F.goto_stash_tab,
+    { buffer = buf, silent = true, desc = "Open stash in tab [Git]" })
+  set("n", "q", "<cmd>q<cr>", { buffer = buf, silent = true })
+end
+
 --- Shared keymap block for git, git-graph, and gitsigns-blame buffers.
 ---@param buf integer
 ---@param opts? { close_fn?: fun() }
@@ -146,7 +173,18 @@ function F.run_git_log_full(args)
   return output
 end
 
-function F.create_git_graph_buf(content, bufname)
+function F.run_git_stash_list()
+  local output = vim.fn.systemlist({ "git", "stash", "list" })
+
+  if vim.v.shell_error ~= 0 then
+    vim.notify("Git stash list failed", vim.log.levels.ERROR)
+    return nil
+  end
+
+  return output
+end
+
+function F.create_git_graph_buf(content, bufname, filetype)
   local existing = vim.fn.bufnr(bufname)
   if existing ~= -1 then
     local win = vim.fn.bufwinid(existing)
@@ -161,7 +199,7 @@ function F.create_git_graph_buf(content, bufname)
   vim.bo[bufnr].buftype = "nofile"
   vim.bo[bufnr].bufhidden = "wipe"
   vim.bo[bufnr].swapfile = false
-  vim.bo[bufnr].filetype = "git-graph"
+  vim.bo[bufnr].filetype = filetype or "git-graph"
 
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, content)
   vim.bo[bufnr].modifiable = false
@@ -263,6 +301,17 @@ function F.setup_shared()
     F.create_git_graph_buf(output, bufname)
   end, { desc = "Git log graph [User]", nargs = "*" })
 
+  vim.api.nvim_create_user_command("Gits", function()
+    local output = F.run_git_stash_list()
+    if output == nil then return end
+    if #output == 0 then
+      vim.notify("No stashes")
+      return
+    end
+    local bufname = "git-graph://" .. vim.fn.getcwd() .. " Gits"
+    F.create_git_graph_buf(output, bufname, "git-stash")
+  end, { desc = "Git stash list [User]" })
+
   vim.api.nvim_create_user_command("DiffPreset", function(opts)
     vim.ui.select({
       "Current file: filter by author",
@@ -294,6 +343,11 @@ function F.setup_shared()
     group = buf_group,
     pattern = { "git", "git-graph" },
     callback = function(args) F.setup_commit_buffer_keymaps(args.buf) end,
+  })
+  vim.api.nvim_create_autocmd("FileType", {
+    group = buf_group,
+    pattern = "git-stash",
+    callback = function(args) F.setup_stash_buffer_keymaps(args.buf) end,
   })
 
   -- Post-Diffview-close cleanup: refresh gitsigns, reset diff fold state
