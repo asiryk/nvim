@@ -59,12 +59,12 @@ end
 function F.setup_commit_buffer_keymaps(buf, opts)
   opts = opts or {}
   local set = vim.keymap.set
-  set("n", "K", F.open_commit_diff_under_cursor,
-    { buffer = buf, desc = "Diffview on commit under cursor [Git]" })
+  set("n", "K", F.goto_commit_tab,
+    { buffer = buf, silent = true, desc = "Open commit in tab [Git]" })
   set("", "<2-LeftMouse>", F.open_commit_diff_under_cursor,
     { buffer = buf, desc = "Diffview on commit under cursor [Git]" })
-  set("n", "<CR>", F.goto_commit_tab,
-    { buffer = buf, silent = true, desc = "Open commit in tab [Git]" })
+  set("n", "<CR>", F.open_commit_diff_under_cursor,
+    { buffer = buf, desc = "Diffview on commit under cursor [Git]" })
   set("n", "q", opts.close_fn or "<cmd>q<cr>",
     { buffer = buf, silent = true })
 end
