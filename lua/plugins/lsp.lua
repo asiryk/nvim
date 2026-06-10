@@ -108,7 +108,7 @@ local function on_attach(client, buffer)
 end
 
 local config = {
-  gopls = {},
+  -- gopls = {},
   rust_analyzer = {},
   ts_ls = {},
   -- tsgo = {},
@@ -178,8 +178,8 @@ local default_config = {
 
 require("mason-tool-installer").setup({
   ensure_installed = vim.list_extend({
-    "prettierd",
-    "stylua",
+    -- "prettierd",
+    -- "stylua",
     -- "luacheck",
   }, vim.tbl_keys(config)),
 })
