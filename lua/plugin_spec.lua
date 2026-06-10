@@ -82,25 +82,6 @@ local spec = {
     config = function() require("plugins.blink") end,
     event = "BufEnter",
   },
-  {
-    "supermaven-inc/supermaven-nvim",
-    commit = "07d20fce48a5629686aefb0a7cd4b25e33947d50",
-    config = function()
-      vim.api.nvim_create_user_command(
-        "AIStart",
-        function() vim.notify("Turned on AI", vim.log.levels.INFO) end,
-        { desc = "Manually turn on AI completion [User]" }
-      )
-      require("supermaven-nvim").setup({
-        keymaps = {
-          accept_suggestion = "<C-l>",
-          clear_suggestion = "<C-]>",
-          accept_word = "<C-j>",
-        },
-      })
-    end,
-    cmd = "AIStart",
-  },
   { -- telescope
     "nvim-telescope/telescope.nvim",
     config = function() require("plugins.telescope") end,

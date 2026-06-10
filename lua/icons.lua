@@ -116,7 +116,7 @@ M.lspkind = {
   Null = "",
   String = "",
   Package = "",
-  Supermaven = "",
+  -- ""
 }
 
 --local kind_icons = {
