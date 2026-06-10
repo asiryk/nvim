@@ -125,14 +125,17 @@ local spec = {
           view = {
             { "n", "<M-j>", actions.select_next_entry, { desc = "Next file entry [User]" } },
             { "n", "<M-k>", actions.select_prev_entry, { desc = "Prev file entry [User]" } },
+            { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close Diffview [User]" } },
           },
           file_panel = {
             { "n", "<M-j>", actions.select_next_entry, { desc = "Next file entry [User]" } },
             { "n", "<M-k>", actions.select_prev_entry, { desc = "Prev file entry [User]" } },
+            { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close Diffview [User]" } },
           },
           file_history_panel = {
             { "n", "<M-j>", actions.select_next_entry, { desc = "Next file entry [User]" } },
             { "n", "<M-k>", actions.select_prev_entry, { desc = "Prev file entry [User]" } },
+            { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close Diffview [User]" } },
           },
         },
       })
