@@ -3,6 +3,7 @@ local parsers = {
   "markdown", "markdown_inline", "regex", "rust", "tsx", "typescript",
   "vim", "vimdoc", "c", "go", "gomod", "gosum", "gotmpl", "gowork",
   "yaml", "toml", "json", "dockerfile", "bash", "sql", "scheme", "zig",
+  "diff",
 }
 
 require("nvim-treesitter").setup({ auto_install = true })

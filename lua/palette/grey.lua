@@ -76,7 +76,7 @@ return {
   removed         = { fg = c.red },
   diff_add        = { bg = c.light_green },
   diff_change     = { bg = c.light_blue },
-  diff_delete     = { fg = c.red },
+  diff_delete     = { bg = c.light_red },
   diff_text       = { bg = c.diff_text },
   diff_file       = { fg = c.black, bold = true },
   diff_index_line = { fg = c.blue },

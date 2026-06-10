@@ -10,6 +10,7 @@ require("statusline")
 require("winbar")
 require("tabline")
 require("claudecode")
+require("diffhl")
 
 local function create_scratch_buf()
   local buf = vim.api.nvim_create_buf(true, true)
