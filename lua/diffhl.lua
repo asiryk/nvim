@@ -29,7 +29,9 @@ local file_langs = {}
 local function compute_file_langs(buf)
   local res = {}
   for i, line in ipairs(vim.api.nvim_buf_get_lines(buf, 0, -1, false)) do
-    local path = line:match("^%+%+%+ [ab]/(.+)$") or line:match("^%+%+%+ (%S+)")
+    -- `[^\t]+` keeps paths with spaces but drops the `\t<timestamp>` that
+    -- non-git unified diffs (diff -u) append after the filename.
+    local path = line:match("^%+%+%+ [ab]/([^\t]+)") or line:match("^%+%+%+ (%S+)")
     if path and path ~= "/dev/null" then
       path = path:gsub("%s+$", "")
       local ft = vim.filetype.match({ filename = path })
@@ -81,12 +83,16 @@ local diff_fts = { diff = true, git = true }
 -- DiffAdd/DiffDelete are theme groups (bg only), so they track colorscheme
 -- switches and the injected source foreground layers on top via `line_hl_group`.
 local bg_ns = vim.api.nvim_create_namespace("diffhl_linebg")
-local linebg_query = vim.treesitter.query.parse("diff", "((addition) @add) ((deletion) @del)")
+local linebg_query -- parsed lazily: needs the diff parser, which may not be installed yet
 
+-- Returns true on success so the caller only records the buffer as done when the
+-- extmarks were actually placed (the diff parser may not be installed yet).
 local function refresh_linebg(buf)
   if not vim.api.nvim_buf_is_valid(buf) or not diff_fts[vim.bo[buf].filetype] then return end
   local ok, parser = pcall(vim.treesitter.get_parser, buf, "diff")
   if not ok or not parser then return end
+  -- get_parser succeeded, so the diff parser exists and query.parse is safe
+  linebg_query = linebg_query or vim.treesitter.query.parse("diff", "((addition) @add) ((deletion) @del)")
   local tree = parser:parse()[1]
   vim.api.nvim_buf_clear_namespace(buf, bg_ns, 0, -1)
   if not tree then return end
@@ -97,19 +103,34 @@ local function refresh_linebg(buf)
       vim.api.nvim_buf_set_extmark(buf, bg_ns, ln, 0, { line_hl_group = grp, priority = 90 })
     end
   end
+  return true
 end
+
+-- bufnr -> changedtick at last refresh: extmarks and file_langs persist with the
+-- buffer, so re-entering a window (BufWinEnter) with unchanged text is a no-op.
+local done_tick = {}
 
 vim.api.nvim_create_autocmd({ "FileType", "BufWinEnter", "TextChanged", "TextChangedI" }, {
   group = vim.api.nvim_create_augroup("diffhl", {}),
   callback = function(args)
-    if not diff_fts[vim.bo[args.buf].filetype] then return end
-    compute_file_langs(args.buf)        -- refresh before (re)parsing injections
-    pcall(vim.treesitter.start, args.buf, "diff")
-    refresh_linebg(args.buf)
+    local buf = args.buf
+    if not diff_fts[vim.bo[buf].filetype] then return end
+    -- start only once: re-starting destroys the active highlighter and forces a
+    -- full re-highlight instead of an incremental update
+    if not vim.treesitter.highlighter.active[buf] then
+      pcall(vim.treesitter.start, buf, "diff")
+    end
+    local tick = vim.b[buf].changedtick
+    if done_tick[buf] == tick then return end
+    compute_file_langs(buf)
+    if refresh_linebg(buf) then done_tick[buf] = tick end
   end,
 })
 
 vim.api.nvim_create_autocmd("BufWipeout", {
   group = "diffhl",
-  callback = function(args) file_langs[args.buf] = nil end,
+  callback = function(args)
+    file_langs[args.buf] = nil
+    done_tick[args.buf] = nil
+  end,
 })
