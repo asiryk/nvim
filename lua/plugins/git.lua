@@ -350,6 +350,21 @@ function F.setup_shared()
     callback = function(args) F.setup_stash_buffer_keymaps(args.buf) end,
   })
 
+  -- Absolute (non-relative) line numbers in diff/patch buffers and Diffview
+  -- windows. The global default is relativenumber=true, which is distracting
+  -- when reading a patch where you want the actual file line numbers.
+  local num_group = vim.api.nvim_create_augroup("git_shared_numbers", { clear = true })
+  vim.api.nvim_create_autocmd("FileType", {
+    group = num_group,
+    pattern = { "diff", "git", "fugitive", "fugitiveblame" },
+    callback = function() vim.wo.relativenumber = false end,
+  })
+  vim.api.nvim_create_autocmd("User", {
+    group = num_group,
+    pattern = "DiffviewDiffBufWinEnter",
+    callback = function() vim.wo.relativenumber = false end,
+  })
+
   -- Post-Diffview-close cleanup: refresh gitsigns, reset diff fold state
   local dv_group = vim.api.nvim_create_augroup("git_shared_diffview", { clear = true })
   vim.api.nvim_create_autocmd("User", {
