@@ -407,7 +407,14 @@ function F.setup_shared()
   vim.api.nvim_create_autocmd("User", {
     group = num_group,
     pattern = "DiffviewDiffBufWinEnter",
-    callback = function() vim.wo.relativenumber = false end,
+    callback = function()
+      vim.wo.relativenumber = false
+      -- Diffview already paints add/delete backgrounds, so gitsigns' signs in
+      -- the gutter are redundant noise that wastes horizontal space. Hide the
+      -- signcolumn in diff windows; gitsigns stays attached so hunk navigation
+      -- (<leader>gj/gk) still works — it reads hunk data, not the visible signs.
+      vim.wo.signcolumn = "no"
+    end,
   })
 
   -- Post-Diffview-close cleanup: refresh gitsigns, reset diff fold state
