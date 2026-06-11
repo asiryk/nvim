@@ -8,7 +8,7 @@
 -- subsequent calls no-op.
 
 local F = {}
-local S = { shared_loaded = false }
+local S = { shared_loaded = false, generators = {} }
 
 -- ──────────────────────── Commit-under-cursor helpers ────────────────────────
 
@@ -184,7 +184,24 @@ function F.run_git_stash_list()
   return output
 end
 
-function F.create_git_graph_buf(content, bufname, filetype)
+-- Repaint a git-graph buffer in place from its stored generator. Used both on
+-- creation and on refresh (`:e`/BufReadCmd). Returns false if there's nothing
+-- to render (generator failed), so callers can bail without creating a buffer.
+local function render_git_graph_buf(bufnr, content)
+  if content == nil then return false end
+  vim.bo[bufnr].modifiable = true
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, content)
+  vim.bo[bufnr].modifiable = false
+  return true
+end
+
+--- Create (or focus) a scratch buffer holding git-graph output.
+--- `gen` is a function returning the buffer lines; it's stored and re-invoked
+--- by the BufReadCmd handler so `:e` refreshes the buffer with newer history.
+---@param gen fun(): string[]|nil
+---@param bufname string
+---@param filetype? string
+function F.create_git_graph_buf(gen, bufname, filetype)
   local existing = vim.fn.bufnr(bufname)
   if existing ~= -1 then
     local win = vim.fn.bufwinid(existing)
@@ -194,6 +211,9 @@ function F.create_git_graph_buf(content, bufname, filetype)
     end
   end
 
+  local content = gen()
+  if content == nil then return end
+
   local bufnr = vim.api.nvim_create_buf(false, true)
 
   vim.bo[bufnr].buftype = "nofile"
@@ -201,8 +221,7 @@ function F.create_git_graph_buf(content, bufname, filetype)
   vim.bo[bufnr].swapfile = false
   vim.bo[bufnr].filetype = filetype or "git-graph"
 
-  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, content)
-  vim.bo[bufnr].modifiable = false
+  render_git_graph_buf(bufnr, content)
 
   vim.cmd.split()
   vim.api.nvim_set_current_buf(bufnr)
@@ -210,6 +229,10 @@ function F.create_git_graph_buf(content, bufname, filetype)
   vim.api.nvim_buf_set_name(bufnr, bufname)
 
   vim.opt_local.listchars = { trail = " ", tab = "  ", nbsp = "␣" }
+
+  -- Stored so the BufReadCmd handler can repaint on `:e`. Keyed by bufnr and
+  -- cleared on BufWipeout (see setup_shared).
+  S.generators[bufnr] = gen
 end
 
 -- ──────────────────────────── Diffview helpers ───────────────────────────────
@@ -288,17 +311,13 @@ function F.setup_shared()
 
   -- User commands
   vim.api.nvim_create_user_command("Gitl", function(opts)
-    local output = F.run_git_log(opts.args)
-    if output == nil then return end
     local bufname = "git-graph://" .. vim.fn.getcwd() .. " Gitl"
-    F.create_git_graph_buf(output, bufname)
+    F.create_git_graph_buf(function() return F.run_git_log(opts.args) end, bufname)
   end, { desc = "Git log graph excluding generated commits [User]", nargs = "*" })
 
   vim.api.nvim_create_user_command("Gitlo", function(opts)
-    local output = F.run_git_log_full(opts.args)
-    if output == nil then return end
     local bufname = "git-graph://" .. vim.fn.getcwd() .. " Gitlo"
-    F.create_git_graph_buf(output, bufname)
+    F.create_git_graph_buf(function() return F.run_git_log_full(opts.args) end, bufname)
   end, { desc = "Git log graph [User]", nargs = "*" })
 
   vim.api.nvim_create_user_command("Gits", function()
@@ -309,7 +328,7 @@ function F.setup_shared()
       return
     end
     local bufname = "git-graph://" .. vim.fn.getcwd() .. " Gits"
-    F.create_git_graph_buf(output, bufname, "git-stash")
+    F.create_git_graph_buf(F.run_git_stash_list, bufname, "git-stash")
   end, { desc = "Git stash list [User]" })
 
   vim.api.nvim_create_user_command("DiffPreset", function(opts)
@@ -336,6 +355,32 @@ function F.setup_shared()
       desc = "Show file history for selected lines [User]",
     }
   )
+
+  -- `:e`/`:edit` refreshes a git-graph buffer with newer history. nofile
+  -- scratch buffers have no file to re-read, so a BufReadCmd intercepts the
+  -- edit and repaints in place by re-running the stored generator. View is
+  -- preserved so the cursor stays put. Generators are cleared on BufWipeout.
+  local refresh_group = vim.api.nvim_create_augroup("git_graph_refresh", { clear = true })
+  vim.api.nvim_create_autocmd("BufReadCmd", {
+    group = refresh_group,
+    pattern = "git-graph://*",
+    callback = function(args)
+      local gen = S.generators[args.buf]
+      if not gen then return end
+      local view = vim.fn.winsaveview()
+      render_git_graph_buf(args.buf, gen())
+      vim.fn.winrestview(view)
+      -- The reload clears syntax, and BufReadCmd bypasses the usual
+      -- FileType->Syntax chain, so re-source it (after/syntax/git-graph.vim,
+      -- after/syntax/git-stash.vim) by re-setting 'syntax' to the filetype.
+      vim.bo[args.buf].syntax = vim.bo[args.buf].filetype
+    end,
+  })
+  vim.api.nvim_create_autocmd("BufWipeout", {
+    group = refresh_group,
+    pattern = "git-graph://*",
+    callback = function(args) S.generators[args.buf] = nil end,
+  })
 
   -- Buffer-level keymaps for git UI buffers
   local buf_group = vim.api.nvim_create_augroup("git_shared_buffers", { clear = true })
