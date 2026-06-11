@@ -414,6 +414,22 @@ function F.setup_shared()
       -- signcolumn in diff windows; gitsigns stays attached so hunk navigation
       -- (<leader>gj/gk) still works — it reads hunk data, not the visible signs.
       vim.wo.signcolumn = "no"
+      -- Neovim's diff filler/alignment is computed per logical line, not per
+      -- screen row. With wrap on, a long line uses extra screen rows on only
+      -- one side, so the two panes drift out of vertical alignment. Disable
+      -- wrap in diff windows to keep both sides lined up.
+      vim.wo.wrap = false
+      -- With wrap off it's easy to miss that a line continues off-screen, so
+      -- show edge markers (needs 'list', which is on globally) in the last/
+      -- first column when a line extends past the right/left of the window.
+      vim.opt_local.listchars:append({ extends = "›", precedes = "‹" })
+      -- Horizontal scroll, mirroring <C-e>/<C-y> vertical scroll. zl/zh move
+      -- one column; a count makes each press cover a few (tweak as desired).
+      local buf = vim.api.nvim_get_current_buf()
+      vim.keymap.set("n", "<C-M-e>", "20zl",
+        { buffer = buf, silent = true, desc = "Scroll right [Diffview]" })
+      vim.keymap.set("n", "<C-M-y>", "20zh",
+        { buffer = buf, silent = true, desc = "Scroll left [Diffview]" })
     end,
   })
 
