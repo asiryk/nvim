@@ -24,6 +24,15 @@ local function get_tab_label(tabnr)
   local winnr = vim.fn.tabpagewinnr(tabnr)
   local current_bufnr = buflist[winnr]
 
+  for _, b in ipairs(buflist) do
+    local ft = vim.bo[b].filetype
+    if ft == "DiffviewFiles" then
+      return "[DiffviewFiles]"
+    elseif ft == "DiffviewFileHistory" then
+      return "[Diffview History]"
+    end
+  end
+
   local bufnr = nil
   if is_real_buffer(current_bufnr) then
     bufnr = current_bufnr
