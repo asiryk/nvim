@@ -38,6 +38,7 @@ Personal Neovim configuration targeting Neovim 0.12+. All configuration is in Lu
 - Autosave on `TextChanged`/`InsertLeave` for real files.
 - Trailing whitespace auto-removal on save (except markdown).
 - Right-click context menu with git operations (blame, diff, hunk preview, revert).
+- Git commit buffers (`git` filetype and `Gitl`/`Gitlo` git-graph buffers) share local commit keymaps: `K` opens the commit in a tab, `<CR>` opens the commit diff in Diffview, and `r` rewords the commit through Fugitive (`Git commit --amend --only`) only when the cursor hash resolves to `HEAD`.
 - Custom statusline showing file path, flags, and git branch.
 - Custom winbar (`lua/winbar.lua`) showing the buffer's relative path with modified/readonly flags; skips terminals and special filetypes.
 - Custom tabline showing buffer filenames per tab. Diffview tabs are detected by scanning for the `DiffviewFiles`/`DiffviewFileHistory` panel filetypes and shown as a fixed `[DiffviewFiles]`/`[Diffview History]` label instead of the focused diff buffer's name.

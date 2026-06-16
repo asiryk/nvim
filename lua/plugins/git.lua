@@ -12,18 +12,46 @@ local S = { shared_loaded = false, generators = {} }
 
 -- ──────────────────────── Commit-under-cursor helpers ────────────────────────
 
+local function commit_hash_under_cursor()
+  local line = vim.api.nvim_get_current_line()
+  local hash = line:match("%f[%x]([0-9a-f]+)%f[^%x]")
+  if not hash or #hash < 7 then return nil end
+  return hash
+end
+
+local function git_first_line(args)
+  local output = vim.fn.systemlist(args)
+  if vim.v.shell_error ~= 0 or output[1] == nil then return nil end
+  return output[1]
+end
+
+local function is_head_commit(hash)
+  if not hash then return false end
+
+  local commit = git_first_line({ "git", "rev-parse", "--verify", hash .. "^{commit}" })
+  if not commit then return false end
+
+  local head = git_first_line({ "git", "rev-parse", "--verify", "HEAD" })
+  return head ~= nil and commit == head
+end
+
 function F.open_commit_diff_under_cursor()
   pcall(function()
-    local line = vim.api.nvim_get_current_line()
-    local hash = line:match("([0-9a-f]+)")
+    local hash = commit_hash_under_cursor()
     if hash then vim.cmd("DiffviewOpen " .. hash .. "^!") end
   end)
 end
 
 function F.goto_commit_tab()
-  local line = vim.api.nvim_get_current_line()
-  local hash = line:match("([0-9a-f]+)")
+  local hash = commit_hash_under_cursor()
   if hash then vim.cmd("Gtabedit " .. hash) end
+end
+
+function F.reword_latest_commit_under_cursor()
+  local hash = commit_hash_under_cursor()
+  if not is_head_commit(hash) then return end
+
+  vim.cmd("Git commit --amend --only")
 end
 
 function F.open_stash_diff_under_cursor()
@@ -65,6 +93,8 @@ function F.setup_commit_buffer_keymaps(buf, opts)
     { buffer = buf, desc = "Diffview on commit under cursor [Git]" })
   set("n", "<CR>", F.open_commit_diff_under_cursor,
     { buffer = buf, desc = "Diffview on commit under cursor [Git]" })
+  set("n", "r", F.reword_latest_commit_under_cursor,
+    { buffer = buf, silent = true, desc = "Reword latest commit [Fugitive]" })
   set("n", "q", opts.close_fn or "<cmd>q<cr>",
     { buffer = buf, silent = true })
 end
