@@ -72,12 +72,12 @@ end
 ---@param buf integer
 function F.setup_stash_buffer_keymaps(buf)
   local set = vim.keymap.set
-  set("n", "K", F.open_stash_diff_under_cursor,
-    { buffer = buf, desc = "Diffview on stash under cursor [Git]" })
+  set("n", "K", F.goto_stash_tab,
+    { buffer = buf, silent = true, desc = "Open stash in tab [Git]" })
   set("", "<2-LeftMouse>", F.open_stash_diff_under_cursor,
     { buffer = buf, desc = "Diffview on stash under cursor [Git]" })
-  set("n", "<CR>", F.goto_stash_tab,
-    { buffer = buf, silent = true, desc = "Open stash in tab [Git]" })
+  set("n", "<CR>", F.open_stash_diff_under_cursor,
+    { buffer = buf, desc = "Diffview on stash under cursor [Git]" })
   set("n", "q", "<cmd>q<cr>", { buffer = buf, silent = true })
 end
 
