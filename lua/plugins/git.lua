@@ -63,7 +63,31 @@ local function dv_open(args)
   if dv_open_pending() then return end
   S.dv_open_ts = vim.uv.now()
   close_blame_wins()
-  vim.cmd("DiffviewOpen " .. (args or ""))
+  -- Outside a repo, diffview reports "Not a repo (or any parent), or no
+  -- supported VCS adapter!" via vim.notify at ERROR level; the default
+  -- notify handler turns that into a thrown Vim error inside the command
+  -- (E5108 + traceback + hit-enter). Intercept it and downgrade to one
+  -- friendly warning instead.
+  local failed = false
+  local orig_notify = vim.notify
+  vim.notify = function(msg, level, opts)
+    if tostring(msg):find("Not a repo") then
+      failed = true
+      return orig_notify("Diffview: not inside a git repository", vim.log.levels.WARN, opts)
+    end
+    return orig_notify(msg, level, opts)
+  end
+  local ok, err = pcall(vim.cmd, "DiffviewOpen " .. (args or ""))
+  vim.notify = orig_notify
+  if not ok then
+    failed = true
+    vim.notify("Diffview: " .. (tostring(err):match("Vim:(.*)") or tostring(err)), vim.log.levels.WARN)
+  end
+  if failed then
+    -- Failed open: DiffviewViewOpened never fires, so unblock the keymaps
+    -- now instead of waiting out the 2s pending timeout.
+    S.dv_open_ts = nil
+  end
 end
 
 function F.open_commit_diff_under_cursor()
