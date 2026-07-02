@@ -35,10 +35,41 @@ local function is_head_commit(hash)
   return head ~= nil and commit == head
 end
 
+-- Close any gitsigns blame view before touching Diffview. The blame window
+-- installs a WinResized autocmd that hard-asserts on cached blame data, and
+-- that data is cleared by anything invalidating gitsigns' cache (diffview's
+-- git activity, our post-close refresh). The next resize — exactly what
+-- opening/closing a tab causes — then crashes. Blame is stale at that point
+-- anyway, so closing it first is the only safe order.
+local function close_blame_wins()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.bo[buf].filetype == "gitsigns-blame" then
+      pcall(vim.api.nvim_win_close, win, true)
+    end
+  end
+end
+
+-- Diffview opens asynchronously; a second open (or a close) issued while one
+-- is still in flight tears down windows the open coroutine still references
+-- and crashes in sync_scroll ("Invalid window id"). Treat an open as pending
+-- until DiffviewViewOpened fires; the timestamp doubles as a timeout so a
+-- failed open can't wedge the keymaps.
+local function dv_open_pending()
+  return S.dv_open_ts ~= nil and (vim.uv.now() - S.dv_open_ts) < 2000
+end
+
+local function dv_open(args)
+  if dv_open_pending() then return end
+  S.dv_open_ts = vim.uv.now()
+  close_blame_wins()
+  vim.cmd("DiffviewOpen " .. (args or ""))
+end
+
 function F.open_commit_diff_under_cursor()
   pcall(function()
     local hash = commit_hash_under_cursor()
-    if hash then vim.cmd("DiffviewOpen " .. hash .. "^!") end
+    if hash then dv_open(hash .. "^!") end
   end)
 end
 
@@ -58,7 +89,7 @@ function F.open_stash_diff_under_cursor()
   pcall(function()
     local line = vim.api.nvim_get_current_line()
     local stash = line:match("(stash@{%d+})")
-    if stash then vim.cmd("DiffviewOpen " .. stash .. "^!") end
+    if stash then dv_open(stash .. "^!") end
   end)
 end
 
@@ -273,10 +304,11 @@ function F.is_diffview_open()
 end
 
 function F.toggle_diffview()
+  if dv_open_pending() then return end
   if F.is_diffview_open() then
     vim.cmd("DiffviewClose")
   else
-    vim.cmd("DiffviewOpen")
+    dv_open()
   end
 end
 
@@ -425,6 +457,18 @@ function F.setup_shared()
     callback = function(args) F.setup_stash_buffer_keymaps(args.buf) end,
   })
 
+  -- Horizontal scroll, mirroring <C-e>/<C-y> vertical scroll. Mainly for the
+  -- nowrap Diffview windows, but global on purpose: buffer-local maps set
+  -- from the Diffview handler would stick to the real file buffer after the
+  -- view closes anyway, so a global map is the honest scope.
+  set("n", "<C-M-e>", "20zl", { silent = true, desc = "Scroll right [User]" })
+  set("n", "<C-M-y>", "20zh", { silent = true, desc = "Scroll left [User]" })
+
+  -- NOTE: window options below are set via vim.wo[0][0] (`:setlocal`
+  -- semantics). Plain `vim.wo.x = v` acts like `:set` and silently changes
+  -- the *global* default too, so every window created afterwards inherits
+  -- it — that was the source of "absolute numbers leak into normal buffers".
+
   -- Absolute (non-relative) line numbers in diff/patch buffers and Diffview
   -- windows. The global default is relativenumber=true, which is distracting
   -- when reading a patch where you want the actual file line numbers.
@@ -432,34 +476,56 @@ function F.setup_shared()
   vim.api.nvim_create_autocmd("FileType", {
     group = num_group,
     pattern = { "diff", "git", "fugitive", "fugitiveblame" },
-    callback = function() vim.wo.relativenumber = false end,
+    callback = function() vim.wo[0][0].relativenumber = false end,
   })
   vim.api.nvim_create_autocmd("User", {
     group = num_group,
     pattern = "DiffviewDiffBufWinEnter",
     callback = function()
-      vim.wo.relativenumber = false
+      vim.wo[0][0].relativenumber = false
       -- Diffview already paints add/delete backgrounds, so gitsigns' signs in
       -- the gutter are redundant noise that wastes horizontal space. Hide the
       -- signcolumn in diff windows; gitsigns stays attached so hunk navigation
       -- (<leader>gj/gk) still works — it reads hunk data, not the visible signs.
-      vim.wo.signcolumn = "no"
+      vim.wo[0][0].signcolumn = "no"
       -- Neovim's diff filler/alignment is computed per logical line, not per
       -- screen row. With wrap on, a long line uses extra screen rows on only
       -- one side, so the two panes drift out of vertical alignment. Disable
       -- wrap in diff windows to keep both sides lined up.
-      vim.wo.wrap = false
+      vim.wo[0][0].wrap = false
       -- With wrap off it's easy to miss that a line continues off-screen, so
       -- show edge markers (needs 'list', which is on globally) in the last/
       -- first column when a line extends past the right/left of the window.
       vim.opt_local.listchars:append({ extends = "›", precedes = "‹" })
-      -- Horizontal scroll, mirroring <C-e>/<C-y> vertical scroll. zl/zh move
-      -- one column; a count makes each press cover a few (tweak as desired).
-      local buf = vim.api.nvim_get_current_buf()
-      vim.keymap.set("n", "<C-M-e>", "20zl",
-        { buffer = buf, silent = true, desc = "Scroll right [Diffview]" })
-      vim.keymap.set("n", "<C-M-y>", "20zh",
-        { buffer = buf, silent = true, desc = "Scroll left [Diffview]" })
+      -- The working-tree side of a diff is the *real* file buffer, and Neovim
+      -- remembers window-local options per buffer (:h local-options): opening
+      -- the buffer later in a fresh window resurrects the diff-window options
+      -- there. Mark it so the BufWinEnter normalizer below can undo them.
+      vim.b.diffview_winopts = true
+    end,
+  })
+
+  -- Reset diff-window options when a marked buffer shows up in a regular
+  -- window again. Everything we set above plus what diff mode itself sets
+  -- (folds, binds) goes back to the global default.
+  local dv_winopts = {
+    "relativenumber", "wrap", "signcolumn", "listchars",
+    "diff", "scrollbind", "cursorbind",
+    "foldmethod", "foldexpr", "foldenable", "foldcolumn", "foldlevel",
+  }
+  vim.api.nvim_create_autocmd("BufWinEnter", {
+    group = num_group,
+    callback = function(args)
+      if not vim.b[args.buf].diffview_winopts then return end
+      -- Still inside a Diffview tab (e.g. cycling file entries): keep both
+      -- the options and the mark.
+      local lib = package.loaded["diffview.lib"]
+      if lib and lib.get_current_view() then return end
+      vim.b[args.buf].diffview_winopts = nil
+      for _, opt in ipairs(dv_winopts) do
+        local global = vim.api.nvim_get_option_value(opt, { scope = "global" })
+        vim.api.nvim_set_option_value(opt, global, { scope = "local", win = 0 })
+      end
     end,
   })
 
@@ -467,21 +533,32 @@ function F.setup_shared()
   local dv_group = vim.api.nvim_create_augroup("git_shared_diffview", { clear = true })
   vim.api.nvim_create_autocmd("User", {
     group = dv_group,
+    pattern = "DiffviewViewOpened",
+    callback = function() S.dv_open_ts = nil end,
+  })
+  vim.api.nvim_create_autocmd("User", {
+    group = dv_group,
     pattern = "DiffviewViewClosed",
     callback = function()
+      -- refresh() invalidates the blame cache the blame view's WinResized
+      -- autocmd asserts on; close it first (see close_blame_wins).
+      close_blame_wins()
+
       -- Wait 100ms since gitsigns may still be updating
       vim.defer_fn(function() pcall(require("gitsigns").refresh) end, 100)
 
-      -- Diffview leaves windows with foldmethod=diff. Restore treesitter
-      -- folding on real-file windows so stale diff fold ranges don't linger.
+      -- Safety net for windows that leaked foldmethod=diff and are already
+      -- visible (the BufWinEnter normalizer only catches re-displayed
+      -- buffers). Restore treesitter folding so stale fold ranges don't
+      -- linger.
       vim.schedule(function()
         for _, win in ipairs(vim.api.nvim_list_wins()) do
           if vim.wo[win].foldmethod == "diff" then
             vim.api.nvim_win_call(win, function()
               vim.cmd("silent! normal! zE")
-              vim.wo[win].foldmethod = "expr"
-              vim.wo[win].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-              vim.wo[win].foldenable = true
+              vim.wo[win][0].foldmethod = "expr"
+              vim.wo[win][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+              vim.wo[win][0].foldenable = true
             end)
           end
         end
