@@ -117,6 +117,12 @@ local spec = {
     config = function()
       local actions = require("diffview.actions")
       require("diffview").setup({
+        -- Per-window winbar labelling each diff side ("WORKING TREE - path",
+        -- "<hash>:path"). Built into diffview but off by default.
+        view = {
+          default = { winbar_info = true },
+          file_history = { winbar_info = true },
+        },
         file_panel = {
           listing_style = "list",
           win_config = { position = "bottom", height = 10 },
