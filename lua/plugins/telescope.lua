@@ -10,7 +10,7 @@ vim.keymap.set("n", "<Leader>fo",
   { desc = "Find files [Telescope]" }
 )
 vim.keymap.set("n", "<Leader>ff",
-  bind(builtin.live_grep, { additional_args = { "--hidden" } }),
+  bind(builtin.live_grep, { additional_args = { "--hidden", "--fixed-strings" } }),
   { desc = "Find text [Telescope]" }
 )
 
