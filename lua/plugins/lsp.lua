@@ -35,7 +35,10 @@ local function toggle_codelens_fn()
 end
 
 local function format()
-  require("conform").format({ async = true })
+  -- "fallback" only kicks in for filetypes with no conform formatter, so stylua
+  -- and biome/prettier still win where they're configured; rust, zig etc. get
+  -- formatted by their language server instead of silently doing nothing.
+  require("conform").format({ async = true, lsp_format = "fallback" })
 end
 vim.keymap.set({ "n", "v" }, "<Leader>lf", format, { desc = "Format [LSP], [Conform]" })
 
@@ -109,7 +112,18 @@ end
 
 local config = {
   -- gopls = {},
-  rust_analyzer = {},
+  rust_analyzer = {
+    settings = {
+      ["rust-analyzer"] = {
+        -- Lint with clippy instead of the default `cargo check`. Slower and
+        -- uses a separate build cache, but catches far more.
+        check = { command = "clippy" },
+        -- Check into target/rust-analyzer so the server and a terminal
+        -- `cargo build` don't block each other on the cargo lock.
+        cargo = { targetDir = true },
+      },
+    },
+  },
   ts_ls = {},
   -- tsgo = {},
   lua_ls = {
@@ -176,12 +190,18 @@ local default_config = {
   on_attach = function(client, buffer) on_attach(client, buffer) end,
 }
 
+-- Servers that ship with their own toolchain and should not come from mason.
+-- rust-analyzer is a rustup component, and ~/.cargo/bin/rust-analyzer is a shim
+-- that resolves the toolchain per project (rust-toolchain.toml), so its
+-- proc-macro server always matches the rustc in use.
+local mason_skip = { rust_analyzer = true }
+
 require("mason-tool-installer").setup({
   ensure_installed = vim.list_extend({
     -- "prettierd",
     -- "stylua",
     -- "luacheck",
-  }, vim.tbl_keys(config)),
+  }, vim.tbl_filter(function(name) return not mason_skip[name] end, vim.tbl_keys(config))),
 })
 
 vim.lsp.log.set_level("off")
