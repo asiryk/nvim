@@ -481,6 +481,20 @@ function F.setup_shared()
     callback = function(args) F.setup_stash_buffer_keymaps(args.buf) end,
   })
 
+  -- Fugitive opens COMMIT_EDITMSG as a split of the window the command ran in,
+  -- so committing from an already-small split leaves a few usable lines. Move
+  -- the commit window into its own tab instead; `:wq`/`:q` closes the last
+  -- window in that tab, which drops the tab and returns to the previous one.
+  -- Guarded on the window count: when nvim is the git editor for a terminal
+  -- `git commit`, the buffer is alone in its tab and `wincmd T` errors.
+  vim.api.nvim_create_autocmd("FileType", {
+    group = buf_group,
+    pattern = "gitcommit",
+    callback = function()
+      if vim.fn.winnr("$") > 1 then vim.cmd("wincmd T") end
+    end,
+  })
+
   -- Horizontal scroll, mirroring <C-e>/<C-y> vertical scroll. Mainly for the
   -- nowrap Diffview windows, but global on purpose: buffer-local maps set
   -- from the Diffview handler would stick to the real file buffer after the
