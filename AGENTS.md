@@ -10,7 +10,7 @@ Personal Neovim configuration targeting Neovim 0.12+. All configuration is in Lu
 
 ## Architecture
 
-**Entry point:** `init.lua` loads modules in this order: `custom` (globals/utils) -> `defaults` (vim options/autocmds) -> `fold` (treesitter folds + `[+N lines]` virt_text) -> `keymaps` -> `menu` (right-click popup) -> colorscheme -> `plugin_spec` (lazy.nvim) -> `qfpersist` -> `statusline` -> `winbar` -> `tabline` -> `claudecode` -> `diffhl`.
+**Entry point:** `init.lua` loads modules in this order: `custom` (globals/utils) -> `defaults` (vim options/autocmds) -> `fold` (treesitter folds + `[+N lines]` virt_text) -> `keymaps` -> `menu` (right-click popup) -> colorscheme -> `plugin_spec` (lazy.nvim) -> `qfpersist` -> `statusline` -> `winbar` -> `tabline` -> `claudecode` -> `diffhl` -> `preview`.
 
 **Global state:** `G` (global table with `utils` and `log`), `L` (language-specific storage), `PopUpMenu` (right-click menu functions). These are set in `lua/custom.lua` and available everywhere.
 
@@ -36,6 +36,7 @@ Personal Neovim configuration targeting Neovim 0.12+. All configuration is in Lu
 
 **Custom features:**
 - `qfpersist` (`lua/qfpersist.lua`): Save/load/delete quickfix lists to disk as JSON. Commands: `QFSave`, `QFLoad`, `QFDelete`.
+- `preview` (`lua/preview.lua`): `:Preview` opens the current markdown buffer in macOS Quick Look via `qlmanage -p`, spawned detached with stdout/stderr discarded (qlmanage is chatty even on success). The module returns early on non-macOS, so the command doesn't exist there at all; non-markdown buffers are refused with a notification. A saved, unmodified buffer previews its own file; a modified or nameless one is dumped to `tempname() .. ".md"` first, since Quick Look reads from disk. Note macOS Quick Look shows markdown as plain text — there is no built-in renderer.
 - `claudecode` (`lua/claudecode.lua`): Claude Code terminal integration. Commands `ClaudeCode` (runs `claude`) and `ClaudeCodeResume` (runs `claude --resume`). A single session is identified by the buffer-local flag `b:claude_code = true`. Behavior: if the buffer exists with a live job, focus its tab (creating a new leftmost tab if it's hidden); if the buffer exists but the job has died, wipe it and spawn fresh; `ClaudeCodeResume` falls back to focusing the existing session with a warning. New tabs are moved leftmost via `tabmove 0`; the terminal buffer is renamed to `claude code` so the existing tabline (`lua/tabline.lua`) renders `[claude code]` via its non-file-buffer fallback — no tabline special case.
 - Autosave on `TextChanged`/`InsertLeave` for real files.
 - Trailing whitespace auto-removal on save (except markdown).

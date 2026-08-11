@@ -11,6 +11,7 @@ require("winbar")
 require("tabline")
 require("claudecode")
 require("diffhl")
+require("preview")
 
 local function create_scratch_buf()
   local buf = vim.api.nvim_create_buf(true, true)
