@@ -195,6 +195,7 @@ return {
   ts_markup_math        = { fg = c.string_ },
   ts_markup_quote       = { fg = c.comment },
   ts_markup_raw         = { fg = c.constant },
+  ts_markup_raw_block   = { fg = c.constant },
   ts_markup_strike      = { fg = c.comment, strikethrough = true },
   ts_markup_strong      = { fg = c.fg, bold = true },
   ts_markup_underline   = { fg = c.fg, underline = true },

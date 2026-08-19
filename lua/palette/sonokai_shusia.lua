@@ -181,6 +181,7 @@ return {
   ts_markup_math        = { fg = c.fg },
   ts_markup_quote       = { fg = c.grey },
   ts_markup_raw         = { fg = c.green },
+  ts_markup_raw_block   = { fg = c.green },
   ts_markup_strike      = { fg = c.fg, strikethrough = true },
   ts_markup_strong      = { fg = c.fg, bold = true },
   ts_markup_underline   = { fg = c.fg, underline = true },

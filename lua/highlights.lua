@@ -242,6 +242,7 @@ return {
   ["@markup.math"]                      = "ts_markup_math",
   ["@markup.quote.markdown"]            = "ts_markup_quote",
   ["@markup.raw"]                       = "ts_markup_raw",
+  ["@markup.raw.block"]                 = "ts_markup_raw_block",
   ["@markup.strike"]                    = "ts_markup_strike",
   ["@markup.strong"]                    = "ts_markup_strong",
   ["@markup.underline"]                 = "ts_markup_underline",
