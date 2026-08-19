@@ -8,7 +8,7 @@
 -- subsequent calls no-op.
 
 local F = {}
-local S = { shared_loaded = false, generators = {} }
+local S = { shared_loaded = false, generators = {}, graph_bufs = {} }
 
 -- ──────────────────────── Commit-under-cursor helpers ────────────────────────
 
@@ -216,23 +216,95 @@ local function git_log_base()
   }
 end
 
-local function append_user_args(cmd, args)
-  if not args or args == "" then return end
-  for arg in args:gmatch("%S+") do
-    table.insert(cmd, arg)
+-- Split a command's raw args the way a shell would: whitespace separates
+-- tokens, but quotes group them, so `--grep "two words"` reaches git as one
+-- argument with the quotes stripped. git is exec'd directly (see
+-- git_log_base), so nothing else would do it.
+local function split_args(str)
+  if not str or str == "" then return {} end
+
+  local args, cur, quote, quoted = {}, {}, nil, false
+  local i = 1
+  while i <= #str do
+    local ch = str:sub(i, i)
+    if quote then
+      if ch == quote then
+        quote = nil
+      elseif ch == "\\" and quote == '"' and i < #str then
+        i = i + 1
+        cur[#cur + 1] = str:sub(i, i)
+      else
+        cur[#cur + 1] = ch
+      end
+    elseif ch == "'" or ch == '"' then
+      quote, quoted = ch, true
+    elseif ch == "\\" and i < #str then
+      i = i + 1
+      cur[#cur + 1] = str:sub(i, i)
+    elseif ch:match("%s") then
+      if quoted or #cur > 0 then
+        args[#args + 1] = table.concat(cur)
+        cur, quoted = {}, false
+      end
+    else
+      cur[#cur + 1] = ch
+    end
+    i = i + 1
   end
+  if quoted or #cur > 0 then args[#args + 1] = table.concat(cur) end
+
+  return args
 end
 
+-- `Gitl`'s exclusions ride on --invert-grep, which git applies to *every*
+-- --grep in the command line -- a user-supplied --grep would be inverted too,
+-- hiding exactly what was searched for. So when the user brings their own
+-- grep, theirs wins and the built-in exclusions are dropped.
+local function user_greps(args)
+  for _, arg in ipairs(args) do
+    if arg == "--grep" or arg:match("^%-%-grep=")
+      or arg == "--invert-grep" or arg == "--all-match" then
+      return true
+    end
+  end
+  return false
+end
+
+-- Completion for the log commands: flags once a dash is typed, refs otherwise.
+local function complete_log_args(arglead)
+  local candidates
+  if arglead:sub(1, 1) == "-" then
+    candidates = {
+      "--all", "--author=", "--grep=", "--invert-grep", "--no-merges",
+      "--merges", "--first-parent", "--since=", "--until=", "--reverse",
+    }
+  else
+    candidates = vim.fn.systemlist({
+      "git", "for-each-ref", "--format=%(refname:short)",
+      "refs/heads", "refs/tags", "refs/remotes",
+    })
+    if vim.v.shell_error ~= 0 then candidates = {} end
+  end
+  return vim.tbl_filter(
+    function(c) return c:find(arglead, 1, true) == 1 end,
+    candidates
+  )
+end
+
+---@param args? string[] extra git-log args, already tokenized
 function F.run_git_log(args)
+  args = args or {}
   local cmd = git_log_base()
-  vim.list_extend(cmd, {
-    "--invert-grep",
-    "--grep=Auto version update",
-    "--grep=Auto update assets",
-    "--grep=Merge branch",
-    "--grep=Merge remote-tracking branch",
-  })
-  append_user_args(cmd, args)
+  if not user_greps(args) then
+    vim.list_extend(cmd, {
+      "--invert-grep",
+      "--grep=Auto version update",
+      "--grep=Auto update assets",
+      "--grep=Merge branch",
+      "--grep=Merge remote-tracking branch",
+    })
+  end
+  vim.list_extend(cmd, args)
 
   local output = vim.fn.systemlist(cmd)
 
@@ -244,9 +316,10 @@ function F.run_git_log(args)
   return output
 end
 
+---@param args? string[] extra git-log args, already tokenized
 function F.run_git_log_full(args)
   local cmd = git_log_base()
-  append_user_args(cmd, args)
+  vim.list_extend(cmd, args or {})
 
   local output = vim.fn.systemlist(cmd)
 
@@ -287,8 +360,11 @@ end
 ---@param bufname string
 ---@param filetype? string
 function F.create_git_graph_buf(gen, bufname, filetype)
-  local existing = vim.fn.bufnr(bufname)
-  if existing ~= -1 then
+  -- Tracked in a table rather than looked up with bufnr(), which treats its
+  -- argument as a pattern -- user args land in the name, so `--grep=fo.*`
+  -- would match some other graph buffer.
+  local existing = S.graph_bufs[bufname]
+  if existing and vim.api.nvim_buf_is_valid(existing) then
     local win = vim.fn.bufwinid(existing)
     if win ~= -1 then
       vim.api.nvim_set_current_win(win)
@@ -318,6 +394,7 @@ function F.create_git_graph_buf(gen, bufname, filetype)
   -- Stored so the BufReadCmd handler can repaint on `:e`. Keyed by bufnr and
   -- cleared on BufWipeout (see setup_shared).
   S.generators[bufnr] = gen
+  S.graph_bufs[bufname] = bufnr
 end
 
 -- ──────────────────────────── Diffview helpers ───────────────────────────────
@@ -396,15 +473,38 @@ function F.setup_shared()
     { desc = "Toggle Git Diff [Diffview]" })
 
   -- User commands
+  -- User args are part of the buffer's identity: `Gitl` and `Gitl --all` are
+  -- different views, and each keeps its own generator so `:e` re-runs the same
+  -- query.
+  local function graph_bufname(cmd, args)
+    local name = "git-graph://" .. vim.fn.getcwd() .. " " .. cmd
+    if args ~= "" then name = name .. " " .. args end
+    return name
+  end
+
   vim.api.nvim_create_user_command("Gitl", function(opts)
-    local bufname = "git-graph://" .. vim.fn.getcwd() .. " Gitl"
-    F.create_git_graph_buf(function() return F.run_git_log(opts.args) end, bufname)
-  end, { desc = "Git log graph excluding generated commits [User]", nargs = "*" })
+    local args = split_args(opts.args)
+    F.create_git_graph_buf(
+      function() return F.run_git_log(args) end,
+      graph_bufname("Gitl", opts.args)
+    )
+  end, {
+    desc = "Git log graph excluding generated commits [User]",
+    nargs = "*",
+    complete = complete_log_args,
+  })
 
   vim.api.nvim_create_user_command("Gitlo", function(opts)
-    local bufname = "git-graph://" .. vim.fn.getcwd() .. " Gitlo"
-    F.create_git_graph_buf(function() return F.run_git_log_full(opts.args) end, bufname)
-  end, { desc = "Git log graph [User]", nargs = "*" })
+    local args = split_args(opts.args)
+    F.create_git_graph_buf(
+      function() return F.run_git_log_full(args) end,
+      graph_bufname("Gitlo", opts.args)
+    )
+  end, {
+    desc = "Git log graph [User]",
+    nargs = "*",
+    complete = complete_log_args,
+  })
 
   vim.api.nvim_create_user_command("Gits", function()
     local output = F.run_git_stash_list()
@@ -413,7 +513,7 @@ function F.setup_shared()
       vim.notify("No stashes")
       return
     end
-    local bufname = "git-graph://" .. vim.fn.getcwd() .. " Gits"
+    local bufname = graph_bufname("Gits", "")
     F.create_git_graph_buf(F.run_git_stash_list, bufname, "git-stash")
   end, { desc = "Git stash list [User]" })
 
@@ -465,7 +565,12 @@ function F.setup_shared()
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = refresh_group,
     pattern = "git-graph://*",
-    callback = function(args) S.generators[args.buf] = nil end,
+    callback = function(args)
+      S.generators[args.buf] = nil
+      for name, bufnr in pairs(S.graph_bufs) do
+        if bufnr == args.buf then S.graph_bufs[name] = nil end
+      end
+    end,
   })
 
   -- Buffer-level keymaps for git UI buffers
