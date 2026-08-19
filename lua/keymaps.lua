@@ -47,6 +47,18 @@ vim.keymap.set("v", "<leader>н", '"+y', { desc = "Yank into system clipboard uk
 vim.keymap.set("n", "<leader>p", '"+p', { desc = "Paste from system clipboard [User]" })
 vim.keymap.set("n", "<leader>з", '"+p', { desc = "Paste from system clipboard uk [User]" })
 
+vim.keymap.set("n", "<leader>yp", function()
+  local path = vim.fn.expand("%:p")
+  vim.fn.setreg("+", path)
+  vim.notify(path)
+end, { desc = "Copy absolute file path [User]" })
+
+vim.keymap.set("n", "<leader>yr", function()
+  local path = vim.fn.fnamemodify(vim.fn.expand("%:p"), ":.")
+  vim.fn.setreg("+", path)
+  vim.notify(path)
+end, { desc = "Copy relative file path [User]" })
+
 vim.keymap.set("n", "<leader>xf", "<cmd>source %<CR>", { desc = "Execute lua file [User]" })
 vim.keymap.set("n", "<leader>xx", ":.lua<CR>", { desc = "Execute current lua line [User]" })
 vim.keymap.set("v", "<leader>x", ":lua<CR>", { desc = "Execute visual lua selection [User]" })

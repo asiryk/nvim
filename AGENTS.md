@@ -32,6 +32,7 @@ Personal Neovim configuration targeting Neovim 0.12+. All configuration is in Lu
 - `<Leader>h*` — Harpoon
 - `<Leader>t*` — Tab management
 - `<Leader>x*` — Execute Lua code
+- `<Leader>y*` — Copy to system clipboard (`yp` absolute file path, `yr` path relative to cwd)
 - Ukrainian keyboard layout is mapped to English equivalents in normal/visual/operator modes
 
 **Custom features:**
