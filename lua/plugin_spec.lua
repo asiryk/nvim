@@ -146,19 +146,6 @@ local spec = {
         },
       })
 
-      -- diffview is unmaintained (upstream HEAD is from 2024-06). Its async
-      -- open crashes with "Invalid window id" in sync_scroll when the view
-      -- is torn down while the open coroutine is still in flight (upstream
-      -- #550 is the same race). Bail out if any layout window died.
-      local Layout = require("diffview.scene.layout").Layout
-      local sync_scroll = Layout.sync_scroll
-      function Layout:sync_scroll()
-        for _, win in ipairs(self.windows) do
-          if not (win.id and vim.api.nvim_win_is_valid(win.id)) then return end
-        end
-        return sync_scroll(self)
-      end
-
       require("plugins.git").setup_shared()
     end,
   },
