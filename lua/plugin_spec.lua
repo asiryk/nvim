@@ -113,7 +113,7 @@ local spec = {
     event = "BufEnter",
   },
   {
-    "sindrets/diffview.nvim",
+    "asiryk/diffview.nvim",
     config = function()
       local actions = require("diffview.actions")
       require("diffview").setup({
