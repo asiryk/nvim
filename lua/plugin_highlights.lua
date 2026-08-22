@@ -86,8 +86,8 @@ local function late_overrides()
 end
 
 local group = vim.api.nvim_create_augroup("plugin-highlights-late", { clear = true })
-vim.api.nvim_create_autocmd("User", {
-  pattern = "VeryLazy", group = group, once = true, callback = late_overrides,
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = group, once = true, callback = late_overrides,
   desc = "Apply late plugin-highlight overrides once plugins have loaded",
 })
 vim.api.nvim_create_autocmd("ColorScheme", {
