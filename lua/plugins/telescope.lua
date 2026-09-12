@@ -9,6 +9,54 @@ vim.keymap.set("n", "<Leader>fo",
   bind(builtin.find_files, { hidden = true }),
   { desc = "Find files [Telescope]" }
 )
+
+-- Pick files and put `@/abs/path` references at the cursor instead of opening
+-- them (Claude Code file mentions). Multi-select (<Tab>) inserts all of them.
+-- Meant for insert mode: the cursor position is captured up front and insert
+-- mode is resumed after the inserted text.
+local function insert_file_refs()
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+  local win = vim.api.nvim_get_current_win()
+  local row, col = unpack(vim.api.nvim_win_get_cursor(win))
+  builtin.find_files({
+    hidden = true,
+    prompt_title = "Insert @path",
+    attach_mappings = function(prompt_bufnr)
+      actions.select_default:replace(function()
+        local entries = action_state.get_current_picker(prompt_bufnr):get_multi_selection()
+        if vim.tbl_isempty(entries) then entries = { action_state.get_selected_entry() } end
+        actions.close(prompt_bufnr)
+        if #entries == 0 then return end -- <CR> with no matches
+        local refs = {}
+        for _, entry in ipairs(entries) do
+          table.insert(refs, "@" .. vim.fn.fnamemodify(entry.path or entry[1], ":p"))
+        end
+        local buf = vim.api.nvim_win_get_buf(win)
+        local text = table.concat(refs, " ")
+        vim.api.nvim_buf_set_text(buf, row - 1, col, row - 1, col, { text })
+        -- Deferred past telescope's own mode switching on close; then resume
+        -- insert right after the text (`startinsert!` when that's end of line).
+        vim.schedule(function()
+          if not vim.api.nvim_win_is_valid(win) then return end
+          vim.api.nvim_set_current_win(win)
+          local end_col = col + #text
+          vim.api.nvim_win_set_cursor(win, { row, end_col })
+          local at_eol = end_col >= #vim.api.nvim_buf_get_lines(buf, row - 1, row, true)[1]
+          vim.cmd(at_eol and "startinsert!" or "startinsert")
+        end)
+      end)
+      return true
+    end,
+  })
+end
+
+-- Only in Claude Code prompt buffers: its external editor (Ctrl+G) opens
+-- `$TMPDIR/claude-prompt-<id>.md` and passes no env marker.
+if vim.api.nvim_buf_get_name(0):match("/claude%-prompt%-[^/]*%.md$") then
+  vim.keymap.set("i", "<C-o>", insert_file_refs, { buffer = 0, desc = "Insert @file path [Telescope]" })
+end
+
 vim.keymap.set("n", "<Leader>ff",
   bind(builtin.live_grep, { additional_args = { "--hidden", "--fixed-strings" } }),
   { desc = "Find text [Telescope]" }
