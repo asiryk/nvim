@@ -37,7 +37,7 @@ Plugins install to `stdpath("data")/site/pack/core/opt`; treesitter parsers live
 - Leader is `<Space>`, local leader is `,`
 - `<Leader>l*` — LSP actions (format, rename, code action, diagnostics)
 - `<Leader>f*` — Telescope finders
-- `<C-o>` (insert mode) in Claude Code prompt buffers — Telescope file picker that inserts `@/absolute/path` at the cursor instead of opening the file. Only registered when the current buffer at `plugins.telescope` load is Claude Code's external-editor file `$TMPDIR/claude-prompt-<id>.md` (Claude spawns the editor with no env marker, so the filename is the only signal); overrides the builtin insert-mode `<C-o>` there only
+- `<C-o>` (insert mode) in Claude Code prompt buffers — Telescope file picker that inserts `@/absolute/path` at the cursor instead of opening the file. Only registered when the current buffer at `plugins.telescope` load is Claude Code's external-editor file `$TMPDIR/claude-prompt-<id>.md` (Claude spawns the editor with no env marker, so the filename is the only signal); overrides the builtin insert-mode `<C-o>` there only. In the same buffers blink's `path` source completes relative to cwd (`get_cwd` in `lua/plugins/blink.lua`) instead of the file's own (temp) directory
 - `<Leader>n*` — Mini.files navigation
 - `<Leader>h*` — Harpoon
 - `<Leader>t*` — Tab management
