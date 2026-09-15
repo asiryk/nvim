@@ -26,6 +26,18 @@ do
   end, { desc = "Toggle error virtual lines [LSP]" })
 end
 
+do
+  -- LSP floats set concealcursor = "", which reveals raw markdown (code
+  -- fences, escapes) on the cursor line. Keep it concealed in normal mode.
+  local open_floating_preview = vim.lsp.util.open_floating_preview
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.lsp.util.open_floating_preview = function(...)
+    local bufnr, winnr = open_floating_preview(...)
+    vim.wo[winnr][0].concealcursor = "nc"
+    return bufnr, winnr
+  end
+end
+
 local function toggle_codelens_fn()
   local open = false
   return function ()
