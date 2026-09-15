@@ -166,7 +166,14 @@ local config = {
       end
 
       local nvim_config = {
-        runtime = { version = "LuaJIT" },
+        runtime = {
+          version = "LuaJIT",
+          -- Resolve `require("x")` only via `lua/x.lua` or `lua/x/init.lua`, like
+          -- Neovim does. Without this, any file named `x.lua` matches, so
+          -- `require("dap")` resolves to `lua/plugins/dap.lua` and loses its types.
+          path = { "lua/?.lua", "lua/?/init.lua" },
+          pathStrict = true,
+        },
         workspace = {
           checkThirdParty = false,
           library = library,
@@ -210,6 +217,7 @@ local mason_skip = { rust_analyzer = true }
 
 require("mason-tool-installer").setup({
   ensure_installed = vim.list_extend({
+    -- "codelldb", -- debug adapter for Rust, see lua/plugins/dap.lua
     -- "prettierd",
     -- "stylua",
     -- "luacheck",

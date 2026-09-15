@@ -73,6 +73,10 @@ vim.pack.add({
   gh("neovim/nvim-lspconfig"),
   gh("stevearc/conform.nvim"),
 
+  -- debugging
+  gh("mfussenegger/nvim-dap"),
+  { src = gh("igorlfs/nvim-dap-view"), version = vim.version.range("1") },
+
   -- completion
   gh("L3MON4D3/LuaSnip"),
   { src = gh("saghen/blink.cmp"), version = vim.version.range("1") },
@@ -126,6 +130,7 @@ require("snacks").setup({
 
 require("plugins.treesitter")
 require("plugins.lsp")
+require("plugins.dap")
 require("plugins.blink")
 require("plugins.harpoon")
 require("plugins.gitsigns")

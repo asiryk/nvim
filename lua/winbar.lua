@@ -16,10 +16,15 @@ local function in_diffview_diff_win()
   return false
 end
 
+-- nvim-dap-view draws its section tabs ("Watches [W]  Scopes [S] …") as the
+-- winbar of its main window, which shows both its own buffers and nvim-dap's
+-- REPL. Clearing it there would hide the tabs.
+local foreign_winbar_ft = { ["dap-view"] = true, ["dap-repl"] = true }
+
 local function should_skip(buf)
-  if in_diffview_diff_win() then return "diffview" end
-  if vim.bo[buf].buftype ~= "" then return true end
   local ft = vim.bo[buf].filetype
+  if in_diffview_diff_win() or foreign_winbar_ft[ft] then return "foreign" end
+  if vim.bo[buf].buftype ~= "" then return true end
   if ft == "" or ft == "minifiles" or ft == "snacks_picker_list" then return true end
   return false
 end
@@ -42,8 +47,8 @@ end
 local function apply()
   local buf = vim.api.nvim_get_current_buf()
   local skip = should_skip(buf)
-  if skip == "diffview" then
-    -- Diffview owns this window's winbar; don't touch it.
+  if skip == "foreign" then
+    -- Diffview or dap-view owns this window's winbar; don't touch it.
   elseif skip then
     vim.wo.winbar = ""
   else
