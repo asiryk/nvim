@@ -38,6 +38,21 @@ do
   end
 end
 
+do
+  -- vim.lsp.enable only skips buffers with a 'buftype', but Diffview's INDEX
+  -- side (`diffview:///…/.git/:0:/path`) is a normal buffer so `:w` can stage
+  -- it. Servers attached there report bogus errors for the old contents, so
+  -- never start or attach a client on a buffer named by a non-file URI.
+  local start = vim.lsp.start
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.lsp.start = function(config, opts)
+    local bufnr = opts and opts.bufnr or 0
+    local name = vim.api.nvim_buf_get_name(bufnr)
+    if name:match("^%a[%w+.-]*://") and not name:match("^file://") then return end
+    return start(config, opts)
+  end
+end
+
 local function toggle_codelens_fn()
   local open = false
   return function ()
@@ -122,6 +137,32 @@ local function on_attach(client, buffer)
   )
 end
 
+-- TypeScript 7 (the native compiler) ships no tsserver.js, so ts_ls can't use
+-- it and falls back to its bundled TypeScript with a warning. Such projects get
+-- TS 7's own `tsc --lsp` server instead, and ts_ls keeps every other project.
+local function native_ts(bufnr)
+  local root = vim.fs.root(bufnr, "node_modules")
+  if not root then return false end
+  local lib = root .. "/node_modules/typescript/lib/"
+  return vim.uv.fs_stat(lib .. "tsc.js") ~= nil
+    and vim.uv.fs_stat(lib .. "tsserver.js") == nil
+end
+
+--- Attach lspconfig's `name` server only to buffers where `want(bufnr)`. `cmd`
+--- comes from the same resolved config as `root_dir`: tsc caches the binary it
+--- picks in a module-local table that each config resolve loads afresh.
+local function attach_if(name, want)
+  local base = assert(vim.lsp.config[name], name .. ": no lspconfig config")
+  local root_dir = base.root_dir
+  assert(type(root_dir) == "function", name .. ": root_dir is not a function")
+  return {
+    cmd = base.cmd,
+    root_dir = function(bufnr, on_dir)
+      if want(bufnr) then root_dir(bufnr, on_dir) end
+    end,
+  }
+end
+
 local config = {
   -- gopls = {},
   rust_analyzer = {
@@ -136,8 +177,8 @@ local config = {
       },
     },
   },
-  ts_ls = {},
-  -- tsgo = {},
+  ts_ls = attach_if("ts_ls", function(bufnr) return not native_ts(bufnr) end),
+  tsc = attach_if("tsc", native_ts),
   lua_ls = {
     on_init = function(client)
       -- Skip configuration if there is a luarc file in the project
@@ -212,8 +253,9 @@ local default_config = {
 -- Servers that ship with their own toolchain and should not come from mason.
 -- rust-analyzer is a rustup component, and ~/.cargo/bin/rust-analyzer is a shim
 -- that resolves the toolchain per project (rust-toolchain.toml), so its
--- proc-macro server always matches the rustc in use.
-local mason_skip = { rust_analyzer = true }
+-- proc-macro server always matches the rustc in use. tsc runs from the
+-- project's own node_modules/.bin (TypeScript 7+).
+local mason_skip = { rust_analyzer = true, tsc = true }
 
 require("mason-tool-installer").setup({
   ensure_installed = vim.list_extend({
