@@ -140,6 +140,13 @@ end
 -- TypeScript 7 (the native compiler) ships no tsserver.js, so ts_ls can't use
 -- it and falls back to its bundled TypeScript with a warning. Such projects get
 -- TS 7's own `tsc --lsp` server instead, and ts_ls keeps every other project.
+--
+-- `tsc.js` is pure JS; the compiler itself is a native binary pulled in as a
+-- per-platform optional dep. A project whose node_modules was installed inside
+-- a Linux container therefore has a `node_modules/.bin/tsc` that dies on
+-- `--version` here. lspconfig's tsc config falls back to a `tsc` on $PATH when
+-- the project-local one can't answer `--version`, so mason installs one (see
+-- mason_skip below) as the backstop for those projects.
 local function native_ts(bufnr)
   local root = vim.fs.root(bufnr, "node_modules")
   if not root then return false end
@@ -253,9 +260,8 @@ local default_config = {
 -- Servers that ship with their own toolchain and should not come from mason.
 -- rust-analyzer is a rustup component, and ~/.cargo/bin/rust-analyzer is a shim
 -- that resolves the toolchain per project (rust-toolchain.toml), so its
--- proc-macro server always matches the rustc in use. tsc runs from the
--- project's own node_modules/.bin (TypeScript 7+).
-local mason_skip = { rust_analyzer = true, tsc = true }
+-- proc-macro server always matches the rustc in use.
+local mason_skip = { rust_analyzer = true }
 
 require("mason-tool-installer").setup({
   ensure_installed = vim.list_extend({
