@@ -42,6 +42,15 @@ vim.api.nvim_create_autocmd("MenuPopup", {
     local cword = vim.fn.expand("<cword>")
     local is_git_buf = vim.b.gitsigns_status_dict ~= nil
 
+    do -- Rust: added only when it applies, so it isn't greyed-out noise elsewhere
+      vim.cmd([[silent! aunmenu PopUp.Run\ Test]])
+      vim.cmd([[silent! aunmenu PopUp.-rust-]])
+      if ft == "rust" and require("rust").can_run_test(data.buf) then
+        vim.cmd([[anoremenu .1 PopUp.Run\ Test <cmd>lua require("rust").run_test_under_cursor()<CR>]])
+        vim.cmd([[anoremenu .1 PopUp.-rust- <NOP>]])
+      end
+    end
+
     local any_git_menu = false
 
     do -- Git Gitsigns
