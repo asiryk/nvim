@@ -43,9 +43,13 @@ do
   -- side (`diffview:///…/.git/:0:/path`) is a normal buffer so `:w` can stage
   -- it. Servers attached there report bogus errors for the old contents, so
   -- never start or attach a client on a buffer named by a non-file URI.
+  -- `attach = false` starts a client without touching the buffer, and callers
+  -- rely on getting its id back: vim.pack asserts on it while its
+  -- `nvim-pack://confirm` buffer is current.
   local start = vim.lsp.start
   ---@diagnostic disable-next-line: duplicate-set-field
   vim.lsp.start = function(config, opts)
+    if opts and opts.attach == false then return start(config, opts) end
     local bufnr = opts and opts.bufnr or 0
     local name = vim.api.nvim_buf_get_name(bufnr)
     if name:match("^%a[%w+.-]*://") and not name:match("^file://") then return end
