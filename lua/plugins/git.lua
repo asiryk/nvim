@@ -59,7 +59,8 @@ local function dv_open_pending()
   return S.dv_open_ts ~= nil and (vim.uv.now() - S.dv_open_ts) < 2000
 end
 
-local function dv_open(args)
+--- `cmd` defaults to DiffviewOpen; DiffviewFileHistory needs the same guards.
+local function dv_open(args, cmd)
   if dv_open_pending() then return end
   S.dv_open_ts = vim.uv.now()
   close_blame_wins()
@@ -77,7 +78,7 @@ local function dv_open(args)
     end
     return orig_notify(msg, level, opts)
   end
-  local ok, err = pcall(vim.cmd, "DiffviewOpen " .. (args or ""))
+  local ok, err = pcall(vim.cmd, (cmd or "DiffviewOpen") .. " " .. (args or ""))
   vim.notify = orig_notify
   if not ok then
     failed = true
@@ -413,6 +414,54 @@ function F.toggle_diffview()
   end
 end
 
+--- Default branch name: origin/HEAD when set, else whichever of main/master
+--- exists locally or on origin.
+local function default_branch()
+  local head = git_first_line({ "git", "symbolic-ref", "--short", "refs/remotes/origin/HEAD" })
+  if head then return (head:gsub("^origin/", "")) end
+  for _, name in ipairs({ "main", "master" }) do
+    for _, ref in ipairs({ "refs/heads/" .. name, "refs/remotes/origin/" .. name }) do
+      if git_first_line({ "git", "rev-parse", "--verify", "--quiet", ref }) then return name end
+    end
+  end
+  return nil
+end
+
+--- PR-style commit list in DiffviewFileHistory. On a feature branch: the
+--- commits not on the default branch (origin/<base> when present, else the
+--- local one). On the default branch itself: the commits not yet pushed to
+--- its upstream. Uses the refs already fetched, and never fetches.
+function F.open_branch_diff()
+  local base = default_branch()
+  if not base then
+    vim.notify("No main/master branch found", vim.log.levels.WARN)
+    return
+  end
+
+  local left
+  if git_first_line({ "git", "branch", "--show-current" }) == base then
+    left = git_first_line({ "git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{upstream}" })
+    if not left then
+      vim.notify(base .. " has no upstream to compare against", vim.log.levels.WARN)
+      return
+    end
+  elseif git_first_line({ "git", "rev-parse", "--verify", "--quiet", "refs/remotes/origin/" .. base }) then
+    left = "origin/" .. base
+  else
+    left = base
+  end
+
+  -- Two dots = commits reachable from HEAD but not from the base, which is
+  -- the PR's commit list. An empty range opens no view (diffview only prints
+  -- an info message), so it is caught here instead of leaving dv_open pending.
+  local range = left .. "..HEAD"
+  if git_first_line({ "git", "rev-list", "--count", range }) == "0" then
+    vim.notify("No commits in " .. range)
+    return
+  end
+  dv_open("--range=" .. range, "DiffviewFileHistory")
+end
+
 function F.current_file_history_with_author()
   local M = {}
   M.co = coroutine.create(function(authors)
@@ -471,6 +520,8 @@ function F.setup_shared()
   end, { desc = "Copy PR URL to clipboard (GitHub, GitLab) [Fugitive]" })
   set("n", "<leader>gd", F.toggle_diffview,
     { desc = "Toggle Git Diff [Diffview]" })
+  set("n", "<leader>gD", F.open_branch_diff,
+    { desc = "Branch commits vs main, or unpushed commits on main [Diffview]" })
 
   -- User commands
   -- User args are part of the buffer's identity: `Gitl` and `Gitl --all` are
