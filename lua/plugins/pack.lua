@@ -196,3 +196,18 @@ do -- flash
   set("o", "r", function() require("flash").remote() end, { desc = "Remote Flash" })
   set("c", "<C-s>", function() require("flash").toggle() end, { desc = "Toggle Flash Search" })
 end
+
+-- ─────────────────────────── Commands ────────────────────────────────────────
+
+-- `vim.pack.update()` takes a list of names but has no picker of its own. The
+-- first entry (the default) updates everything; the result is still the usual
+-- confirmation buffer (`:write` to accept, `:quit` to discard).
+vim.api.nvim_create_user_command("PackUpdate", function()
+  local names = vim.tbl_map(function(p) return p.spec.name end, vim.pack.get(nil, { info = false }))
+  table.sort(names, function(a, b) return a:lower() < b:lower() end)
+  local all = "All Plugins"
+  vim.ui.select({ all, unpack(names) }, { prompt = "Update plugin" }, function(choice)
+    if not choice then return end
+    vim.pack.update(choice ~= all and { choice } or nil)
+  end)
+end, { desc = "Pick a plugin (or all) to update with vim.pack" })
